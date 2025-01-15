@@ -13,6 +13,7 @@ interface MenuItemProps {
   onAddToCart: () => void;
   toggleFilterMenu: () => void;
   cartItems: MenuItemType[];
+  isVeg: boolean;
 }
 
 interface MenuItemType {
@@ -27,6 +28,7 @@ interface MenuItemType {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({
+  id,
   name,
   price,
   description,
@@ -35,7 +37,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
   onAddToCart,
   longDescription,
   toggleFilterMenu,
-  cartItems
+  cartItems,
+  isVeg
 }) => {
   const [showDetails, setShowDetails] = useState(false);
 
@@ -45,12 +48,13 @@ const MenuItem: React.FC<MenuItemProps> = ({
   };
 
   const totalCartItems = cartItems.reduce((acc, item) => acc + (item.quantity || 0), 0);
+  const quantity = cartItems.find(item => item.id === id)?.quantity || 0;
 
   return (
     <>
       {/* Menu Item Card */}
-      <div className="bg-[#FAF7F5] p-1 rounded-lg">
-        <div className="flex justify-between gap-4">
+      <div className="bg-[#FAF7F5] p-4 rounded-lg">
+        <div className="flex items-center gap-4">
           <div className="flex-1">
             <div className="flex items-start justify-between mb-1">
               <h3 className="text-base font-medium text-gray-900">{name}</h3>
@@ -60,25 +64,27 @@ const MenuItem: React.FC<MenuItemProps> = ({
               </div>
             </div>
             <p className="text-base font-medium mb-1">₹ {price}</p>
+            <p className="text-sm text-gray-600 mb-2">{isVeg ? '🟢 Veg' : '🔴 Non-veg'}</p>
             <p className="text-sm text-gray-600 mb-2">{description}</p>
-            <button
-              onClick={handleReadMoreClick}
-              className="text-[#8b5c4a] text-sm hover:text-[#6d4837]"
-            >
-              Read More
-            </button>
-            <br />
-            <button
-              onClick={onAddToCart}
-              className="mt-2 px-2 py-1 bg-[#9D8480] text-white text-sm rounded hover:bg-[#6d4837] transition-colors"
-            >
-              Add to cart
-            </button>
+            <div className="flex justify-between items-center mt-2">
+              <button
+                onClick={handleReadMoreClick}
+                className="text-[#8b5c4a] text-sm hover:text-[#6d4837]"
+              >
+                Read More
+              </button>
+              <button
+                onClick={onAddToCart}
+                className="px-3 py-1 bg-[#9D8480] text-white text-sm rounded-full hover:bg-[#6d4837] transition-colors"
+              >
+                Add {quantity > 0 && `(${quantity})`}
+              </button>
+            </div>
           </div>
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 self-center">
             <div className="relative w-24 h-24 rounded-lg overflow-hidden">
               <Image
-                src={image}
+                src={image || "/placeholder.svg"}
                 alt={name}
                 fill
                 className="object-cover"
@@ -91,7 +97,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
 
       {/* Bottom Drawer with View Cart */}
       {showDetails && (
-        <div className="fixed inset-0 z-50" onClick={() => setShowDetails(false)}>
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setShowDetails(false)}>
           <div className="absolute inset-x-0 bottom-0 flex flex-col">
             {/* Popup Content */}
             <div 
@@ -111,12 +117,11 @@ const MenuItem: React.FC<MenuItemProps> = ({
               <div className="flex justify-between items-start gap-4">
                 <p className="text-sm text-gray-600 flex-1">
                   {longDescription || description}
-                  {" A classic side dish that pairs perfectly with burgers, sandwiches, or as a snack on its own."}
                 </p>
                 <div className="flex-shrink-0">
                   <div className="relative w-24 h-24 rounded-lg overflow-hidden">
                     <Image
-                      src={image}
+                      src={image || "/placeholder.svg"}
                       alt={name}
                       fill
                       className="object-cover"
@@ -150,3 +155,4 @@ const MenuItem: React.FC<MenuItemProps> = ({
 };
 
 export default MenuItem;
+

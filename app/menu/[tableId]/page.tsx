@@ -3,7 +3,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import Header from '@/components/Navbar';
+import Navbar from '@/components/Navbar';
 import MenuItem from '@/components/MenuItem';
 import SearchBar from '@/components/SearchBar';
 import FilterMenu from '@/components/FilterMenu';
@@ -107,7 +107,7 @@ export default function MenuPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F1EEE6]">
-      <Header tableId={tableId} />
+      <Navbar tableId={tableId} />
 
       <SearchBar
         tableId={tableId}
@@ -146,3 +146,4 @@ export default function MenuPage() {
     </div>
   );
 }
+
