@@ -1,7 +1,6 @@
 "use client";
 
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import MenuItem from '@/components/MenuItem';
@@ -57,6 +56,7 @@ interface MenuItemType {
   name: string;
   price: number;
   description: string;
+  longDescription?: string;
   image: string;
   rating: number;
   isVeg: boolean;
