@@ -1,14 +1,25 @@
-import '../styles/globals.css'
+import './globals.css'
 import type { Metadata } from 'next'
-import { aleo, roboto } from './fonts'
-import '../styles/animations.css'
-import '../styles/gradients.css'
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/react"
+import { Roboto, Aleo } from 'next/font/google'
+import Background from '@/components/Background'
+
+const roboto = Roboto({
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-roboto',
+})
+
+const aleo = Aleo({
+  weight: ['400', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-aleo',
+})
 
 export const metadata: Metadata = {
   title: 'The Waiter Company',
-  description: 'Innovative solutions for your cafe business',
+  description: 'Empowering your cafe business with innovative solutions',
 }
 
 export default function RootLayout({
@@ -17,12 +28,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body suppressHydrationWarning className={`${aleo.variable} ${roboto.variable} font-sans bg-primary`}>
+    <html lang="en" className={`scroll-smooth ${roboto.variable} ${aleo.variable}`}>
+      <body className={roboto.className}>
+        <Background />
         {children}
-        <SpeedInsights />
-        <Analytics />
       </body>
     </html>
   )
 }
+

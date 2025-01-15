@@ -3,7 +3,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import Header from '@/components/Header';
+import Header from '@/components/Navbar';
 import MenuItem from '@/components/MenuItem';
 import SearchBar from '@/components/SearchBar';
 import FilterMenu from '@/components/FilterMenu';

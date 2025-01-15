@@ -1,81 +1,94 @@
-import Image from "next/image"
+'use client'
+
 import Link from 'next/link'
-import { Linkedin, Instagram, MapPin, Phone, Mail } from 'lucide-react'
+import Image from 'next/image'
+import { Facebook, Twitter, Linkedin, Instagram, MapPin, Phone, Mail } from 'lucide-react'
 
 export default function Footer() {
+  const socialLinks = [
+    { name: 'Facebook', href: '#', icon: Facebook },
+    { name: 'Twitter', href: '#', icon: Twitter },
+    { name: 'LinkedIn', href: 'https://www.linkedin.com/company/the-waiter-company', icon: Linkedin },
+    { name: 'Instagram', href: 'https://www.instagram.com/thewaitercompany', icon: Instagram }
+  ]
+
+  const footerLinks = [
+    { name: 'About Us', href: '#' },
+    { name: 'Help', href: '#' },
+    { name: 'Privacy Policy', href: '#' },
+    { name: 'Disclaimer', href: '#' }
+  ]
+
   return (
-    (<footer className="bg-supporting text-highlight font-roboto py-8">
+    <footer className="bg-[#e6d7cf] py-12">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-          {/* Social Links - Left Column */}
-          <div className="space-y-4">
-            {/* <Link href="https://facebook.com" target='_blank' className="flex items-center space-x-2 hover:text-gray-300">
-              <Facebook size={20} />
-              <span>Facebook</span>
-            </Link>
-            <Link href="https://twitter.com" target='_blank' className="flex items-center space-x-2 hover:text-gray-300">
-              <Twitter size={20} />
-              <span>Twitter</span>
-            </Link> */}
-            <Link href="https://www.linkedin.com/company/the-waiter-company" target='_blank' className="flex items-center space-x-2 hover:text-[#F5F1EB]">
-              <Linkedin size={20} />
-              <span>LinkedIn</span>
-            </Link>
-            <Link href="https://www.instagram.com/thewaitercompany" target='_blank' className="flex items-center space-x-2 hover:text-[#F5F1EB]">
-              <Instagram size={20} />
-              <span>Instagram</span>
-            </Link>
-          </div>
-
-          {/* 
-          <div className="space-y-4">
-            <Link href="/about" target='_blank' className="hover:underline flex justify-center md:justify-start items-center space-x-2">
-              <span>About Us</span>
-            </Link>
-            <Link href="/help" target='_blank' className="hover:underline flex justify-center md:justify-start items-center space-x-2">
-              <span>Help</span>
-            </Link>
-            <Link href="/privacy" target='_blank' className="hover:underline flex justify-center md:justify-start items-center space-x-2">
-              <span>Privacy Policy</span>
-            </Link>
-            <Link href="/disclaimer" target='_blank' className="hover:underline flex justify-center md:justify-start items-center space-x-2">
-              <span>Disclaimer</span>
-            </Link>
-          </div> */}
-
-
-          {/* Contact Info - Middle Column */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <MapPin size={20} />
-              <span>RV College</span>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-[#B29792]/20">
+            {/* Social Links */}
+            <div className="space-y-3">
+              {socialLinks.map((link) => {
+                const Icon = link.icon
+                return (
+                  <Link 
+                    key={link.name}
+                    href={link.href}
+                    className="flex items-center gap-2 text-sm text-[#8A7F7C] hover:text-[#4E3E3B] transition-colors group"
+                  >
+                    <Icon className="h-4 w-4 opacity-70 group-hover:opacity-100" />
+                    <span>{link.name}</span>
+                  </Link>
+                )
+              })}
             </div>
-            <div className="flex items-center space-x-2">
-              <Phone size={20} />
-              <span>+91 7878449528</span>
+
+            {/* Footer Links */}
+            <div className="space-y-3">
+              {footerLinks.map((link) => (
+                <Link 
+                  key={link.name}
+                  href={link.href}
+                  className="block text-sm text-[#8A7F7C] hover:text-[#4E3E3B] transition-colors"
+                >
+                  {link.name}
+                </Link>
+              ))}
             </div>
-            <div className="flex items-center space-x-2">
-              <Mail size={20} />
-              <span>founder@thewaitercompany.in</span>
+
+            {/* Contact Info */}
+            <div className="space-y-3">
+              <p className="flex items-center gap-2 text-sm text-[#8A7F7C]">
+                <MapPin className="h-4 w-4 opacity-70" />
+                RV College
+              </p>
+              <p className="flex items-center gap-2 text-sm text-[#8A7F7C]">
+                <Phone className="h-4 w-4 opacity-70" />
+                +91 8219058337
+              </p>
+              <p className="flex items-center gap-2 text-sm text-[#8A7F7C]">
+                <Mail className="h-4 w-4 opacity-70" />
+                email@gmail.com
+              </p>
             </div>
           </div>
 
-          {/* Logo and Copyright - Right Column */}
-          <div className="flex flex-col items-end space-y-4">
-            <Image
-              src="/logo.png"
-              alt="The Waiter Company Logo"
-              width={150}
-              height={50}
-              className="h-10 w-auto"
-              style={{
-                maxWidth: "100%",
-                height: "auto"
-              }} />
-            <p className="text-sm">Copyright © 2024 • The Waiter Company</p>
+          {/* Logo and Copyright */}
+          <div className="pt-8 flex flex-col items-center space-y-4">
+            <Link href="/" className="inline-block">
+              <Image
+                src="/logo.png"
+                alt="The Waiter Company"
+                width={100}
+                height={100}
+                className="opacity-80 hover:opacity-100 transition-opacity"
+              />
+            </Link>
+            <p className="text-xs text-[#8A7F7C]">
+              Copyright © 2024 • The Waiter Company
+            </p>
           </div>
         </div>
       </div>
-    </footer>)
-  );
+    </footer>
+  )
 }
+
