@@ -1,119 +1,51 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Clock } from 'lucide-react';
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { useToast } from "@/hooks/use-toast"
-
-type OrderStatus = 'preparing' | 'ready' | 'delivered';
+import React from 'react';
 
 interface OrderStatusProps {
   orderId: string;
-  initialStatus?: OrderStatus;
   cookName: string;
+  currentStatus: 'preparing' | 'delivering' | 'delivered';
 }
 
-export default function OrderStatus({ orderId, initialStatus = 'preparing', cookName }: OrderStatusProps) {
-  const [status, setStatus] = useState<OrderStatus>(initialStatus);
-  const [error, setError] = useState<string | null>(null);
-  const [isConnected, setIsConnected] = useState(true);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    let eventSource: EventSource;
-
-    const connectSSE = () => {
-      try {
-        eventSource = new EventSource(`/api/orders/${orderId}/status`);
-
-        eventSource.onopen = () => {
-          setIsConnected(true);
-          setError(null);
-        };
-
-        eventSource.onmessage = (event) => {
-          const data = JSON.parse(event.data);
-          setStatus(data.status);
-          
-          toast({
-            title: "Order Status Updated",
-            description: `Your order is now ${data.status}`,
-          });
-        };
-
-        eventSource.onerror = () => {
-          setIsConnected(false);
-          setError("Connection lost. Trying to reconnect...");
-          eventSource.close();
-          setTimeout(connectSSE, 5000);
-        };
-      } catch (error: unknown) {
-        setError("Failed to connect to status updates: " + (error instanceof Error ? error.message : String(error)));
-        setIsConnected(false);
-      }
-    };
-
-    connectSSE();
-
-    return () => {
-      if (eventSource) {
-        eventSource.close();
-      }
-    };
-  }, [orderId, toast]);
-
-  const getStatusConfig = (statusCheck: OrderStatus) => {
-    const isActive = status === statusCheck;
-    const isPast = (
-      (status === 'ready' && statusCheck === 'preparing') ||
-      (status === 'delivered' && (statusCheck === 'preparing' || statusCheck === 'ready'))
-    );
-
-    return {
-      isActive,
-      isPast,
-      textColor: isActive || isPast ? 'text-[#4E3E3B]' : 'text-gray-500',
-    };
-  };
-
+const OrderStatus: React.FC<OrderStatusProps> = ({ cookName, currentStatus }) => {
   return (
-    <div className="px-6">
-      {error && (
-        <Alert variant="destructive" className="mb-4">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
-
-      {!isConnected && (
-        <div className="text-yellow-600 text-sm mb-4">
-          Reconnecting to status updates...
-        </div>
-      )}
+    <div className="relative pl-8">
+      {/* Vertical line */}
+      <div className="absolute left-[0.3rem] top-3 bottom-0 w-[2px] bg-[#4E3E3B]" />
       
-      <div className="space-y-8">
-        {/* Status Items */}
-        <div className="flex items-center gap-3">
-          <Clock className={`w-5 h-5 ${getStatusConfig('preparing').textColor}`} />
-          <p className={`text-base ${getStatusConfig('preparing').textColor}`}>
-            Your order is being prepared by{' '}
-            <span className="font-medium text-[#4E3E3B]">{cookName}</span>
-          </p>
-        </div>
+      {/* Preparing */}
+      <div className="relative mb-16">
+        <div className={`absolute left-[-0.25rem] top-1.5 w-3 h-3 rounded-full ${
+          currentStatus === 'preparing' ? 'bg-[#4E3E3B]' : 'border-2 border-[#4E3E3B] bg-white'
+        }`} />
+        <p className="text-[15px] text-[#4E3E3B] font-serif">
+          Your order is being prepared by {cookName}
+        </p>
+      </div>
 
-        <div className="flex items-center gap-3">
-          <Clock className={`w-5 h-5 ${getStatusConfig('ready').textColor}`} />
-          <p className={`text-base ${getStatusConfig('ready').textColor}`}>
-            Ready for Pickup
-          </p>
-        </div>
+      {/* On the way */}
+      <div className="relative mb-16">
+        <div className={`absolute left-[-0.25rem] top-1.5 w-3 h-3 rounded-full ${
+          currentStatus === 'delivering' ? 'bg-[#4E3E3B]' : 'border-2 border-[#4E3E3B] bg-white'
+        }`} />
+        <p className="text-[15px] text-[#4E3E3B] font-serif">
+          On it&apos;s way to your table!
+        </p>
+      </div>
 
-        <div className="flex items-center gap-3">
-          <Clock className={`w-5 h-5 ${getStatusConfig('delivered').textColor}`} />
-          <p className={`text-base ${getStatusConfig('delivered').textColor}`}>
-            Delivered
-          </p>
-        </div>
+      {/* Delivered */}
+      <div className="relative">
+        <div className={`absolute left-[-0.25rem] top-1.5 w-3 h-3 rounded-full ${
+          currentStatus === 'delivered' ? 'bg-[#4E3E3B]' : 'border-2 border-[#4E3E3B] bg-white'
+        }`} />
+        <p className="text-[15px] text-[#4E3E3B] font-serif">
+          Delivered
+        </p>
       </div>
     </div>
   );
-}
+};
+
+export default OrderStatus;
+
