@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 export default function Hero() {
   return (
-    <section className="bg-[#F1EEE6] pt-16 pb-24">
+    <section className="bg-[#F1EEE6] pt-16 pb-12">
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row items-start justify-between gap-16">
           <motion.div 
@@ -21,8 +21,7 @@ export default function Hero() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
               >
-              Delivering innovative solutions to empower your cafe business!
-             
+                Delivering innovative solutions to empower your cafe business!
               </motion.h1>
               <motion.p 
                 className="text-[#B29792] text-2xl leading-relaxed"

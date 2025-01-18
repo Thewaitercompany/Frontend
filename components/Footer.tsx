@@ -20,7 +20,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-[#e6d7cf] py-12">
+    <footer className="bg-[#EBCDB5] py-12">
       <div className="container mx-auto px-6">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-[#B29792]/20">
@@ -77,9 +77,9 @@ export default function Footer() {
               <Image
                 src="/logo.png"
                 alt="The Waiter Company"
-                width={100}
-                height={100}
-                className="opacity-80 hover:opacity-100 transition-opacity"
+                width={150}
+                height={120}
+                className="opacity-100 hover:opacity-80 transition-opacity"
               />
             </Link>
             <p className="text-xs text-[#8A7F7C]">

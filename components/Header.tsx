@@ -10,8 +10,11 @@ import LoginDialog from './LoginDialog'
 export default function Header() {
   const [isOpen, setIsOpen] = React.useState(false)
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const scrollToFeatures = () => {
+    const featuresSection = document.getElementById('features');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -33,20 +36,19 @@ export default function Header() {
               alt="The Waiter Company"
               width={120}
               height={40}
-              className="h-8 w-auto"
             />
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
             <button 
-              onClick={scrollToTop} 
+              onClick={scrollToFeatures} 
               type="button"
-              className="text-highlight hover:text-[#F5F1EB] transition-colors duration-300"
+              className="text-highlight hover:text-[#a08884] transition-colors duration-300"
             >
               About Us
             </button>
-            <Link href="mailto:founder@thewaitercompany.in" target='_blank' className="text-highlight hover:text-[#F5F1EB] transition-colors duration-300">
+            <Link href="mailto:founder@thewaitercompany.in" target='_blank' className="text-highlight hover:text-[#a08884] transition-colors duration-300">
               Contact Us
             </Link>
             <LoginDialog />
@@ -100,7 +102,7 @@ export default function Header() {
             <nav className="flex flex-col items-center space-y-6">
               <button 
                 onClick={() => {
-                  scrollToTop();
+                  scrollToFeatures();
                   setIsOpen(false);
                 }} 
                 type="button"
