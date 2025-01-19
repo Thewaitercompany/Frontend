@@ -49,7 +49,8 @@ const menuItems = [
     rating: 4.3,
     isVeg: false
   },
-]
+  // ... other menu items
+];
 
 interface MenuItemType {
   id: number;
@@ -69,7 +70,7 @@ export default function MenuPage() {
   const tableId = params.tableId as string;
   const [filteredItems, setFilteredItems] = useState<MenuItemType[]>(menuItems);
   const [cartItems, setCartItems] = useState<MenuItemType[]>([]);
-  const [showFilterMenu, setShowFilterMenu] = useState(true);
+  const [showDetails, setShowDetails] = useState(false);
 
   const handleFilterChange = (isVeg: boolean) => {
     if (isVeg) {
@@ -101,10 +102,6 @@ export default function MenuPage() {
     });
   };
 
-  const toggleFilterMenu = () => {
-    setShowFilterMenu(prev => !prev);
-  };
-
   return (
     <div className="flex flex-col min-h-screen bg-[#F1EEE6]">
       <Navbar tableId={tableId} />
@@ -115,30 +112,31 @@ export default function MenuPage() {
         onSearch={handleSearch}
       />
 
-      <main className="flex-1 p-6 space-y-2">
+      <main className="flex-1 p-4 space-y-3">
         {filteredItems.map((item) => (
           <MenuItem
             key={item.id}
             {...item}
             onAddToCart={() => addToCart(item)}
-            toggleFilterMenu={toggleFilterMenu}
+            toggleFilterMenu={() => setShowDetails(!showDetails)}
             cartItems={cartItems}
           />
         ))}
       </main>
 
-      {showFilterMenu && (
-        <div className="fixed bottom-[88px] right-4 z-50">
-          <FilterMenu onFilterChange={handleFilterChange} />
-        </div>
-      )}
+      <div className="fixed bottom-[88px] right-4 z-50">
+        <FilterMenu 
+          onFilterChange={handleFilterChange}
+          isVisible={!showDetails}
+        />
+      </div>
 
-      <div className="sticky bottom-0 p-2 bg-white z-40">
+      <div className="sticky bottom-0 p-4 bg-[#F1EEE6]">
         <button
           type="button"
           aria-label="View Cart"
           onClick={() => router.push(`/menu/${tableId}/cart`)}
-          className="w-full bg-[#9D8480] text-white py-3 rounded-md hover:bg-[#3a2e2c] transition-colors"
+          className="w-full bg-[#9D8480] text-white py-3 rounded-lg text-[15px]"
         >
           View Cart ({cartItems.reduce((acc, item) => acc + (item.quantity || 0), 0)} items)
         </button>

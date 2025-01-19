@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import Image, { StaticImageData } from "next/image";
 import { Star } from 'lucide-react';
@@ -38,7 +40,6 @@ const MenuItem: React.FC<MenuItemProps> = ({
   longDescription,
   toggleFilterMenu,
   cartItems,
-  isVeg
 }) => {
   const [showDetails, setShowDetails] = useState(false);
 
@@ -64,7 +65,6 @@ const MenuItem: React.FC<MenuItemProps> = ({
               </div>
             </div>
             <p className="text-base font-medium mb-1">₹ {price}</p>
-            <p className="text-sm text-gray-600 mb-2">{isVeg ? '🟢 Veg' : '🔴 Non-veg'}</p>
             <p className="text-sm text-gray-600 mb-2">{description}</p>
             <div className="flex justify-between items-center mt-2">
               <button
