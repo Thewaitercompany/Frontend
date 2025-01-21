@@ -1,135 +1,145 @@
-"use client";
+"use client"
 
-import React, { useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import Navbar from '@/components/Navbar';
-import MenuItem from '@/components/MenuItem';
-import SearchBar from '@/components/SearchBar';
-import FilterMenu from '@/components/FilterMenu';
+import React, { useState } from "react"
+import { useRouter, useParams } from "next/navigation"
+import Navbar from "@/components/Navbar"
+import MenuItem from "@/components/MenuItem"
+import SearchBar from "@/components/SearchBar"
+import FilterMenu from "@/components/FilterMenu"
 
 // Sample menu data
 const menuItems = [
   {
     id: 1,
-    name: 'Crispy fries',
+    name: "Crispy fries",
     price: 60,
-    description: 'Crispy, golden-brown fries served piping hot with a sprinkle of salt.',
-    longDescription: 'Crispy, golden-brown fries served piping hot with a sprinkle of salt. A classic side dish that pairs perfectly with burgers, sandwiches, or as a snack on its own.',
-    image: '/fries.png',
+    description: "Crispy, golden-brown fries served piping hot with a sprinkle of salt.",
+    longDescription:
+      "Crispy, golden-brown fries served piping hot with a sprinkle of salt. A classic side dish that pairs perfectly with burgers, sandwiches, or as a snack on its own.",
+    image: "/fries.png",
     rating: 4.1,
-    isVeg: true
+    isVeg: true,
   },
   {
     id: 2,
-    name: 'Chicken nuggets',
+    name: "Chicken nuggets",
     price: 80,
-    description: 'Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried.',
-    longDescription: 'Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried. They are a popular fast food item, often served with french fries and dipping sauces like ketchup, mustard, or BBQ sauce.',
-    image: '/nugg.png',
+    description: "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried.",
+    longDescription:
+      "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried. They are a popular fast food item, often served with french fries and dipping sauces like ketchup, mustard, or BBQ sauce.",
+    image: "/nugg.png",
     rating: 4.3,
-    isVeg: false
+    isVeg: false,
   },
   {
     id: 3,
-    name: 'Crispy fries',
+    name: "Crispy fries",
     price: 60,
-    description: 'Crispy, golden-brown fries served piping hot with a sprinkle of salt.',
-    longDescription: 'Crispy, golden-brown fries served piping hot with a sprinkle of salt. A classic side dish that pairs perfectly with burgers, sandwiches, or as a snack on its own.',
-    image: '/fries.png',
+    description: "Crispy, golden-brown fries served piping hot with a sprinkle of salt.",
+    longDescription:
+      "Crispy, golden-brown fries served piping hot with a sprinkle of salt. A classic side dish that pairs perfectly with burgers, sandwiches, or as a snack on its own.",
+    image: "/fries.png",
     rating: 4.1,
-    isVeg: true
+    isVeg: true,
   },
   {
     id: 4,
-    name: 'Chicken nuggets',
+    name: "Chicken nuggets",
     price: 80,
-    description: 'Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried.',
-    longDescription: 'Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried. They are a popular fast food item, often served with french fries and dipping sauces like ketchup, mustard, or BBQ sauce.',
-    image: '/nugg.png',
+    description: "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried.",
+    longDescription:
+      "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried. They are a popular fast food item, often served with french fries and dipping sauces like ketchup, mustard, or BBQ sauce.",
+    image: "/nugg.png",
     rating: 4.3,
-    isVeg: false
-  },
+    isVeg: false,
+  }
   // ... other menu items
-];
+]
 
 interface MenuItemType {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  longDescription?: string;
-  image: string;
-  rating: number;
-  isVeg: boolean;
-  quantity?: number;
+  id: number
+  name: string
+  price: number
+  description: string
+  longDescription?: string
+  image: string
+  rating: number
+  isVeg: boolean
+  quantity?: number
 }
 
 export default function MenuPage() {
-  const router = useRouter();
-  const params = useParams();
-  const tableId = params.tableId as string;
-  const [filteredItems, setFilteredItems] = useState<MenuItemType[]>(menuItems);
-  const [cartItems, setCartItems] = useState<MenuItemType[]>([]);
-  const [showDetails, setShowDetails] = useState(false);
+  const router = useRouter()
+  const params = useParams()
+  const tableId = params.tableId as string
+  const [filteredItems, setFilteredItems] = useState<MenuItemType[]>(menuItems)
+  const [cartItems, setCartItems] = useState<Array<{ id: number; quantity: number }>>([])
+  const [isFilterMenuVisible, setIsFilterMenuVisible] = useState(true)
 
   const handleFilterChange = (isVeg: boolean) => {
     if (isVeg) {
-      setFilteredItems(menuItems.filter(item => item.isVeg));
+      setFilteredItems(menuItems.filter((item) => item.isVeg))
     } else {
-      setFilteredItems(menuItems);
+      setFilteredItems(menuItems)
     }
-  };
+  }
 
   const handleSearch = (query: string) => {
-    const lowercaseQuery = query.toLowerCase();
-    setFilteredItems(menuItems.filter(item =>
-      item.name.toLowerCase().includes(lowercaseQuery) ||
-      item.description.toLowerCase().includes(lowercaseQuery)
-    ));
-  };
+    const lowercaseQuery = query.toLowerCase()
+    setFilteredItems(
+      menuItems.filter(
+        (item) =>
+          item.name.toLowerCase().includes(lowercaseQuery) || item.description.toLowerCase().includes(lowercaseQuery),
+      ),
+    )
+  }
 
-  const addToCart = (item: MenuItemType) => {
-    setCartItems(prevItems => {
-      const existingItem = prevItems.find(i => i.id === item.id);
-      if (existingItem) {
-        return prevItems.map(i => i.id === item.id
-          ? { ...i, quantity: (i.quantity || 0) + 1 }
-          : i
-        );
-      } else {
-        return [...prevItems, { ...item, quantity: 1 }];
+  const updateCart = (id: number, quantity: number) => {
+    setCartItems((prevItems) => {
+      const existingItemIndex = prevItems.findIndex((item) => item.id === id)
+      if (existingItemIndex !== -1) {
+        const updatedItems = [...prevItems]
+        if (quantity === 0) {
+          updatedItems.splice(existingItemIndex, 1)
+        } else {
+          updatedItems[existingItemIndex].quantity = quantity
+        }
+        return updatedItems
+      } else if (quantity > 0) {
+        return [...prevItems, { id, quantity }]
       }
-    });
-  };
+      return prevItems
+    })
+  }
+
+  const toggleFilterMenu = (isVisible: boolean) => {
+    setIsFilterMenuVisible(isVisible)
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F1EEE6]">
       <Navbar tableId={tableId} />
 
-      <SearchBar
-        tableId={tableId}
-        onFilterChange={handleFilterChange}
-        onSearch={handleSearch}
-      />
+      <SearchBar tableId={tableId} onFilterChange={handleFilterChange} onSearch={handleSearch} />
 
-      <main className="flex-1 p-4 space-y-3">
+      <main className="flex-1 p-4 space-y-4">
         {filteredItems.map((item) => (
           <MenuItem
             key={item.id}
             {...item}
-            onAddToCart={() => addToCart(item)}
-            toggleFilterMenu={() => setShowDetails(!showDetails)}
+            onAddToCart={updateCart}
+            toggleFilterMenu={toggleFilterMenu}
             cartItems={cartItems}
+            tableId={tableId}
           />
         ))}
       </main>
 
-      <div className="fixed bottom-[88px] right-4 z-50">
-        <FilterMenu 
-          onFilterChange={handleFilterChange}
-          isVisible={!showDetails}
-        />
-      </div>
+      {isFilterMenuVisible && (
+        <div className="fixed bottom-[88px] right-4 z-50">
+          <FilterMenu onFilterChange={handleFilterChange} isVisible={true} />
+        </div>
+      )}
 
       <div className="sticky bottom-0 p-4 bg-[#F1EEE6]">
         <button
@@ -138,10 +148,10 @@ export default function MenuPage() {
           onClick={() => router.push(`/menu/${tableId}/cart`)}
           className="w-full bg-[#9D8480] text-white py-3 rounded-lg text-[15px]"
         >
-          View Cart ({cartItems.reduce((acc, item) => acc + (item.quantity || 0), 0)} items)
+          View Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)} items)
         </button>
       </div>
     </div>
-  );
+  )
 }
 

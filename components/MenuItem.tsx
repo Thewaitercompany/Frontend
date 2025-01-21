@@ -1,32 +1,24 @@
-"use client";
+"use client"
 
-import React, { useState } from 'react';
-import Image, { StaticImageData } from "next/image";
-import { Star } from 'lucide-react';
+import type React from "react"
+import { useState, useEffect } from "react"
+import Image, { type StaticImageData } from "next/image"
+import { Star } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 interface MenuItemProps {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  image: string | StaticImageData;
-  rating: number;
-  longDescription?: string;
-  onAddToCart: () => void;
-  toggleFilterMenu: () => void;
-  cartItems: MenuItemType[];
-  isVeg: boolean;
-}
-
-interface MenuItemType {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  image: string;
-  rating: number;
-  isVeg: boolean;
-  quantity?: number;
+  id: number
+  name: string
+  price: number
+  description: string
+  image: string | StaticImageData
+  rating: number
+  isVeg: boolean
+  onAddToCart: (id: number, quantity: number) => void
+  toggleFilterMenu: (show: boolean) => void
+  cartItems: Array<{ id: number; quantity: number }>
+  longDescription?: string
+  tableId?: string
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({
@@ -37,112 +29,181 @@ const MenuItem: React.FC<MenuItemProps> = ({
   image,
   rating,
   onAddToCart,
-  longDescription,
   toggleFilterMenu,
   cartItems,
+  longDescription,
+  tableId,
 }) => {
-  const [showDetails, setShowDetails] = useState(false);
+  const router = useRouter()
+  const [showDetails, setShowDetails] = useState(false)
+  const [quantity, setQuantity] = useState(0)
+  const [animate, setAnimate] = useState(false)
+  const [showPopup, setShowPopup] = useState(false)
 
-  const handleReadMoreClick = () => {
-    setShowDetails(true);
-    toggleFilterMenu();
-  };
+  useEffect(() => {
+    const cartItem = cartItems.find((item) => item.id === id)
+    setQuantity(cartItem ? cartItem.quantity : 0)
+  }, [cartItems, id])
 
-  const totalCartItems = cartItems.reduce((acc, item) => acc + (item.quantity || 0), 0);
-  const quantity = cartItems.find(item => item.id === id)?.quantity || 0;
+  const handleReadMoreClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowDetails(true)
+    toggleFilterMenu(false)
+  }
+
+  const handleAdd = () => {
+    setShowDetails(true)
+    toggleFilterMenu(false)
+    handleIncrement()
+  }
+
+  const handleIncrement = () => {
+    setAnimate(true)
+    const newQuantity = quantity + 1
+    setQuantity(newQuantity)
+    onAddToCart(id, newQuantity)
+    if (newQuantity === 1) {
+      setShowPopup(true)
+      setTimeout(() => setShowPopup(false), 2000)
+    }
+    setTimeout(() => setAnimate(false), 300)
+  }
+
+  const handleDecrement = () => {
+    if (quantity > 0) {
+      setAnimate(true)
+      const newQuantity = quantity - 1
+      setQuantity(newQuantity)
+      onAddToCart(id, newQuantity)
+      setTimeout(() => setAnimate(false), 300)
+    }
+  }
+
+  const totalCartItems = cartItems.reduce((acc, item) => acc + item.quantity, 0)
 
   return (
     <>
-      {/* Menu Item Card */}
-      <div className="bg-[#FAF7F5] p-4 rounded-lg">
-        <div className="flex items-center gap-4">
-          <div className="flex-1">
-            <div className="flex items-start justify-between mb-1">
-              <h3 className="text-base font-medium text-gray-900">{name}</h3>
-              <div className="flex items-center gap-1">
-                <Star className="h-4 w-4 fill-yellow-400 stroke-none" />
-                <span className="text-sm text-gray-500">{rating.toFixed(1)}</span>
-              </div>
-            </div>
-            <p className="text-base font-medium mb-1">₹ {price}</p>
-            <p className="text-sm text-gray-600 mb-2">{description}</p>
-            <div className="flex justify-between items-center mt-2">
-              <button
-                onClick={handleReadMoreClick}
-                className="text-[#8b5c4a] text-sm hover:text-[#6d4837]"
-              >
-                Read More
-              </button>
-              <button
-                onClick={onAddToCart}
-                className="px-3 py-1 bg-[#9D8480] text-white text-sm rounded-full hover:bg-[#6d4837] transition-colors"
-              >
-                Add {quantity > 0 && `(${quantity})`}
-              </button>
+      <div className="bg-white rounded-lg mb-3 relative flex">
+        <div className="flex-1 p-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[15px] font-medium text-gray-900">{name}</span>
+            <div className="flex items-center">
+              <Star className="h-3.5 w-3.5 fill-yellow-400 stroke-none" />
+              <span className="text-xs text-gray-500 ml-0.5">{rating}</span>
             </div>
           </div>
-          <div className="flex-shrink-0 self-center">
-            <div className="relative w-24 h-24 rounded-lg overflow-hidden">
-              <Image
-                src={image || "/placeholder.svg"}
-                alt={name}
-                fill
-                className="object-cover"
-                sizes="96px"
-              />
-            </div>
+          <div className="mt-1">
+            <span className="text-[13px] text-gray-900">₹ {price}</span>
           </div>
+          <p className="text-[13px] text-gray-500 mt-1 leading-snug">
+            {description}{" "}
+            <button onClick={handleReadMoreClick} className="text-[#8b5c4a] hover:underline inline-block">
+              Read More
+            </button>
+          </p>
+          <button
+            onClick={handleAdd}
+            className="mt-2 px-4 py-1 bg-[#D4C5C3] text-[13px] text-black rounded-md hover:bg-[#C0B2B0] transition-colors"
+          >
+            Add
+          </button>
         </div>
+        <div className="w-[100px] relative">
+          <Image
+            src={image || "/placeholder.svg"}
+            alt={name}
+            fill
+            className="object-cover rounded-r-lg"
+            sizes="100px"
+          />
+        </div>
+        {showPopup && (
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-green-500 text-white px-4 py-2 rounded-full text-sm animate-popup">
+            Added to cart!
+          </div>
+        )}
       </div>
 
-      {/* Bottom Drawer with View Cart */}
       {showDetails && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setShowDetails(false)}>
-          <div className="absolute inset-x-0 bottom-0 flex flex-col">
-            {/* Popup Content */}
-            <div 
-              className="bg-white py-4 px-4 rounded-t-xl"
-              onClick={e => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-medium">{name}</h3>
-                  <div className="flex items-center">
-                    <Star className="h-4 w-4 fill-yellow-400 stroke-none" />
-                    <span className="text-sm text-gray-600 ml-1">{rating.toFixed(1)}</span>
+        <div
+          className="fixed inset-0 bg-black/50 z-50"
+          onClick={() => {
+            setShowDetails(false)
+            toggleFilterMenu(true)
+          }}
+        >
+          <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-xl animate-slide-up">
+            <div className="p-4" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-start gap-4">
+                <div className="flex-1">
+                  <div className="flex items-start justify-between mb-2">
+                    <div>
+                      <h3 className="text-lg font-medium mb-1">{name}</h3>
+                      <div className="flex items-center">
+                        <Star className="h-4 w-4 fill-yellow-400 stroke-none" />
+                        <span className="text-sm text-gray-600 ml-1">{rating}</span>
+                      </div>
+                    </div>
+                    <p className="text-lg">₹ {price}</p>
                   </div>
+                  <p className="text-sm text-gray-600">{longDescription || description}</p>
                 </div>
-                <p className="text-base">₹ {price}</p>
-              </div>
-              <div className="flex justify-between items-start gap-4">
-                <p className="text-sm text-gray-600 flex-1">
-                  {longDescription || description}
-                </p>
                 <div className="flex-shrink-0">
                   <div className="relative w-24 h-24 rounded-lg overflow-hidden">
-                    <Image
-                      src={image || "/placeholder.svg"}
-                      alt={name}
-                      fill
-                      className="object-cover"
-                      sizes="96px"
-                    />
+                    <Image src={image || "/placeholder.svg"} alt={name} fill className="object-cover" sizes="96px" />
                   </div>
-                  <button
-                    onClick={onAddToCart}
-                    className="mt-2 w-full py-1 px-4 bg-white text-black text-sm rounded border border-gray-200 hover:bg-gray-50 transition-colors"
-                  >
-                    Add
-                  </button>
+                  <div className="mt-2 flex items-center justify-center bg-white rounded border border-gray-200">
+                    {quantity === 0 ? (
+                      <button
+                        onClick={handleAdd}
+                        className="w-full py-1 px-4 bg-[#D4C5C3] text-black rounded text-sm hover:bg-[#C0B2B0] transition-colors"
+                      >
+                        Add
+                      </button>
+                    ) : (
+                      <div className="flex items-center bg-white w-full">
+                        <button onClick={handleDecrement} className="p-1 hover:bg-gray-100 rounded-l transition-colors">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
+                        </button>
+                        <span className={`px-3 text-sm ${animate ? "animate-bounce" : ""}`}>{quantity}</span>
+                        <button onClick={handleIncrement} className="p-1 hover:bg-gray-100 rounded-r transition-colors">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* View Cart Button */}
             <div className="bg-white px-4 py-3 border-t">
-              <button 
-                className="w-full py-3 bg-[#9D8480] text-white rounded-lg font-medium"
-                onClick={() => console.log('View cart clicked')}
+              <button
+                className="w-full py-3 bg-[#9D8480] text-white rounded-lg font-medium hover:bg-[#8A716D] transition-colors"
+                onClick={() => tableId && router.push(`/menu/${tableId}/cart`)}
               >
                 View Cart ({totalCartItems} items)
               </button>
@@ -151,8 +212,8 @@ const MenuItem: React.FC<MenuItemProps> = ({
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default MenuItem;
+export default MenuItem
 

@@ -57,6 +57,20 @@ module.exports = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
       },
+      keyframes: {
+        popup: {
+          "0%": { transform: "scale(0.5) translateY(20px)", opacity: "0" },
+          "100%": { transform: "scale(1) translateY(0)", opacity: "1" },
+        },
+        slideUp: {
+          "0%": { transform: "translateY(100%)" },
+          "100%": { transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        popup: "popup 0.3s ease-out",
+        "slide-up": "slideUp 0.3s ease-out",
+      },
     }
   },
   plugins: [tailwindcssAnimate],
