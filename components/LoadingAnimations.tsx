@@ -52,13 +52,9 @@ export default function LoadingAnimations({
       try {
         if (video1Ref.current && video2Ref.current) {
           // Play animations sequentially
-          if (video1Loaded) {
-            await playAnimation(video1Ref.current);
-            setCurrentAnimation(2);
-            if (video2Loaded) {
-              await playAnimation(video2Ref.current);
-            }
-          }
+          await playAnimation(video1Ref.current);
+          setCurrentAnimation(2);
+          await playAnimation(video2Ref.current);
           onComplete();
         }
       } catch (err) {
