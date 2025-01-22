@@ -15,6 +15,8 @@ export default function LoadingAnimations({
 
   useEffect(() => {
     let isMounted = true;
+    const video1 = video1Ref.current;
+    const video2 = video2Ref.current;
 
     const loadVideos = async () => {
       try {
@@ -119,10 +121,6 @@ export default function LoadingAnimations({
 
     return () => {
       isMounted = false;
-      // Capture ref values before cleanup
-      const video1 = video1Ref.current;
-      const video2 = video2Ref.current;
-
       // Cleanup video elements
       if (video1) {
         video1.pause();
@@ -135,7 +133,7 @@ export default function LoadingAnimations({
         video2.load();
       }
     };
-  }, [onComplete]);
+  }, [onComplete, video1Ref, video2Ref]);
 
   if (hasError) {
     console.log("Rendering error state");
