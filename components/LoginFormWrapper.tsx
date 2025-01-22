@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Phone } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,10 @@ export default function LoginFormWrapper() {
 
   useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  const handleAnimationComplete = useCallback(() => {
+    setShowAnimations(false);
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,7 +57,7 @@ export default function LoginFormWrapper() {
   }
 
   if (showAnimations) {
-    return <LoadingAnimations onComplete={() => setShowAnimations(false)} />;
+    return <LoadingAnimations onComplete={handleAnimationComplete} />;
   }
 
   return (

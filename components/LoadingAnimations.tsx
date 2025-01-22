@@ -19,6 +19,9 @@ export default function LoadingAnimations({
 
   // Preload videos
   useEffect(() => {
+    const video1 = video1Ref.current;
+    const video2 = video2Ref.current;
+
     const preloadVideos = async () => {
       try {
         const video1Promise = fetch("/animation 1.mp4").then((response) => {
@@ -36,28 +39,49 @@ export default function LoadingAnimations({
           video2Promise,
         ]);
 
-        if (video1Ref.current && video2Ref.current) {
-          video1Ref.current.src = URL.createObjectURL(video1Blob);
-          video2Ref.current.src = URL.createObjectURL(video2Blob);
+        if (video1 && video2) {
+          const url1 = URL.createObjectURL(video1Blob);
+          const url2 = URL.createObjectURL(video2Blob);
+
+          video1.src = url1;
+          video2.src = url2;
 
           setVideosLoaded({ video1: true, video2: true });
           setIsLoading(false);
+
+          // Store URLs for cleanup
+          return { url1, url2 };
         }
+        return null;
       } catch (error) {
         console.error("Error preloading videos:", error);
         setHasError(true);
         onComplete();
+        return null;
       }
     };
 
-    preloadVideos();
+    const urlsPromise = preloadVideos();
 
     return () => {
-      // Cleanup object URLs
-      if (video1Ref.current) URL.revokeObjectURL(video1Ref.current.src);
-      if (video2Ref.current) URL.revokeObjectURL(video2Ref.current.src);
+      // Cleanup function uses captured video refs
+      if (video1) {
+        video1.pause();
+        video1.src = "";
+      }
+      if (video2) {
+        video2.pause();
+        video2.src = "";
+      }
+      // Cleanup URLs
+      urlsPromise.then((urls) => {
+        if (urls) {
+          URL.revokeObjectURL(urls.url1);
+          URL.revokeObjectURL(urls.url2);
+        }
+      });
     };
-  }, []);
+  }, [onComplete]); // Include onComplete in dependencies
 
   // Play videos once loaded
   useEffect(() => {
@@ -107,6 +131,7 @@ export default function LoadingAnimations({
 
     return () => {
       isMounted = false;
+      // Cleanup function uses captured video refs
       if (video1) {
         video1.pause();
         video1.currentTime = 0;
@@ -116,7 +141,7 @@ export default function LoadingAnimations({
         video2.currentTime = 0;
       }
     };
-  }, [videosLoaded, onComplete]);
+  }, [videosLoaded, onComplete]); // Include all dependencies
 
   if (hasError) return null;
 
