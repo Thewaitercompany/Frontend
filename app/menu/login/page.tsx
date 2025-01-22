@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Phone } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,7 @@ import Navbar from "@/components/Navbar";
 import LoadingAnimations from "@/components/LoadingAnimations";
 import Cookies from "js-cookie";
 
-function LoginForm() {
+export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [tableId, setTableId] = useState("1");
@@ -19,9 +19,11 @@ function LoginForm() {
     numberOfPeople: "",
   });
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [showAnimations, setShowAnimations] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const tableIdParam = searchParams.get("tableId");
     if (tableIdParam && tableIdParam !== "login") {
       setTableId(tableIdParam);
@@ -36,18 +38,26 @@ function LoginForm() {
       return;
     }
 
-    Cookies.set("auth", "true", { expires: 1 });
-    Cookies.set("userData", JSON.stringify(formData), { expires: 1 });
-
-    router.push(`/menu/${tableId}`);
+    try {
+      Cookies.set("auth", "true", { expires: 1 });
+      Cookies.set("userData", JSON.stringify(formData), { expires: 1 });
+      router.push(`/menu/${tableId}`);
+    } catch (err) {
+      setError("Failed to save login information. Please try again.");
+    }
   };
 
-  const handleAnimationComplete = () => {
-    setIsLoading(false);
-  };
+  // Don't render anything until mounted to prevent hydration issues
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-[#F1EEE6] flex items-center justify-center">
+        <div className="text-center">Loading...</div>
+      </div>
+    );
+  }
 
-  if (isLoading) {
-    return <LoadingAnimations onComplete={handleAnimationComplete} />;
+  if (showAnimations) {
+    return <LoadingAnimations onComplete={() => setShowAnimations(false)} />;
   }
 
   return (
@@ -124,13 +134,5 @@ function LoginForm() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <LoginForm />
-    </Suspense>
   );
 }

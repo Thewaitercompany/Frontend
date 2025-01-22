@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function LoadingAnimations({
   onComplete,
@@ -8,48 +8,105 @@ export default function LoadingAnimations({
   onComplete: () => void;
 }) {
   const [currentAnimation, setCurrentAnimation] = useState(1);
+  const [videoLoadError, setVideoLoadError] = useState(false);
+  const video1Ref = useRef<HTMLVideoElement>(null);
+  const video2Ref = useRef<HTMLVideoElement>(null);
+  const [video1Loaded, setVideo1Loaded] = useState(false);
+  const [video2Loaded, setVideo2Loaded] = useState(false);
 
   useEffect(() => {
-    const video1 = document.getElementById("animation1") as HTMLVideoElement;
-    const video2 = document.getElementById("animation2") as HTMLVideoElement;
+    let timeoutId: NodeJS.Timeout;
 
-    const playAnimation = (video: HTMLVideoElement) => {
-      return new Promise<void>((resolve) => {
-        video.play();
-        video.onended = () => resolve();
-      });
+    const checkVideoLoading = () => {
+      timeoutId = setTimeout(() => {
+        if (!video1Loaded || !video2Loaded) {
+          console.log("Video loading timeout - proceeding to login");
+          onComplete();
+        }
+      }, 5000);
     };
 
-    const playAnimations = async () => {
-      await playAnimation(video1);
-      setCurrentAnimation(2);
-      await playAnimation(video2);
-      onComplete();
+    checkVideoLoading();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [onComplete, video1Loaded, video2Loaded]);
+
+  useEffect(() => {
+    const playAnimation = async (video: HTMLVideoElement) => {
+      try {
+        await video.play();
+        return new Promise<void>((resolve) => {
+          video.onended = () => resolve();
+        });
+      } catch (err) {
+        console.error("Video playback error:", err);
+        onComplete();
+        return Promise.reject(err);
+      }
     };
 
-    playAnimations();
-  }, [onComplete]);
+    const loadAndPlayAnimations = async () => {
+      try {
+        if (video1Ref.current && video2Ref.current) {
+          if (video1Loaded) {
+            await playAnimation(video1Ref.current);
+            setCurrentAnimation(2);
+            if (video2Loaded) {
+              await playAnimation(video2Ref.current);
+            }
+          }
+          onComplete();
+        }
+      } catch (err) {
+        console.error("Animation sequence error:", err);
+        onComplete();
+      }
+    };
+
+    if (video1Loaded && video2Loaded) {
+      loadAndPlayAnimations();
+    }
+  }, [onComplete, video1Loaded, video2Loaded]);
+
+  const handleVideoError = () => {
+    setVideoLoadError(true);
+    onComplete();
+  };
+
+  if (videoLoadError) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 bg-[#F1EEE6] z-50 flex items-center justify-center">
-      <video
-        id="animation1"
-        className={`object-cover ${
-          currentAnimation === 1 ? "block" : "hidden"
-        }`}
-        src="/animation 1.mp4"
-        muted
-        playsInline
-      />
-      <video
-        id="animation2"
-        className={` object-cover ${
-          currentAnimation === 2 ? "block" : "hidden"
-        }`}
-        src="/animation 2.mp4"
-        muted
-        playsInline
-      />
+      <div className="w-full max-w-md aspect-video">
+        <video
+          ref={video1Ref}
+          className={`w-full h-full object-cover ${
+            currentAnimation === 1 ? "block" : "hidden"
+          }`}
+          src="/animation 1.mp4"
+          muted
+          playsInline
+          preload="auto"
+          onLoadedData={() => setVideo1Loaded(true)}
+          onError={handleVideoError}
+        />
+        <video
+          ref={video2Ref}
+          className={`w-full h-full object-cover ${
+            currentAnimation === 2 ? "block" : "hidden"
+          }`}
+          src="/animation 2.mp4"
+          muted
+          playsInline
+          preload="auto"
+          onLoadedData={() => setVideo2Loaded(true)}
+          onError={handleVideoError}
+        />
+      </div>
     </div>
   );
 }
