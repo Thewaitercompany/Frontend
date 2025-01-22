@@ -14,70 +14,131 @@ export default function LoadingAnimations({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadVideos = async () => {
       try {
+        console.log("Starting to load videos...");
+
         // Create promises for both videos to load
         const loadVideo1 = new Promise<void>((resolve, reject) => {
-          if (video1Ref.current) {
-            video1Ref.current.onloadeddata = () => {
-              resolve();
-            };
-            video1Ref.current.onerror = () => reject("Video 1 failed to load");
-          }
+          const video = video1Ref.current;
+          if (!video) return reject("Video 1 element not found");
+
+          // Log video element properties
+          console.log("Video 1 element:", {
+            src: video.src,
+            readyState: video.readyState,
+            error: video.error,
+          });
+
+          video.onloadeddata = () => {
+            console.log("Video 1 loaded successfully");
+            resolve();
+          };
+          video.onerror = (e) => {
+            console.error("Video 1 load error:", e);
+            reject("Video 1 failed to load");
+          };
         });
 
         const loadVideo2 = new Promise<void>((resolve, reject) => {
-          if (video2Ref.current) {
-            video2Ref.current.onloadeddata = () => {
-              resolve();
-            };
-            video2Ref.current.onerror = () => reject("Video 2 failed to load");
-          }
+          const video = video2Ref.current;
+          if (!video) return reject("Video 2 element not found");
+
+          // Log video element properties
+          console.log("Video 2 element:", {
+            src: video.src,
+            readyState: video.readyState,
+            error: video.error,
+          });
+
+          video.onloadeddata = () => {
+            console.log("Video 2 loaded successfully");
+            resolve();
+          };
+          video.onerror = (e) => {
+            console.error("Video 2 load error:", e);
+            reject("Video 2 failed to load");
+          };
         });
 
         // Wait for both videos to load
         await Promise.all([loadVideo1, loadVideo2]);
+        console.log("Both videos loaded successfully");
+
+        if (!isMounted) return;
         setIsLoading(false);
 
         // Play videos sequentially
         if (video1Ref.current && video2Ref.current) {
+          console.log("Starting video 1 playback");
           // Play first video
           await video1Ref.current.play();
 
           // Wait for first video to end
           await new Promise<void>((resolve) => {
-            if (video1Ref.current) {
-              video1Ref.current.onended = () => resolve();
-            }
+            if (!video1Ref.current) return;
+            video1Ref.current.onended = () => {
+              console.log("Video 1 playback completed");
+              resolve();
+            };
           });
 
+          if (!isMounted) return;
           // Switch to second video
           setCurrentAnimation(2);
+          console.log("Starting video 2 playback");
 
           // Play second video
           await video2Ref.current.play();
 
           // Wait for second video to end
           await new Promise<void>((resolve) => {
-            if (video2Ref.current) {
-              video2Ref.current.onended = () => resolve();
-            }
+            if (!video2Ref.current) return;
+            video2Ref.current.onended = () => {
+              console.log("Video 2 playback completed");
+              resolve();
+            };
           });
 
-          // Complete the sequence
+          if (!isMounted) return;
+          console.log("Animation sequence completed");
           onComplete();
         }
       } catch (error) {
         console.error("Error with videos:", error);
-        setHasError(true);
-        onComplete();
+        if (isMounted) {
+          setHasError(true);
+          onComplete();
+        }
       }
     };
 
     loadVideos();
+
+    return () => {
+      isMounted = false;
+      // Capture ref values before cleanup
+      const video1 = video1Ref.current;
+      const video2 = video2Ref.current;
+
+      // Cleanup video elements
+      if (video1) {
+        video1.pause();
+        video1.src = "";
+        video1.load();
+      }
+      if (video2) {
+        video2.pause();
+        video2.src = "";
+        video2.load();
+      }
+    };
   }, [onComplete]);
 
   if (hasError) {
+    console.log("Rendering error state");
     return null;
   }
 
@@ -98,6 +159,7 @@ export default function LoadingAnimations({
           muted
           playsInline
           preload="auto"
+          crossOrigin="anonymous"
         />
         <video
           ref={video2Ref}
@@ -108,6 +170,7 @@ export default function LoadingAnimations({
           muted
           playsInline
           preload="auto"
+          crossOrigin="anonymous"
         />
       </div>
     </div>

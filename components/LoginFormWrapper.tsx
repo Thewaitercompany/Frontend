@@ -24,6 +24,30 @@ export default function LoginFormWrapper() {
 
   useEffect(() => {
     setIsMounted(true);
+    // Check if videos exist and are accessible
+    fetch("/animation 1.mp4", { method: "HEAD" })
+      .then((response) => {
+        if (!response.ok) {
+          console.error("Animation 1 not found:", response.status);
+          setShowAnimations(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking animation 1:", error);
+        setShowAnimations(false);
+      });
+
+    fetch("/animation 2.mp4", { method: "HEAD" })
+      .then((response) => {
+        if (!response.ok) {
+          console.error("Animation 2 not found:", response.status);
+          setShowAnimations(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking animation 2:", error);
+        setShowAnimations(false);
+      });
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -44,7 +68,6 @@ export default function LoginFormWrapper() {
     }
   };
 
-  // Don't render anything until client-side hydration is complete
   if (!isMounted) {
     return (
       <div className="min-h-screen bg-[#F1EEE6] flex items-center justify-center">
@@ -53,12 +76,10 @@ export default function LoginFormWrapper() {
     );
   }
 
-  // Show animations first
   if (showAnimations) {
     return <LoadingAnimations onComplete={() => setShowAnimations(false)} />;
   }
 
-  // Show login form after animations
   return (
     <div className="min-h-screen bg-[#F1EEE6] flex flex-col">
       <Navbar tableId={tableId} />
