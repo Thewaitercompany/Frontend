@@ -134,7 +134,7 @@ function MediaContent({ media }: { media: Feature['media'] }) {
           alt="Feature illustration"
           width={150}
           height={75}
-          className="object-contain md:max-w-[150px] md:max-h-[400px] "
+          className="object-contain md:max-w-[150px] md:max-h-[250px] mx-auto"
         />
       )
     case 'gif':
@@ -144,10 +144,10 @@ function MediaContent({ media }: { media: Feature['media'] }) {
           alt="Feature illustration"
           width={250}
           height={250}
-          className="w-full h-auto object-contain md:max-w-[250px]"
-          unoptimized={media.type === 'gif'}
+          className="w-full h-auto object-contain md:max-w-[250px] mx-auto"
+          unoptimized={media.type === "gif"}
         />
-      )
+      );
     case 'video':
       return (
         <video
@@ -156,9 +156,9 @@ function MediaContent({ media }: { media: Feature['media'] }) {
           loop
           muted
           playsInline
-          className="w-full h-auto object-contain md:max-w-[250px]"
+          className="w-full h-auto object-contain md:max-w-[250px] mx-auto"
         />
-      )
+      );
     default:
       return null
   }
@@ -217,7 +217,9 @@ export default function Features() {
           transition={{ duration: 0.6 }}
         >
          <h2 className="text-2xl md:text-3xl font-normal mb-4 md:mb-8 text-[#B39793] transition-colors text-center">
-            Why Choose <span className="text-black transition-colors">The Waiter Company</span> (TWC)?
+            Why Choose <span className="bg-gradient-to-r from-[#4D3E3B] to-[#D07F3E] bg-clip-text text-transparent">
+            The Waiter Company
+          </span> (TWC)?
           </h2>
         </motion.div>
         

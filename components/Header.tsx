@@ -1,28 +1,28 @@
-'use client'
+"use client";
 
-import * as React from "react"
-import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
-import Image from "next/image"
-import LoginDialog from './LoginDialog'
+import * as React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import Image from "next/image";
+import LoginDialog from "./LoginDialog";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const scrollToFeatures = () => {
-    const featuresSection = document.getElementById('features');
+    const featuresSection = document.getElementById("features");
     if (featuresSection) {
-      featuresSection.scrollIntoView({ behavior: 'smooth' });
+      featuresSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   return (
     <>
-      <motion.header 
-        className="sticky top-0 z-50 py-4 gradient-header"
+      <motion.header
+        className="sticky top-0 z-50 py-4"
         style={{
-          background: 'linear-gradient(to right, #B29792, #F1EEE6)'
+          background: "linear-gradient(to right, #B29792, #F1EEE6)",
         }}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -34,27 +34,31 @@ export default function Header() {
             <Image
               src="/logo.png"
               alt="The Waiter Company"
-              width={120}
-              height={40}
+              width={200}
+              height={100}
+              className="h-12 w-auto"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
-            <button 
-              onClick={scrollToFeatures} 
-              type="button"
-              className="text-highlight hover:text-[#a08884] transition-colors duration-300"
+          <nav className="hidden lg:flex items-center gap-8">
+            <button
+              onClick={scrollToFeatures}
+              className="text-[#4E3E3B] hover:text-[#8A7F7C] transition-colors"
             >
               About Us
             </button>
-            <Link href="mailto:founder@thewaitercompany.in" target='_blank' className="text-highlight hover:text-[#a08884] transition-colors duration-300">
+            <Link
+              href="mailto:founder@thewaitercompany.in"
+              target="_blank"
+              className="text-[#4E3E3B] hover:text-[#8A7F7C] transition-colors"
+            >
               Contact Us
             </Link>
             <LoginDialog />
-            <Link 
+            <Link
               href="#demo"
-              className="bg-[#B29792] text-white px-6 py-2 rounded text-sm hover:bg-[#a08884] transition-colors"
+              className="bg-[#B29792] text-white px-6 py-2 rounded hover:bg-[#a08884] transition-colors"
             >
               Book A Demo
             </Link>
@@ -74,7 +78,6 @@ export default function Header() {
       {/* Mobile Menu Overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -83,7 +86,6 @@ export default function Header() {
             onClick={() => setIsOpen(false)}
           />
 
-          {/* Menu Panel */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,26 +102,25 @@ export default function Header() {
               </button>
             </div>
             <nav className="flex flex-col items-center space-y-6">
-              <button 
+              <button
                 onClick={() => {
                   scrollToFeatures();
                   setIsOpen(false);
-                }} 
-                type="button"
+                }}
                 className="text-[#4E3E3B] text-lg hover:opacity-80 transition-opacity"
               >
                 About Us
               </button>
               <Link
                 href="mailto:founder@thewaitercompany.in"
-                target='_blank'
+                target="_blank"
                 onClick={() => setIsOpen(false)}
                 className="text-[#4E3E3B] text-lg hover:opacity-80 transition-opacity"
               >
                 Contact Us
               </Link>
               <LoginDialog />
-              <Link 
+              <Link
                 href="#demo"
                 onClick={() => setIsOpen(false)}
                 className="bg-[#B29792] text-white px-8 py-2 rounded text-lg hover:bg-[#a08884] transition-colors"
@@ -131,6 +132,5 @@ export default function Header() {
         </div>
       )}
     </>
-  )
+  );
 }
-

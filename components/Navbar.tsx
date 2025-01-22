@@ -11,7 +11,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ tableId }) => {
   return (
-    <div className="bg-[#F5F5F5] px-3 py-2">
+    <div className="bg-[#ffffff] px-3 py-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-6">
