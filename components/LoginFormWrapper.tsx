@@ -44,14 +44,21 @@ export default function LoginFormWrapper() {
     }
   };
 
+  // Don't render anything until client-side hydration is complete
   if (!isMounted) {
-    return null;
+    return (
+      <div className="min-h-screen bg-[#F1EEE6] flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-[#4A3F3C] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
   }
 
+  // Show animations first
   if (showAnimations) {
     return <LoadingAnimations onComplete={() => setShowAnimations(false)} />;
   }
 
+  // Show login form after animations
   return (
     <div className="min-h-screen bg-[#F1EEE6] flex flex-col">
       <Navbar tableId={tableId} />

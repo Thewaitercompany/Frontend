@@ -10,33 +10,37 @@ export default function LoadingAnimations({
   const [currentAnimation, setCurrentAnimation] = useState(1);
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
-  // Removed: const [isLoading, setIsLoading] = useState(true)
-  const loadingTimeoutRef = useRef<NodeJS.Timeout>();
   const [hasError, setHasError] = useState(false);
-
-  // Cleanup function
-  useEffect(() => {
-    return () => {
-      if (loadingTimeoutRef.current) {
-        clearTimeout(loadingTimeoutRef.current);
-      }
-    };
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Set a timeout to proceed if videos don't load
-    loadingTimeoutRef.current = setTimeout(() => {
-      console.log("Loading timeout - proceeding to login");
-      onComplete();
-    }, 3000);
-
-    const playVideosSequentially = async () => {
+    const loadVideos = async () => {
       try {
-        if (video1Ref.current && video2Ref.current) {
-          // Preload both videos
-          video1Ref.current.load();
-          video2Ref.current.load();
+        // Create promises for both videos to load
+        const loadVideo1 = new Promise<void>((resolve, reject) => {
+          if (video1Ref.current) {
+            video1Ref.current.onloadeddata = () => {
+              resolve();
+            };
+            video1Ref.current.onerror = () => reject("Video 1 failed to load");
+          }
+        });
 
+        const loadVideo2 = new Promise<void>((resolve, reject) => {
+          if (video2Ref.current) {
+            video2Ref.current.onloadeddata = () => {
+              resolve();
+            };
+            video2Ref.current.onerror = () => reject("Video 2 failed to load");
+          }
+        });
+
+        // Wait for both videos to load
+        await Promise.all([loadVideo1, loadVideo2]);
+        setIsLoading(false);
+
+        // Play videos sequentially
+        if (video1Ref.current && video2Ref.current) {
           // Play first video
           await video1Ref.current.play();
 
@@ -60,31 +64,30 @@ export default function LoadingAnimations({
             }
           });
 
-          // Complete the animation sequence
+          // Complete the sequence
           onComplete();
         }
       } catch (error) {
-        console.error("Error playing videos:", error);
+        console.error("Error with videos:", error);
         setHasError(true);
         onComplete();
-      } finally {
-        // Removed: setIsLoading(false)
-        if (loadingTimeoutRef.current) {
-          clearTimeout(loadingTimeoutRef.current);
-        }
       }
     };
 
-    playVideosSequentially();
+    loadVideos();
   }, [onComplete]);
 
-  // If there's an error, don't show anything and proceed to login
   if (hasError) {
     return null;
   }
 
   return (
     <div className="fixed inset-0 bg-[#F1EEE6] z-50 flex items-center justify-center">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#F1EEE6]">
+          <div className="w-16 h-16 border-4 border-[#4A3F3C] border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
       <div className="w-full max-w-md aspect-video relative">
         <video
           ref={video1Ref}
