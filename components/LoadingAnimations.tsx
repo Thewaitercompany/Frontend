@@ -8,171 +8,105 @@ export default function LoadingAnimations({
   onComplete: () => void;
 }) {
   const [currentAnimation, setCurrentAnimation] = useState(1);
+  const [videoLoadError, setVideoLoadError] = useState(false);
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
-  const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [videosLoaded, setVideosLoaded] = useState({
-    video1: false,
-    video2: false,
-  });
+  const [video1Loaded, setVideo1Loaded] = useState(false);
+  const [video2Loaded, setVideo2Loaded] = useState(false);
 
-  // Preload videos
   useEffect(() => {
-    const video1 = video1Ref.current;
-    const video2 = video2Ref.current;
+    let timeoutId: NodeJS.Timeout;
 
-    const preloadVideos = async () => {
-      try {
-        const video1Promise = fetch("/animation 1.mp4").then((response) => {
-          if (!response.ok) throw new Error("Video 1 not found");
-          return response.blob();
-        });
-
-        const video2Promise = fetch("/animation 2.mp4").then((response) => {
-          if (!response.ok) throw new Error("Video 2 not found");
-          return response.blob();
-        });
-
-        const [video1Blob, video2Blob] = await Promise.all([
-          video1Promise,
-          video2Promise,
-        ]);
-
-        if (video1 && video2) {
-          const url1 = URL.createObjectURL(video1Blob);
-          const url2 = URL.createObjectURL(video2Blob);
-
-          video1.src = url1;
-          video2.src = url2;
-
-          setVideosLoaded({ video1: true, video2: true });
-          setIsLoading(false);
-
-          // Store URLs for cleanup
-          return { url1, url2 };
+    const checkVideoLoading = () => {
+      timeoutId = setTimeout(() => {
+        // If videos haven't loaded within 5 seconds, proceed to login
+        if (!video1Loaded || !video2Loaded) {
+          console.log("Video loading timeout - proceeding to login");
+          onComplete();
         }
-        return null;
-      } catch (error) {
-        console.error("Error preloading videos:", error);
-        setHasError(true);
-        onComplete();
-        return null;
-      }
+      }, 5000);
     };
 
-    const urlsPromise = preloadVideos();
+    checkVideoLoading();
 
     return () => {
-      // Cleanup function uses captured video refs
-      if (video1) {
-        video1.pause();
-        video1.src = "";
-      }
-      if (video2) {
-        video2.pause();
-        video2.src = "";
-      }
-      // Cleanup URLs
-      urlsPromise.then((urls) => {
-        if (urls) {
-          URL.revokeObjectURL(urls.url1);
-          URL.revokeObjectURL(urls.url2);
-        }
-      });
+      if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [onComplete]); // Include onComplete in dependencies
+  }, [onComplete, video1Loaded, video2Loaded]);
 
-  // Play videos once loaded
   useEffect(() => {
-    if (!videosLoaded.video1 || !videosLoaded.video2) return;
-
-    let isMounted = true;
-    const video1 = video1Ref.current;
-    const video2 = video2Ref.current;
-
-    const playVideos = async () => {
+    const playAnimation = async (video: HTMLVideoElement) => {
       try {
-        if (!video1 || !video2) return;
-
-        // Play first video
-        await video1.play();
-
-        // Wait for first video to end
-        await new Promise<void>((resolve) => {
-          if (!video1) return;
-          video1.onended = () => resolve();
+        await video.play();
+        return new Promise<void>((resolve) => {
+          video.onended = () => resolve();
         });
+      } catch (err) {
+        console.error("Video playback error:", err);
+        onComplete(); // Proceed to login if video fails to play
+        return Promise.reject(err);
+      }
+    };
 
-        if (!isMounted) return;
-
-        // Switch to second video
-        setCurrentAnimation(2);
-
-        // Play second video
-        await video2.play();
-
-        // Wait for second video to end
-        await new Promise<void>((resolve) => {
-          if (!video2) return;
-          video2.onended = () => resolve();
-        });
-
-        if (!isMounted) return;
-        onComplete();
-      } catch (error) {
-        console.error("Error playing videos:", error);
-        setHasError(true);
+    const loadAndPlayAnimations = async () => {
+      try {
+        if (video1Ref.current && video2Ref.current) {
+          // Play animations sequentially
+          if (video1Loaded) {
+            await playAnimation(video1Ref.current);
+            setCurrentAnimation(2);
+            if (video2Loaded) {
+              await playAnimation(video2Ref.current);
+            }
+          }
+          onComplete();
+        }
+      } catch (err) {
+        console.error("Animation sequence error:", err);
         onComplete();
       }
     };
 
-    playVideos();
+    if (video1Loaded && video2Loaded) {
+      loadAndPlayAnimations();
+    }
+  }, [onComplete, video1Loaded, video2Loaded]);
 
-    return () => {
-      isMounted = false;
-      // Cleanup function uses captured video refs
-      if (video1) {
-        video1.pause();
-        video1.currentTime = 0;
-      }
-      if (video2) {
-        video2.pause();
-        video2.currentTime = 0;
-      }
-    };
-  }, [videosLoaded, onComplete]); // Include all dependencies
+  const handleVideoError = () => {
+    setVideoLoadError(true);
+    onComplete();
+  };
 
-  if (hasError) return null;
+  if (videoLoadError) {
+    return null; // Proceed to login immediately if videos fail to load
+  }
 
   return (
     <div className="fixed inset-0 bg-[#F1EEE6] z-50 flex items-center justify-center">
-      {isLoading && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-[#F1EEE6]">
-          <div className="w-16 h-16 border-4 border-[#4A3F3C] border-t-transparent rounded-full animate-spin" />
-          <p className="text-[#4A3F3C]">Loading animations...</p>
-        </div>
-      )}
-      <div className="w-full max-w-md aspect-video relative">
-        <video
-          ref={video1Ref}
-          className={`w-full h-full object-contain ${
-            currentAnimation === 1 ? "opacity-100" : "opacity-0"
-          } transition-opacity duration-300`}
-          muted
-          playsInline
-          preload="auto"
-        />
-        <video
-          ref={video2Ref}
-          className={`w-full h-full object-contain absolute inset-0 ${
-            currentAnimation === 2 ? "opacity-100" : "opacity-0"
-          } transition-opacity duration-300`}
-          muted
-          playsInline
-          preload="auto"
-        />
-      </div>
+      <video
+        ref={video1Ref}
+        className={`object-cover ${
+          currentAnimation === 1 ? "block" : "hidden"
+        }`}
+        src="/animation 1.mp4"
+        muted
+        playsInline
+        preload="auto"
+        onLoadedData={() => setVideo1Loaded(true)}
+        onError={handleVideoError}
+      />
+      <video
+        ref={video2Ref}
+        className={`object-cover ${
+          currentAnimation === 2 ? "block" : "hidden"
+        }`}
+        src="/animation 2.mp4"
+        muted
+        playsInline
+        preload="auto"
+        onLoadedData={() => setVideo2Loaded(true)}
+        onError={handleVideoError}
+      />
     </div>
   );
 }
