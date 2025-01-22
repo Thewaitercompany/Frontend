@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Phone } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -9,10 +9,10 @@ import Navbar from "@/components/Navbar";
 import LoadingAnimations from "@/components/LoadingAnimations";
 import Cookies from "js-cookie";
 
-export default function LoginPage() {
+export default function LoginFormWrapper() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [tableId, setTableId] = useState("1");
+  const tableId = searchParams.get("tableId") || "1";
   const [formData, setFormData] = useState({
     mobileNumber: "",
     name: "",
@@ -20,15 +20,6 @@ export default function LoginPage() {
   });
   const [error, setError] = useState("");
   const [showAnimations, setShowAnimations] = useState(true);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    const tableIdParam = searchParams.get("tableId");
-    if (tableIdParam && tableIdParam !== "login") {
-      setTableId(tableIdParam);
-    }
-  }, [searchParams]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,14 +38,6 @@ export default function LoginPage() {
       setError("Failed to save login information. Please try again.");
     }
   };
-
-  if (!isMounted) {
-    return (
-      <div className="min-h-screen bg-[#F1EEE6] flex items-center justify-center">
-        <div className="text-center">Loading...</div>
-      </div>
-    );
-  }
 
   if (showAnimations) {
     return <LoadingAnimations onComplete={() => setShowAnimations(false)} />;
