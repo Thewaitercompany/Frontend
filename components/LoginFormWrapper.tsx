@@ -24,30 +24,6 @@ export default function LoginFormWrapper() {
 
   useEffect(() => {
     setIsMounted(true);
-    // Check if videos exist and are accessible
-    fetch("/animation 1.mp4", { method: "HEAD" })
-      .then((response) => {
-        if (!response.ok) {
-          console.error("Animation 1 not found:", response.status);
-          setShowAnimations(false);
-        }
-      })
-      .catch((error) => {
-        console.error("Error checking animation 1:", error);
-        setShowAnimations(false);
-      });
-
-    fetch("/animation 2.mp4", { method: "HEAD" })
-      .then((response) => {
-        if (!response.ok) {
-          console.error("Animation 2 not found:", response.status);
-          setShowAnimations(false);
-        }
-      })
-      .catch((error) => {
-        console.error("Error checking animation 2:", error);
-        setShowAnimations(false);
-      });
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
