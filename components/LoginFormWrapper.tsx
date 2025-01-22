@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Phone } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,11 @@ export default function LoginFormWrapper() {
   });
   const [error, setError] = useState("");
   const [showAnimations, setShowAnimations] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +43,10 @@ export default function LoginFormWrapper() {
       setError("Failed to save login information. Please try again.");
     }
   };
+
+  if (!isMounted) {
+    return null;
+  }
 
   if (showAnimations) {
     return <LoadingAnimations onComplete={() => setShowAnimations(false)} />;
