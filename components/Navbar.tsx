@@ -25,7 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ tableId }) => {
               }} />
           </div>
           <span className="text-gray-900 text-base">
-            x Badshah&apos;s Kitchen
+            x Kitchen
           </span>
         </div>
         <div className="flex items-center gap-2">

@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { useRouter, useParams } from "next/navigation"
-import Navbar from "@/components/Navbar"
-import MenuItem from "@/components/MenuItem"
-import SearchBar from "@/components/SearchBar"
-import FilterMenu from "@/components/FilterMenu"
+import React, { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
+import Navbar from "@/components/Navbar";
+import MenuItem from "@/components/MenuItem";
+import SearchBar from "@/components/SearchBar";
+import FilterMenu from "@/components/FilterMenu";
+import Cookies from "js-cookie";
 
 // Sample menu data
 const menuItems = [
@@ -13,7 +14,8 @@ const menuItems = [
     id: 1,
     name: "Crispy fries",
     price: 60,
-    description: "Crispy, golden-brown fries served piping hot with a sprinkle of salt.",
+    description:
+      "Crispy, golden-brown fries served piping hot with a sprinkle of salt.",
     longDescription:
       "Crispy, golden-brown fries served piping hot with a sprinkle of salt. A classic side dish that pairs perfectly with burgers, sandwiches, or as a snack on its own.",
     image: "/fries.png",
@@ -24,7 +26,8 @@ const menuItems = [
     id: 2,
     name: "Chicken nuggets",
     price: 80,
-    description: "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried.",
+    description:
+      "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried.",
     longDescription:
       "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried. They are a popular fast food item, often served with french fries and dipping sauces like ketchup, mustard, or BBQ sauce.",
     image: "/nugg.png",
@@ -35,7 +38,8 @@ const menuItems = [
     id: 3,
     name: "Crispy fries",
     price: 60,
-    description: "Crispy, golden-brown fries served piping hot with a sprinkle of salt.",
+    description:
+      "Crispy, golden-brown fries served piping hot with a sprinkle of salt.",
     longDescription:
       "Crispy, golden-brown fries served piping hot with a sprinkle of salt. A classic side dish that pairs perfectly with burgers, sandwiches, or as a snack on its own.",
     image: "/fries.png",
@@ -46,81 +50,103 @@ const menuItems = [
     id: 4,
     name: "Chicken nuggets",
     price: 80,
-    description: "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried.",
+    description:
+      "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried.",
     longDescription:
       "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried. They are a popular fast food item, often served with french fries and dipping sauces like ketchup, mustard, or BBQ sauce.",
     image: "/nugg.png",
     rating: 4.3,
     isVeg: false,
-  }
+  },
   // ... other menu items
-]
+];
 
 interface MenuItemType {
-  id: number
-  name: string
-  price: number
-  description: string
-  longDescription?: string
-  image: string
-  rating: number
-  isVeg: boolean
-  quantity?: number
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  longDescription?: string;
+  image: string;
+  rating: number;
+  isVeg: boolean;
+  quantity?: number;
 }
 
 export default function MenuPage() {
-  const router = useRouter()
-  const params = useParams()
-  const tableId = params.tableId as string
-  const [filteredItems, setFilteredItems] = useState<MenuItemType[]>(menuItems)
-  const [cartItems, setCartItems] = useState<Array<{ id: number; quantity: number }>>([])
-  const [isFilterMenuVisible, setIsFilterMenuVisible] = useState(true)
+  const router = useRouter();
+  const params = useParams();
+  const tableId = params.tableId as string;
+  const [filteredItems, setFilteredItems] = useState<MenuItemType[]>(menuItems);
+  const [cartItems, setCartItems] = useState<
+    Array<{ id: number; quantity: number }>
+  >([]);
+  const [isFilterMenuVisible, setIsFilterMenuVisible] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const auth = Cookies.get("auth");
+    if (!auth) {
+      router.replace(`/menu/login?tableId=${tableId}`);
+    } else {
+      setIsLoading(false);
+    }
+  }, [router, tableId]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const handleFilterChange = (isVeg: boolean) => {
     if (isVeg) {
-      setFilteredItems(menuItems.filter((item) => item.isVeg))
+      setFilteredItems(menuItems.filter((item) => item.isVeg));
     } else {
-      setFilteredItems(menuItems)
+      setFilteredItems(menuItems);
     }
-  }
+  };
 
   const handleSearch = (query: string) => {
-    const lowercaseQuery = query.toLowerCase()
+    const lowercaseQuery = query.toLowerCase();
     setFilteredItems(
       menuItems.filter(
         (item) =>
-          item.name.toLowerCase().includes(lowercaseQuery) || item.description.toLowerCase().includes(lowercaseQuery),
-      ),
-    )
-  }
+          item.name.toLowerCase().includes(lowercaseQuery) ||
+          item.description.toLowerCase().includes(lowercaseQuery)
+      )
+    );
+  };
 
   const updateCart = (id: number, quantity: number) => {
     setCartItems((prevItems) => {
-      const existingItemIndex = prevItems.findIndex((item) => item.id === id)
+      const existingItemIndex = prevItems.findIndex((item) => item.id === id);
       if (existingItemIndex !== -1) {
-        const updatedItems = [...prevItems]
+        const updatedItems = [...prevItems];
         if (quantity === 0) {
-          updatedItems.splice(existingItemIndex, 1)
+          updatedItems.splice(existingItemIndex, 1);
         } else {
-          updatedItems[existingItemIndex].quantity = quantity
+          updatedItems[existingItemIndex].quantity = quantity;
         }
-        return updatedItems
+        return updatedItems;
       } else if (quantity > 0) {
-        return [...prevItems, { id, quantity }]
+        return [...prevItems, { id, quantity }];
       }
-      return prevItems
-    })
-  }
+      return prevItems;
+    });
+  };
 
   const toggleFilterMenu = (isVisible: boolean) => {
-    setIsFilterMenuVisible(isVisible)
-  }
+    setIsFilterMenuVisible(isVisible);
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F1EEE6]">
       <Navbar tableId={tableId} />
 
-      <SearchBar tableId={tableId} onFilterChange={handleFilterChange} onSearch={handleSearch} />
+      <SearchBar
+        tableId={tableId}
+        onFilterChange={handleFilterChange}
+        onSearch={handleSearch}
+      />
 
       <main className="flex-1 p-4 space-y-4">
         {filteredItems.map((item) => (
@@ -148,10 +174,10 @@ export default function MenuPage() {
           onClick={() => router.push(`/menu/${tableId}/cart`)}
           className="w-full bg-[#9D8480] text-white py-3 rounded-lg text-[15px]"
         >
-          View Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)} items)
+          View Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)}{" "}
+          items)
         </button>
       </div>
     </div>
-  )
+  );
 }
-
