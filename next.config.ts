@@ -1,5 +1,8 @@
+import type { NextConfig } from 'next'
+import type { Configuration } from 'webpack'
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   typescript: {
     // !! WARN !!
     // Dangerously allow production builds to successfully complete even if
@@ -19,7 +22,6 @@ const nextConfig = {
         ],
       },
       {
-        // Add correct content-type for video files
         source: "/:path*.mp4",
         headers: [
           {
@@ -29,6 +31,23 @@ const nextConfig = {
         ],
       },
     ]
+  },
+  webpack: (config: Configuration, { isServer }: { isServer: boolean }) => {
+    config.module.rules.push({
+      test: /\.(mp4)$/,
+      use: [
+        {
+          loader: "file-loader",
+          options: {
+            publicPath: "/_next/static/videos/",
+            outputPath: `${isServer ? "../" : ""}static/videos/`,
+            name: "[name].[hash].[ext]",
+          },
+        },
+      ],
+    });
+
+    return config;
   },
 }
 

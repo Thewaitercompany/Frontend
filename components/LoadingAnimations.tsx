@@ -14,7 +14,6 @@ export default function LoadingAnimations({
   const [video1Loaded, setVideo1Loaded] = useState(false);
   const [video2Loaded, setVideo2Loaded] = useState(false);
 
-  // Proceed to login after timeout
   useEffect(() => {
     const loadTimeout = setTimeout(() => {
       if (!video1Loaded || !video2Loaded) {
@@ -26,11 +25,9 @@ export default function LoadingAnimations({
     return () => clearTimeout(loadTimeout);
   }, [onComplete, video1Loaded, video2Loaded]);
 
-  // Handle video sequence
   useEffect(() => {
     const playAnimation = async (video: HTMLVideoElement) => {
       try {
-        // Ensure video is ready to play
         if (video.readyState >= 2) {
           await video.play();
           return new Promise<void>((resolve) => {
@@ -70,6 +67,15 @@ export default function LoadingAnimations({
     onComplete();
   };
 
+  const handleVideoLoad = (videoNumber: number) => {
+    console.log(`Video ${videoNumber} loaded successfully`);
+    if (videoNumber === 1) {
+      setVideo1Loaded(true);
+    } else {
+      setVideo2Loaded(true);
+    }
+  };
+
   if (videoLoadError) {
     return null;
   }
@@ -84,7 +90,7 @@ export default function LoadingAnimations({
         muted
         playsInline
         preload="auto"
-        onCanPlay={() => setVideo1Loaded(true)}
+        onCanPlay={() => handleVideoLoad(1)}
         onError={() => handleVideoError(1)}
       >
         <source src="/animation 1.mp4" type="video/mp4" />
@@ -97,7 +103,7 @@ export default function LoadingAnimations({
         muted
         playsInline
         preload="auto"
-        onCanPlay={() => setVideo2Loaded(true)}
+        onCanPlay={() => handleVideoLoad(2)}
         onError={() => handleVideoError(2)}
       >
         <source src="/animation 2.mp4" type="video/mp4" />
