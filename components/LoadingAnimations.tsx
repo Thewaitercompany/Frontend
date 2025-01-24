@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 
 export default function LoadingAnimations({
   onComplete,
@@ -15,6 +14,7 @@ export default function LoadingAnimations({
   const [video1Loaded, setVideo1Loaded] = useState(false);
   const [video2Loaded, setVideo2Loaded] = useState(false);
 
+  // Proceed to login after timeout
   useEffect(() => {
     const loadTimeout = setTimeout(() => {
       if (!video1Loaded || !video2Loaded) {
@@ -26,13 +26,19 @@ export default function LoadingAnimations({
     return () => clearTimeout(loadTimeout);
   }, [onComplete, video1Loaded, video2Loaded]);
 
+  // Handle video sequence
   useEffect(() => {
     const playAnimation = async (video: HTMLVideoElement) => {
       try {
-        await video.play();
-        return new Promise<void>((resolve) => {
-          video.onended = () => resolve();
-        });
+        // Ensure video is ready to play
+        if (video.readyState >= 2) {
+          await video.play();
+          return new Promise<void>((resolve) => {
+            video.onended = () => resolve();
+          });
+        } else {
+          throw new Error("Video not ready to play");
+        }
       } catch (err) {
         console.error("Video playback error:", err);
         return Promise.reject(err);
@@ -72,42 +78,30 @@ export default function LoadingAnimations({
     <div className="fixed inset-0 bg-[#F1EEE6] z-50 flex items-center justify-center">
       <video
         ref={video1Ref}
-        className={`object-cover ${
+        className={`max-w-full max-h-full object-contain ${
           currentAnimation === 1 ? "block" : "hidden"
         }`}
         muted
         playsInline
         preload="auto"
-        onLoadedData={() => setVideo1Loaded(true)}
+        onCanPlay={() => setVideo1Loaded(true)}
         onError={() => handleVideoError(1)}
       >
         <source src="/animation 1.mp4" type="video/mp4" />
-        <source src="/animation 1.webm" type="video/webm" />
-        Your browser does not support the video tag.
       </video>
       <video
         ref={video2Ref}
-        className={`object-cover ${
+        className={`max-w-full max-h-full object-contain ${
           currentAnimation === 2 ? "block" : "hidden"
         }`}
         muted
         playsInline
         preload="auto"
-        onLoadedData={() => setVideo2Loaded(true)}
+        onCanPlay={() => setVideo2Loaded(true)}
         onError={() => handleVideoError(2)}
       >
         <source src="/animation 2.mp4" type="video/mp4" />
-        <source src="/animation 2.webm" type="video/webm" />
-        Your browser does not support the video tag.
       </video>
-      <Image
-        src="/fallback-image.jpg"
-        alt="Loading animation fallback"
-        layout="fill"
-        objectFit="cover"
-        priority
-        className={`${videoLoadError ? "block" : "hidden"}`}
-      />
     </div>
   );
 }
