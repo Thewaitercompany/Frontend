@@ -86,7 +86,7 @@ export default function CartPage({ params }: CartPageProps) {
           <div className="space-y-4">
             {cartItems.map((item) => (
               <div key={item.id} className="flex items-center gap-3">
-                <div className="relative w-16 h-16 rounded-lg overflow-hidden">
+                <div className="relative w-24 h-20 rounded-lg overflow-hidden">
                   <Image
                     src={item.image || "/placeholder.svg"}
                     alt={item.name}

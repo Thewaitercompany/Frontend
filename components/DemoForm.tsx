@@ -40,8 +40,9 @@ export default function DemoForm() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
+            className="md:flex-1"
           >
-            <div className="max-w-xl">
+            <div className="max-w-xl mx-auto md:mx-0">
               <h2 className="text-[2rem] text-[#4E3E3B] font-medium mb-2">
                 Book your free demo today!
               </h2>
@@ -49,9 +50,29 @@ export default function DemoForm() {
                 Let The Waiter Company call you with the recipe for success.
               </p>
 
+              {/* GIF Space - Visible only on mobile, below the text */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="relative w-full h-[200px] mb-8 md:hidden"
+              >
+                <Image
+                  src="/form.gif"
+                  alt="Demo Animation"
+                  fill
+                  className="rounded-lg object-contain"
+                  unoptimized
+                />
+              </motion.div>
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="restaurant" className="block text-[#4E3E3B] mb-2">
+                  <label
+                    htmlFor="restaurant"
+                    className="block text-[#4E3E3B] mb-2"
+                  >
                     Restaurant Name
                   </label>
                   <input
@@ -76,7 +97,7 @@ export default function DemoForm() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-[#4E3E3B] mb-2">
                       Name
@@ -90,7 +111,10 @@ export default function DemoForm() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="phone" className="block text-[#4E3E3B] mb-2">
+                    <label
+                      htmlFor="phone"
+                      className="block text-[#4E3E3B] mb-2"
+                    >
                       Phone Number
                     </label>
                     <input
@@ -121,7 +145,7 @@ export default function DemoForm() {
                   disabled={isSubmitting}
                   className="bg-[#B29792] text-white px-8 py-3 rounded-md font-medium hover:bg-[#a08884] transition-colors disabled:opacity-50 disabled:cursor-not-allowed w-32 text-center shadow-sm"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
               </form>
             </div>
@@ -141,12 +165,13 @@ export default function DemoForm() {
                 alt="Demo Animation"
                 fill
                 className="rounded-lg object-contain"
+                unoptimized
               />
             </motion.div>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
 

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Utensils } from 'lucide-react';
+import { useState } from "react";
+import Image from "next/image";
 
 interface Category {
   name: string;
@@ -9,11 +9,11 @@ interface Category {
 }
 
 const categories: Category[] = [
-  { name: 'Starters', count: 15 },
-  { name: 'Main course', count: 12 },
-  { name: 'Beverages', count: 6 },
-  { name: 'Desserts', count: 9 },
-  { name: 'Alcohol', count: 22 },
+  { name: "Starters", count: 15 },
+  { name: "Main course", count: 12 },
+  { name: "Beverages", count: 6 },
+  { name: "Desserts", count: 9 },
+  { name: "Alcohol", count: 22 },
 ];
 
 interface FilterMenuProps {
@@ -21,7 +21,10 @@ interface FilterMenuProps {
   isVisible: boolean;
 }
 
-const FilterMenu: React.FC<FilterMenuProps> = ({ onFilterChange, isVisible }) => {
+const FilterMenu: React.FC<FilterMenuProps> = ({
+  onFilterChange,
+  isVisible,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleFilterChange = (isVeg: boolean) => {
@@ -35,10 +38,33 @@ const FilterMenu: React.FC<FilterMenuProps> = ({ onFilterChange, isVisible }) =>
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-3 rounded-full bg-[#9D8480] hover:bg-[#8b7471] transition-colors"
+        className="rounded-full transition-all duration-300 ease-in-out hover:scale-110"
         aria-label="Filter Menu"
       >
-        <Utensils className="w-5 h-5 text-white" />
+        <div className="relative w-14 h-14">
+          <Image
+            src="/utensils.png"
+            alt="Open filter menu"
+            width={56}
+            height={56}
+            className="rounded-full absolute top-0 left-0 transition-all duration-300 ease-in-out"
+            style={{
+              opacity: isOpen ? 0 : 1,
+              transform: `scale(${isOpen ? 0.8 : 1})`,
+            }}
+          />
+          <Image
+            src="/crossutensils.png"
+            alt="Close filter menu"
+            width={56}
+            height={56}
+            className="rounded-full absolute top-0 left-0 transition-all duration-300 ease-in-out"
+            style={{
+              opacity: isOpen ? 1 : 0,
+              transform: `scale(${isOpen ? 1 : 0.8})`,
+            }}
+          />
+        </div>
       </button>
 
       {isOpen && (
@@ -50,16 +76,18 @@ const FilterMenu: React.FC<FilterMenuProps> = ({ onFilterChange, isVisible }) =>
           />
 
           {/* Menu */}
-          <div className="absolute bottom-full right-0 mb-2 w-64 bg-[#4E3E3B] rounded-xl shadow-lg overflow-hidden z-50">
+          <div className="absolute bottom-full right-0 mb-4 w-64 bg-[#4E3E3B] rounded-xl shadow-lg overflow-hidden z-50">
             {categories.map((category) => (
               <button
                 key={category.name}
-                onClick={() => handleFilterChange(category.name === 'Vegetarian')}
+                onClick={() =>
+                  handleFilterChange(category.name === "Vegetarian")
+                }
                 className="flex justify-between items-center w-full px-6 py-3 text-white hover:bg-[#5d4c49] transition-colors"
               >
                 <span className="text-[15px]">{category.name}</span>
                 <span className="text-[15px]">
-                  {category.count.toString().padStart(2, '0')}
+                  {category.count.toString().padStart(2, "0")}
                 </span>
               </button>
             ))}
@@ -71,4 +99,3 @@ const FilterMenu: React.FC<FilterMenuProps> = ({ onFilterChange, isVisible }) =>
 };
 
 export default FilterMenu;
-

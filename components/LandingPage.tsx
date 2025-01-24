@@ -1,6 +1,5 @@
 'use client'
 
-import Navbar from './Navbar'
 import { useState, useEffect } from 'react'
 import Image from "next/image"
 import Footer from './Footer'
@@ -8,6 +7,7 @@ import '../styles/animations.css'
 import '../styles/gradients.css'
 import { ArrowUp } from 'lucide-react'
 import { aleo, roboto } from '../app/fonts'
+import Header from './Header'
 
 export default function LandingPage() {
   const [showScrollTop, setShowScrollTop] = useState(false)
@@ -42,7 +42,7 @@ export default function LandingPage() {
   return (
     <div className={`min-h-screen bg-[#F5F1EB] text-[#4A3F35] font-serif ${aleo.variable} ${roboto.variable}`}>
       <header className="fixed w-full top-0 z-50 bg-[#F5F1EB] shadow-sm">
-        <Navbar />
+        <Header />
       </header>
       <main className="container mx-auto px-6 pt-32 pb-12">
         <div className="flex flex-col lg:flex-row items-center mb-20">

@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import Image, { type StaticImageData } from "next/image"
-import { Star } from "lucide-react"
-import { useRouter } from "next/navigation"
+import type React from "react";
+import { useState, useEffect } from "react";
+import Image, { type StaticImageData } from "next/image";
+import { Star } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface MenuItemProps {
-  id: number
-  name: string
-  price: number
-  description: string
-  image: string | StaticImageData
-  rating: number
-  isVeg: boolean
-  onAddToCart: (id: number, quantity: number) => void
-  toggleFilterMenu: (show: boolean) => void
-  cartItems: Array<{ id: number; quantity: number }>
-  longDescription?: string
-  tableId?: string
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  image: string | StaticImageData;
+  rating: number;
+  isVeg: boolean;
+  onAddToCart: (id: number, quantity: number) => void;
+  toggleFilterMenu: (show: boolean) => void;
+  cartItems: Array<{ id: number; quantity: number }>;
+  longDescription?: string;
+  tableId?: string;
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({
@@ -34,67 +34,68 @@ const MenuItem: React.FC<MenuItemProps> = ({
   longDescription,
   tableId,
 }) => {
-  const router = useRouter()
-  const [showDetails, setShowDetails] = useState(false)
-  const [quantity, setQuantity] = useState(0)
-  const [animate, setAnimate] = useState(false)
-  const [showPopup, setShowPopup] = useState(false)
+  const router = useRouter();
+  const [showDetails, setShowDetails] = useState(false);
+  const [quantity, setQuantity] = useState(0);
+  const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
-    const cartItem = cartItems.find((item) => item.id === id)
-    setQuantity(cartItem ? cartItem.quantity : 0)
-  }, [cartItems, id])
+    const cartItem = cartItems.find((item) => item.id === id);
+    setQuantity(cartItem ? cartItem.quantity : 0);
+  }, [cartItems, id]);
 
   const handleReadMoreClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setShowDetails(true)
-    toggleFilterMenu(false)
-  }
+    e.stopPropagation();
+    setShowDetails(true);
+    toggleFilterMenu(false);
+  };
 
   const handleAdd = () => {
-    setShowDetails(true)
-    toggleFilterMenu(false)
-    handleIncrement()
-  }
+    setAnimate(true);
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity);
+    onAddToCart(id, newQuantity);
+    setTimeout(() => setAnimate(false), 300);
+  };
 
   const handleIncrement = () => {
-    setAnimate(true)
-    const newQuantity = quantity + 1
-    setQuantity(newQuantity)
-    onAddToCart(id, newQuantity)
-    if (newQuantity === 1) {
-      setShowPopup(true)
-      setTimeout(() => setShowPopup(false), 2000)
-    }
-    setTimeout(() => setAnimate(false), 300)
-  }
+    setAnimate(true);
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity);
+    onAddToCart(id, newQuantity);
+    if (newQuantity === 1)
+    setTimeout(() => setAnimate(false), 300);
+  };
 
   const handleDecrement = () => {
     if (quantity > 0) {
-      setAnimate(true)
-      const newQuantity = quantity - 1
-      setQuantity(newQuantity)
-      onAddToCart(id, newQuantity)
-      setTimeout(() => setAnimate(false), 300)
+      setAnimate(true);
+      const newQuantity = quantity - 1;
+      setQuantity(newQuantity);
+      onAddToCart(id, newQuantity);
+      setTimeout(() => setAnimate(false), 300);
     }
-  }
+  };
 
-  const totalCartItems = cartItems.reduce((acc, item) => acc + item.quantity, 0)
+  const totalCartItems = cartItems.reduce(
+    (acc, item) => acc + item.quantity,
+    0
+  );
 
   return (
     <>
       <div className="bg-white rounded-lg mb-3 relative flex">
-        <div className="flex-1 p-3">
-          <div className="flex items-center justify-between">
+        <div className="flex-1 p-2">
+          <div className="flex items-center justify-between mb-1">
             <span className="text-[15px] font-medium text-gray-900">
               {name}
             </span>
             <div className="flex items-center">
-              <Star className="h-3.5 w-3.5 fill-yellow-400 stroke-none" />
+              <Star className="h-3.5 w-3.5 fill-black stroke-none" />
               <span className="text-xs text-gray-500 ml-0.5">{rating}</span>
             </div>
           </div>
-          <div className="mt-1">
+          <div className="mb-1">
             <span className="text-[13px] text-gray-900">₹ {price}</span>
           </div>
           <p className="text-[13px] text-gray-500 mt-1 leading-snug">
@@ -106,12 +107,61 @@ const MenuItem: React.FC<MenuItemProps> = ({
               Read More
             </button>
           </p>
-          <button
-            onClick={handleReadMoreClick}
-            className="mt-2 px-4 py-1 bg-[#D4C5C3] text-[13px] text-black rounded-md hover:bg-[#C0B2B0] transition-colors"
-          >
-            Add
-          </button>
+          {quantity === 0 ? (
+            <button
+              onClick={handleAdd}
+              className={`mt-2 px-4 py-1 bg-[#B29792] text-[13px] text-black rounded-md hover:bg-[#B29792] transition-colors ${
+                animate ? "animate-bounce" : ""
+              }`}
+            >
+              Add
+            </button>
+          ) : (
+            <div className="inline-flex items-center bg-[#B29792] rounded-md mt-2">
+              <button
+                title="Remove"
+                onClick={handleDecrement}
+                className="p-1 hover:bg-[#a08884] rounded-l transition-colors"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </button>
+              <span
+                className={`px-3 text-sm ${animate ? "animate-bounce" : ""}`}
+              >
+                {quantity}
+              </span>
+              <button
+                title="Add"
+                onClick={handleIncrement}
+                className="p-1 hover:bg-[#a08884] rounded-r transition-colors"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
         <div className="w-[135px] h-[125px] relative self-center">
           <Image
@@ -122,11 +172,6 @@ const MenuItem: React.FC<MenuItemProps> = ({
             sizes="150px"
           />
         </div>
-        {showPopup && (
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full bg-green-500 text-white px-4 py-2 rounded-full text-sm animate-popup">
-            Added to cart!
-          </div>
-        )}
       </div>
 
       {showDetails && (
@@ -137,7 +182,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
             toggleFilterMenu(true);
           }}
         >
-          <div className="absolute inset-x-0 bottom-0 bg-white rounded-t-xl animate-slide-up">
+          <div className="absolute inset-x-0 bottom-0 bg-[#F1EEE6] rounded-t-xl animate-slide-up">
             <div className="p-4" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-start gap-4">
                 <div className="flex-1">
@@ -167,63 +212,62 @@ const MenuItem: React.FC<MenuItemProps> = ({
                       sizes="96px"
                     />
                   </div>
-                  <div className="mt-2 flex items-center justify-center bg-white rounded border border-gray-200">
-                    {quantity === 0 ? (
+                  {quantity === 0 ? (
+                    <button
+                      type="button"
+                      onClick={handleAdd}
+                      className="w-full py-1 px-4 bg-[#ffffff] text-black rounded-md mt-2 text-sm hover:bg-[#C0B2B0] transition-colors border "
+                    >
+                      Add
+                    </button>
+                  ) : (
+                    <div className="inline-flex items-center justify-center bg-[#ffffff] rounded-md mt-2 border w-full">
                       <button
-                        onClick={handleAdd}
-                        className="w-full py-1 px-4 bg-[#D4C5C3] text-black rounded text-sm hover:bg-[#C0B2B0] transition-colors"
+                        title="Remove"
+                        onClick={handleDecrement}
+                        className="p-1 hover:bg-[#a08884] rounded-l transition-colors flex items-center justify-center"
                       >
-                        Add
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
                       </button>
-                    ) : (
-                      <div className="flex items-center bg-white w-full">
-                        <button
-                          title="Remove"
-                          onClick={handleDecrement}
-                          className="p-1 hover:bg-gray-100 rounded-l transition-colors"
+                      <span
+                        className={`px-3 text-sm ${
+                          animate ? "animate-bounce" : ""
+                        } flex items-center justify-center`}
+                      >
+                        {quantity}
+                      </span>
+                      <button
+                        title="Add"
+                        onClick={handleIncrement}
+                        className="p-1 hover:bg-[#a08884] rounded-r transition-colors flex items-center justify-center"
+                      >
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                          </svg>
-                        </button>
-                        <span
-                          className={`px-3 text-sm ${
-                            animate ? "animate-bounce" : ""
-                          }`}
-                        >
-                          {quantity}
-                        </span>
-                        <button
-                          title="Add"
-                          onClick={handleIncrement}
-                          className="p-1 hover:bg-gray-100 rounded-r transition-colors"
-                        >
-                          <svg
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <line x1="12" y1="5" x2="12" y2="19" />
-                            <line x1="5" y1="12" x2="19" y2="12" />
-                          </svg>
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                          <line x1="12" y1="5" x2="12" y2="19" />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -242,7 +286,6 @@ const MenuItem: React.FC<MenuItemProps> = ({
       )}
     </>
   );
-}
+};
 
-export default MenuItem
-
+export default MenuItem;

@@ -107,6 +107,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ params }) => {
           <div className="flex gap-2 mb-4">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
+                title="Rate this restaurant"
                 key={star}
                 onClick={() => setRating(star)}
                 onMouseEnter={() => setHoveredRating(star)}

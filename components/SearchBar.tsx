@@ -45,9 +45,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onFilterChange, onSearch }) => {
               checked={isVeg}
               onChange={toggleFilter}
             />
-            <div className="w-5 h-5 border-2 border-gray-300 rounded bg-white peer-checked:bg-green-500 peer-checked:border-green-500 transition-colors">
+            <div className="w-6 h-6 border-2 border-gray-300 rounded bg-white peer-checked:bg-green-500 peer-checked:border-green-500 transition-colors">
               {isVeg && (
-                <Check className="w-4 h-4 text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+              <Check className="w-5 h-5 text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
               )}
             </div>
           </div>
