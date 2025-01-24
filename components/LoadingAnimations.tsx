@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useRef } from "react";
 
+interface LoadingAnimationsProps {
+  onComplete: () => void;
+}
+
 export default function LoadingAnimations({
   onComplete,
-}: {
-  onComplete: () => void;
-}) {
+}: LoadingAnimationsProps) {
   const [currentAnimation, setCurrentAnimation] = useState(1);
   const [videoLoadError, setVideoLoadError] = useState(false);
   const video1Ref = useRef<HTMLVideoElement>(null);
@@ -61,8 +63,8 @@ export default function LoadingAnimations({
     }
   }, [onComplete, video1Loaded, video2Loaded]);
 
-  const handleVideoError = (videoNumber: number) => {
-    console.error(`Error loading video ${videoNumber}`);
+  const handleVideoError = (videoNumber: number, error: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    console.error(`Error loading video ${videoNumber}:`, error);
     setVideoLoadError(true);
     onComplete();
   };
@@ -75,6 +77,12 @@ export default function LoadingAnimations({
       setVideo2Loaded(true);
     }
   };
+
+  useEffect(() => {
+    console.log("Environment:", process.env.NODE_ENV);
+    console.log("Video 1 path:", "/animation 1.mp4");
+    console.log("Video 2 path:", "/animation 2.mp4");
+  }, []);
 
   if (videoLoadError) {
     return null;
@@ -91,7 +99,7 @@ export default function LoadingAnimations({
         playsInline
         preload="auto"
         onCanPlay={() => handleVideoLoad(1)}
-        onError={() => handleVideoError(1)}
+        onError={(e) => handleVideoError(1, e)}
       >
         <source src="/animation 1.mp4" type="video/mp4" />
       </video>
@@ -104,7 +112,7 @@ export default function LoadingAnimations({
         playsInline
         preload="auto"
         onCanPlay={() => handleVideoLoad(2)}
-        onError={() => handleVideoError(2)}
+        onError={(e) => handleVideoError(2, e)}
       >
         <source src="/animation 2.mp4" type="video/mp4" />
       </video>

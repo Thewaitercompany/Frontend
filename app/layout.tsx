@@ -1,6 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Roboto, Aleo } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -31,7 +33,28 @@ export default function RootLayout({
       lang="en"
       className={`scroll-smooth ${roboto.variable} ${aleo.variable}`}
     >
-      <body suppressHydrationWarning className={`${roboto.className} antialiased`}>{children}</body>
+      <head>
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="
+          default-src 'self';
+          script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com;
+          style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+          font-src 'self' https://fonts.gstatic.com;
+          img-src 'self' data: https:;
+          media-src 'self' https: data:;
+          connect-src 'self' https://analytics.languagetoolplus.com https://vitals.vercel-insights.com;
+        "
+        />
+      </head>
+      <body
+        suppressHydrationWarning
+        className={`${roboto.className} antialiased`}
+      >
+        {children}
+        <Analytics />
+        <SpeedInsights />
+      </body>
     </html>
   );
 }

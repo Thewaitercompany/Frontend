@@ -1,9 +1,23 @@
 import "../../../styles/globals.css";
 import "../../../styles/animations.css";
 import type { Metadata } from "next";
-import { aleo, roboto } from "../../fonts";
 import "../../../styles/gradients.css";
 import type React from "react";
+import { Roboto, Aleo } from "next/font/google";
+
+const roboto = Roboto({
+  weight: ["400", "500", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-roboto",
+});
+
+const aleo = Aleo({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-aleo",
+});
 
 export const metadata: Metadata = {
   title: "The Waiter Company - Menu",
