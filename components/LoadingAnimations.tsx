@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 export default function LoadingAnimations({
   onComplete,
@@ -15,23 +16,14 @@ export default function LoadingAnimations({
   const [video2Loaded, setVideo2Loaded] = useState(false);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    const loadTimeout = setTimeout(() => {
+      if (!video1Loaded || !video2Loaded) {
+        console.log("Video loading timeout - proceeding to login");
+        onComplete();
+      }
+    }, 5000);
 
-    const checkVideoLoading = () => {
-      timeoutId = setTimeout(() => {
-        // If videos haven't loaded within 5 seconds, proceed to login
-        if (!video1Loaded || !video2Loaded) {
-          console.log("Video loading timeout - proceeding to login");
-          onComplete();
-        }
-      }, 5000);
-    };
-
-    checkVideoLoading();
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
+    return () => clearTimeout(loadTimeout);
   }, [onComplete, video1Loaded, video2Loaded]);
 
   useEffect(() => {
@@ -43,7 +35,6 @@ export default function LoadingAnimations({
         });
       } catch (err) {
         console.error("Video playback error:", err);
-        onComplete(); // Proceed to login if video fails to play
         return Promise.reject(err);
       }
     };
@@ -51,7 +42,6 @@ export default function LoadingAnimations({
     const loadAndPlayAnimations = async () => {
       try {
         if (video1Ref.current && video2Ref.current) {
-          // Play animations sequentially
           await playAnimation(video1Ref.current);
           setCurrentAnimation(2);
           await playAnimation(video2Ref.current);
@@ -68,13 +58,14 @@ export default function LoadingAnimations({
     }
   }, [onComplete, video1Loaded, video2Loaded]);
 
-  const handleVideoError = () => {
+  const handleVideoError = (videoNumber: number) => {
+    console.error(`Error loading video ${videoNumber}`);
     setVideoLoadError(true);
     onComplete();
   };
 
   if (videoLoadError) {
-    return null; // Proceed to login immediately if videos fail to load
+    return null;
   }
 
   return (
@@ -84,24 +75,38 @@ export default function LoadingAnimations({
         className={`object-cover ${
           currentAnimation === 1 ? "block" : "hidden"
         }`}
-        src="/animation 1.mp4"
         muted
         playsInline
         preload="auto"
         onLoadedData={() => setVideo1Loaded(true)}
-        onError={handleVideoError}
-      />
+        onError={() => handleVideoError(1)}
+      >
+        <source src="/animation 1.mp4" type="video/mp4" />
+        <source src="/animation 1.webm" type="video/webm" />
+        Your browser does not support the video tag.
+      </video>
       <video
         ref={video2Ref}
         className={`object-cover ${
           currentAnimation === 2 ? "block" : "hidden"
         }`}
-        src="/animation 2.mp4"
         muted
         playsInline
         preload="auto"
         onLoadedData={() => setVideo2Loaded(true)}
-        onError={handleVideoError}
+        onError={() => handleVideoError(2)}
+      >
+        <source src="/animation 2.mp4" type="video/mp4" />
+        <source src="/animation 2.webm" type="video/webm" />
+        Your browser does not support the video tag.
+      </video>
+      <Image
+        src="/fallback-image.jpg"
+        alt="Loading animation fallback"
+        layout="fill"
+        objectFit="cover"
+        priority
+        className={`${videoLoadError ? "block" : "hidden"}`}
       />
     </div>
   );
