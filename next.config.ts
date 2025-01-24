@@ -1,21 +1,5 @@
-/** @type {import('next').NextConfig} */
-interface Header {
-  key: string;
-  value: string;
-}
-
-interface SourceHeaders {
-  source: string;
-  headers: Header[];
-}
-
-interface NextConfig {
-  typescript: {
-    ignoreBuildErrors: boolean;
-  };
-  headers: () => Promise<SourceHeaders[]>;
-  webpack: (config: import('webpack').Configuration, options: { isServer: boolean }) => import('webpack').Configuration;
-}
+import type { NextConfig } from "next"
+import type { Configuration as WebpackConfig } from "webpack"
 
 const nextConfig: NextConfig = {
   typescript: {
@@ -39,29 +23,32 @@ const nextConfig: NextConfig = {
       },
       {
         source: "/:path*.mp4",
-        headers: [{ key: "Content-Type", value: "video/mp4" }],
+        headers: [
+          { key: "Content-Type", value: "video/mp4" },
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
       },
-    ];
+    ]
   },
-  webpack: (config, { isServer }) => {
-    config.module = config.module || { rules: [] };
-    config.module.rules = config.module.rules || [];
+  webpack: (config: WebpackConfig, { isServer }: { isServer: boolean }): WebpackConfig => {
+    config.module = config.module || { rules: [] }
+    config.module.rules = config.module.rules || []
     config.module.rules.push({
       test: /\.(mp4)$/,
       use: [
         {
           loader: "file-loader",
           options: {
-            publicPath: "/_next/static/media/",
-            outputPath: `${isServer ? "../" : ""}static/media/`,
+            publicPath: "/_next/static/videos/",
+            outputPath: `${isServer ? "../" : ""}static/videos/`,
             name: "[name].[hash].[ext]",
           },
         },
       ],
-    });
-    return config;
+    })
+    return config
   },
-};
+}
 
-module.exports = nextConfig
+export default nextConfig
 

@@ -42,7 +42,7 @@ export default function RootLayout({
           style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
           font-src 'self' https://fonts.gstatic.com;
           img-src 'self' data: https:;
-          media-src 'self' https: data:;
+          media-src 'self' https: data: blob:;
           connect-src 'self' https://analytics.languagetoolplus.com https://vitals.vercel-insights.com;
         "
         />

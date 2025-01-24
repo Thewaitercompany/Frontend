@@ -63,7 +63,10 @@ export default function LoadingAnimations({
     }
   }, [onComplete, video1Loaded, video2Loaded]);
 
-  const handleVideoError = (videoNumber: number, error: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+  const handleVideoError = (
+    videoNumber: number,
+    error: React.SyntheticEvent<HTMLVideoElement, Event>
+  ) => {
     console.error(`Error loading video ${videoNumber}:`, error);
     setVideoLoadError(true);
     onComplete();
