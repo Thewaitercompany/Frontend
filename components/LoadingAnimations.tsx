@@ -14,23 +14,10 @@ export default function LoadingAnimations({
   const [video1Loaded, setVideo1Loaded] = useState(false);
   const [video2Loaded, setVideo2Loaded] = useState(false);
 
-  // Proceed to login after timeout
-  useEffect(() => {
-    const loadTimeout = setTimeout(() => {
-      if (!video1Loaded || !video2Loaded) {
-        console.log("Video loading timeout - proceeding to login");
-        onComplete();
-      }
-    }, 5000);
-
-    return () => clearTimeout(loadTimeout);
-  }, [onComplete, video1Loaded, video2Loaded]);
-
   // Handle video sequence
   useEffect(() => {
-    const playAnimation = async (video: HTMLVideoElement) => {
+    const playAnimation = async (video: HTMLVideoElement): Promise<void> => {
       try {
-        // Ensure video is ready to play
         if (video.readyState >= 2) {
           await video.play();
           return new Promise<void>((resolve) => {
@@ -41,7 +28,7 @@ export default function LoadingAnimations({
         }
       } catch (err) {
         console.error("Video playback error:", err);
-        return Promise.reject(err);
+        throw err;
       }
     };
 
@@ -55,6 +42,7 @@ export default function LoadingAnimations({
         }
       } catch (err) {
         console.error("Animation sequence error:", err);
+        setVideoLoadError(true);
         onComplete();
       }
     };
@@ -76,32 +64,32 @@ export default function LoadingAnimations({
 
   return (
     <div className="fixed inset-0 bg-[#F1EEE6] z-50 flex items-center justify-center">
-      <video
-        ref={video1Ref}
-        className={`max-w-full max-h-full object-contain ${
-          currentAnimation === 1 ? "block" : "hidden"
-        }`}
-        muted
-        playsInline
-        preload="auto"
-        onCanPlay={() => setVideo1Loaded(true)}
-        onError={() => handleVideoError(1)}
-      >
-        <source src="/animation 1.mp4" type="video/mp4" />
-      </video>
-      <video
-        ref={video2Ref}
-        className={`max-w-full max-h-full object-contain ${
-          currentAnimation === 2 ? "block" : "hidden"
-        }`}
-        muted
-        playsInline
-        preload="auto"
-        onCanPlay={() => setVideo2Loaded(true)}
-        onError={() => handleVideoError(2)}
-      >
-        <source src="/animation 2.mp4" type="video/mp4" />
-      </video>
+      <div className="relative w-full h-full">
+        <video
+          ref={video1Ref}
+          className="absolute inset-0 w-full h-full object-cover"
+          muted
+          playsInline
+          preload="auto"
+          onCanPlay={() => setVideo1Loaded(true)}
+          onError={() => handleVideoError(1)}
+        >
+          <source src="/animation 1.mp4" type="video/mp4" />
+        </video>
+        <video
+          ref={video2Ref}
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+            currentAnimation === 2 ? "opacity-100" : "opacity-0"
+          }`}
+          muted
+          playsInline
+          preload="auto"
+          onCanPlay={() => setVideo2Loaded(true)}
+          onError={() => handleVideoError(2)}
+        >
+          <source src="/animation 2.mp4" type="video/mp4" />
+        </video>
+      </div>
     </div>
   );
 }
