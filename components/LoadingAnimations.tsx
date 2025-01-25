@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 
 export default function LoadingAnimations({
   onComplete,
@@ -16,6 +16,8 @@ export default function LoadingAnimations({
 
   // Handle video sequence
   useEffect(() => {
+    if (typeof window === "undefined") return; // Prevent server-side execution
+
     const playAnimation = async (video: HTMLVideoElement): Promise<void> => {
       try {
         if (video.readyState >= 2) {
@@ -58,38 +60,47 @@ export default function LoadingAnimations({
     onComplete();
   };
 
+  // Early return if error occurs
   if (videoLoadError) {
     return null;
   }
 
   return (
-    <div className="fixed inset-0 bg-[#F1EEE6] z-50 flex items-center justify-center">
-      <div className="relative w-full h-full">
-        <video
-          ref={video1Ref}
-          className="absolute inset-0 w-full h-full object-cover"
-          muted
-          playsInline
-          preload="auto"
-          onCanPlay={() => setVideo1Loaded(true)}
-          onError={() => handleVideoError(1)}
-        >
-          <source src="/animation 1.mp4" type="video/mp4" />
-        </video>
-        <video
-          ref={video2Ref}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-            currentAnimation === 2 ? "opacity-100" : "opacity-0"
-          }`}
-          muted
-          playsInline
-          preload="auto"
-          onCanPlay={() => setVideo2Loaded(true)}
-          onError={() => handleVideoError(2)}
-        >
-          <source src="/animation 2.mp4" type="video/mp4" />
-        </video>
+    <Suspense fallback={<div className="fixed inset-0 bg-[#F1EEE6] z-50" />}>
+      <div className="fixed inset-0 bg-[#F1EEE6] z-50 flex items-center justify-center">
+        <div className="relative">
+          <video
+            ref={video1Ref}
+            className="absolute inset-0 object-cover"
+            muted
+            playsInline
+            preload="auto"
+            onCanPlay={() => setVideo1Loaded(true)}
+            onError={() => handleVideoError(1)}
+          >
+            <source
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || ""}/animation 1.mp4`}
+              type="video/mp4"
+            />
+          </video>
+          <video
+            ref={video2Ref}
+            className={`absolute inset-0 object-cover transition-opacity duration-500 ${
+              currentAnimation === 2 ? "opacity-100" : "opacity-0"
+            }`}
+            muted
+            playsInline
+            preload="auto"
+            onCanPlay={() => setVideo2Loaded(true)}
+            onError={() => handleVideoError(2)}
+          >
+            <source
+              src={`${process.env.NEXT_PUBLIC_BASE_URL || ""}/animation 2.mp4`}
+              type="video/mp4"
+            />
+          </video>
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 }

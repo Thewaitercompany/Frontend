@@ -1,14 +1,12 @@
+"use client";
+
 import "../../styles/globals.css";
 import "../../styles/animations.css";
-import type { Metadata } from "next";
 import "../../styles/gradients.css";
 import type React from "react";
 import { Roboto, Aleo } from "next/font/google";
-
-export const metadata: Metadata = {
-  title: "The Waiter Company - Menu",
-  description: "Order your favorite dishes",
-};
+import LoadingAnimations from "@/components/LoadingAnimations";
+import { useState } from "react";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -29,6 +27,8 @@ export default function MenuLayout({
 }: {
   children: React.ReactNode;
 }) {
+   const [isLoading, setIsLoading] = useState(true);
+
   return (
     <html lang="en">
       <head>
@@ -48,7 +48,10 @@ export default function MenuLayout({
         suppressHydrationWarning
         className={`${aleo.variable} ${roboto.variable} font-sans bg-primary`}
       >
-        {children}
+        {isLoading && (
+          <LoadingAnimations onComplete={() => setIsLoading(false)} />
+        )}
+        {!isLoading && children}
       </body>
     </html>
   );
