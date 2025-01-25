@@ -2,13 +2,11 @@
 
 import { useState, useEffect, useRef } from "react";
 
-interface LoadingAnimationsProps {
-  onComplete: () => void;
-}
-
 export default function LoadingAnimations({
   onComplete,
-}: LoadingAnimationsProps) {
+}: {
+  onComplete: () => void;
+}) {
   const [currentAnimation, setCurrentAnimation] = useState(1);
   const [videoLoadError, setVideoLoadError] = useState(false);
   const video1Ref = useRef<HTMLVideoElement>(null);
@@ -16,6 +14,7 @@ export default function LoadingAnimations({
   const [video1Loaded, setVideo1Loaded] = useState(false);
   const [video2Loaded, setVideo2Loaded] = useState(false);
 
+  // Proceed to login after timeout
   useEffect(() => {
     const loadTimeout = setTimeout(() => {
       if (!video1Loaded || !video2Loaded) {
@@ -27,9 +26,11 @@ export default function LoadingAnimations({
     return () => clearTimeout(loadTimeout);
   }, [onComplete, video1Loaded, video2Loaded]);
 
+  // Handle video sequence
   useEffect(() => {
     const playAnimation = async (video: HTMLVideoElement) => {
       try {
+        // Ensure video is ready to play
         if (video.readyState >= 2) {
           await video.play();
           return new Promise<void>((resolve) => {
@@ -63,29 +64,11 @@ export default function LoadingAnimations({
     }
   }, [onComplete, video1Loaded, video2Loaded]);
 
-  const handleVideoError = (
-    videoNumber: number,
-    error: React.SyntheticEvent<HTMLVideoElement, Event>
-  ) => {
-    console.error(`Error loading video ${videoNumber}:`, error);
+  const handleVideoError = (videoNumber: number) => {
+    console.error(`Error loading video ${videoNumber}`);
     setVideoLoadError(true);
     onComplete();
   };
-
-  const handleVideoLoad = (videoNumber: number) => {
-    console.log(`Video ${videoNumber} loaded successfully`);
-    if (videoNumber === 1) {
-      setVideo1Loaded(true);
-    } else {
-      setVideo2Loaded(true);
-    }
-  };
-
-  useEffect(() => {
-    console.log("Environment:", process.env.NODE_ENV);
-    console.log("Video 1 path:", "/animation 1.mp4");
-    console.log("Video 2 path:", "/animation 2.mp4");
-  }, []);
 
   if (videoLoadError) {
     return null;
@@ -101,8 +84,8 @@ export default function LoadingAnimations({
         muted
         playsInline
         preload="auto"
-        onCanPlay={() => handleVideoLoad(1)}
-        onError={(e) => handleVideoError(1, e)}
+        onCanPlay={() => setVideo1Loaded(true)}
+        onError={() => handleVideoError(1)}
       >
         <source src="/animation 1.mp4" type="video/mp4" />
       </video>
@@ -114,8 +97,8 @@ export default function LoadingAnimations({
         muted
         playsInline
         preload="auto"
-        onCanPlay={() => handleVideoLoad(2)}
-        onError={(e) => handleVideoError(2, e)}
+        onCanPlay={() => setVideo2Loaded(true)}
+        onError={() => handleVideoError(2)}
       >
         <source src="/animation 2.mp4" type="video/mp4" />
       </video>

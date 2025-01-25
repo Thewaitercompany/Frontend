@@ -33,20 +33,6 @@ export default function RootLayout({
       lang="en"
       className={`scroll-smooth ${roboto.variable} ${aleo.variable}`}
     >
-      <head>
-        <meta
-          httpEquiv="Content-Security-Policy"
-          content="
-          default-src 'self';
-          script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com;
-          style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-          font-src 'self' https://fonts.gstatic.com;
-          img-src 'self' data: https:;
-          media-src 'self' https: data: blob:;
-          connect-src 'self' https://analytics.languagetoolplus.com https://vitals.vercel-insights.com;
-        "
-        />
-      </head>
       <body
         suppressHydrationWarning
         className={`${roboto.className} antialiased`}
