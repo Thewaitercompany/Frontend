@@ -19,7 +19,7 @@ const aleo = Aleo({
   variable: "--font-aleo",
 });
 
-export const metadata: Metadata = {
+export const viewport: Metadata = {
   title: "The Waiter Company - Menu",
   description: "Order your favorite dishes",
 };

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "rm -rf .next"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.2",
@@ -16,11 +17,11 @@
     "@radix-ui/react-toast": "^1.2.2",
     "@radix-ui/react-toggle": "^1.1.0",
     "@types/js-cookie": "^3.0.6",
-    "@vercel/analytics": "^1.3.2",
-    "@vercel/speed-insights": "^1.0.14",
+    "@vercel/analytics": "^1.4.1",
+    "@vercel/speed-insights": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "framer-motion": "^11.11.17",
+    "framer-motion": "^11.0.0",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.453.0",
     "next": "^15.1.6",
@@ -33,17 +34,16 @@
     "twc": "file:"
   },
   "devDependencies": {
-    "@types/next": "^8.0.7",
     "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/react": "^18.3.18",
     "@types/react-dom": "^18",
     "@types/webpack": "^5.28.5",
     "eslint": "^8",
-    "eslint-config-next": "15.0.1",
+    "eslint-config-next": "14.1.0",
     "file-loader": "^6.2.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.14",
-    "typescript": "^5",
+    "typescript": "^5.7.3",
     "webpack": "^5.97.1"
   }
 }

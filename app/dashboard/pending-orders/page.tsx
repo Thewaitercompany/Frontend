@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 import Image from "next/image";
-import Link from 'next/link';
+import Link from "next/link";
 
 interface Order {
   id: number;
@@ -11,33 +11,33 @@ interface Order {
   quantity: string;
   waiterDetails: string;
   customerDetails: string;
-  status: 'Pending' | 'Preparing' | 'Cooking' | 'Ready';
+  status: "Pending" | "Preparing" | "Cooking" | "Ready";
 }
 
 const orders: Order[] = [
   {
     id: 1,
-    image: '/fries.png',
-    name: 'Crispy Fries',
-    quantity: '01',
-    waiterDetails: 'Mr Ram',
-    customerDetails: 'Mr Patel',
-    status: 'Preparing'
+    image: "/fries.png",
+    name: "Crispy Fries",
+    quantity: "01",
+    waiterDetails: "Mr Ram",
+    customerDetails: "Mr Patel",
+    status: "Preparing",
   },
   {
     id: 2,
-    image: '/nugg.png',
-    name: 'Chicken Nuggets',
-    quantity: '01',
-    waiterDetails: 'Mr Ram',
-    customerDetails: 'Mr Patel',
-    status: 'Pending'
-  }
+    image: "/nugg.png",
+    name: "Chicken Nuggets",
+    quantity: "01",
+    waiterDetails: "Mr Ram",
+    customerDetails: "Mr Patel",
+    status: "Pending",
+  },
 ];
 
-const statuses = ['Pending', 'Preparing', 'Cooking', 'Ready'];
+const statuses = ["Pending", "Preparing", "Cooking", "Ready"];
 
-function OrderProgressBar({ status }: { status: Order['status'] }) {
+function OrderProgressBar({ status }: { status: Order["status"] }) {
   const currentIndex = statuses.indexOf(status);
 
   return (
@@ -47,14 +47,12 @@ function OrderProgressBar({ status }: { status: Order['status'] }) {
           <div className="flex items-center">
             <div
               className={`h-2 w-16 rounded ${
-                index <= currentIndex ? 'bg-[#C99E5A]' : 'bg-gray-200'
+                index <= currentIndex ? "bg-[#C99E5A]" : "bg-gray-200"
               }`}
             />
             <span className="text-xs ml-1">{step}</span>
           </div>
-          {index < statuses.length - 1 && (
-            <div className="h-2 w-2" />
-          )}
+          {index < statuses.length - 1 && <div className="h-2 w-2" />}
         </React.Fragment>
       ))}
     </div>
@@ -62,9 +60,8 @@ function OrderProgressBar({ status }: { status: Order['status'] }) {
 }
 
 export default function PendingOrders() {
-
   return (
-    (<div className="min-h-screen bg-[#f5f1eb] p-6 font-serif">
+    <div className="min-h-screen bg-[#f5f1eb] p-6 font-serif">
       {/* Header */}
       <header className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-2">
@@ -77,8 +74,9 @@ export default function PendingOrders() {
               className="h-8 lg:h-10 w-auto"
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
           </Link>
           <span className="text-xl text-gray-400">×</span>
           <span className="text-xl">Badshah&apos;s Kitchen</span>
@@ -86,10 +84,8 @@ export default function PendingOrders() {
         <div className="text-right">
           <Link href="/dashboard">
             <h2 className="text-xl font-medium">Dashboard</h2>
-            </Link>
-          <p className="text-sm text-gray-600">
-            Saturday, November, 2024
-          </p>
+          </Link>
+          <p className="text-sm text-gray-600">Saturday, November, 2024</p>
         </div>
       </header>
       {/* Today's Overview */}
@@ -97,7 +93,7 @@ export default function PendingOrders() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg">Today&apos;s Overview</h2>
           <div className="flex gap-4">
-            <Link 
+            <Link
               href="/dashboard/tables"
               className="px-4 py-2 bg-white border border-gray-200 rounded-md text-sm hover:bg-[#C99E5A] transition-colors"
             >
@@ -113,7 +109,10 @@ export default function PendingOrders() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          <Link href="/dashboard/total-orders" className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors">
+          <Link
+            href="/dashboard/total-orders"
+            className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
+          >
             <h3 className="text-sm text-gray-600 mb-2">Total Orders</h3>
             <p className="text-2xl font-medium text-[#C99E5A]">200</p>
           </Link>
@@ -121,7 +120,10 @@ export default function PendingOrders() {
             <h3 className="text-sm text-black mb-1">Completed Orders</h3>
             <p className="text-2xl font-normal text-[#C99E5A]">170</p>
           </div>
-          <Link href="/dashboard/pending-orders" className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors">
+          <Link
+            href="/dashboard/pending-orders"
+            className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
+          >
             <h3 className="text-sm text-gray-600 mb-2">Pending Orders</h3>
             <p className="text-2xl font-medium text-[#C99E5A]">30</p>
           </Link>
@@ -149,8 +151,12 @@ export default function PendingOrders() {
                 <th className="text-left py-4 px-4 font-medium">Image</th>
                 <th className="text-left py-4 px-4 font-medium">Name</th>
                 <th className="text-left py-4 px-4 font-medium">Quantity</th>
-                <th className="text-left py-4 px-4 font-medium">Waiter Details</th>
-                <th className="text-left py-4 px-4 font-medium">Customer Details</th>
+                <th className="text-left py-4 px-4 font-medium">
+                  Waiter Details
+                </th>
+                <th className="text-left py-4 px-4 font-medium">
+                  Customer Details
+                </th>
                 <th className="text-left py-4 px-4 font-medium">Order Time</th>
               </tr>
             </thead>
@@ -166,7 +172,8 @@ export default function PendingOrders() {
                         className="object-cover rounded-lg"
                         style={{
                           maxWidth: "100%",
-                        }} />
+                        }}
+                      />
                     </div>
                   </td>
                   <td className="py-4 px-4">{order.name}</td>
@@ -182,6 +189,6 @@ export default function PendingOrders() {
           </table>
         </div>
       </div>
-    </div>)
+    </div>
   );
 }

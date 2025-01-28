@@ -20,11 +20,6 @@ export default function LoginFormWrapper() {
   });
   const [error, setError] = useState("");
   const [showAnimations, setShowAnimations] = useState(true);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const handleAnimationComplete = useCallback(() => {
     setShowAnimations(false);
@@ -47,14 +42,6 @@ export default function LoginFormWrapper() {
       setError("Failed to save login information. Please try again.");
     }
   };
-
-  if (!isMounted) {
-    return (
-      <div className="min-h-screen bg-[#F1EEE6] flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-[#4A3F3C] border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
 
   if (showAnimations) {
     return <LoadingAnimations onComplete={handleAnimationComplete} />;

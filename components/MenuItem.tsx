@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image, { type StaticImageData } from "next/image";
 import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -41,8 +41,15 @@ const MenuItem: React.FC<MenuItemProps> = ({
 
   useEffect(() => {
     const cartItem = cartItems.find((item) => item.id === id);
-    setQuantity(cartItem ? cartItem.quantity : 0);
-  }, [cartItems, id]);
+    if (cartItem?.quantity !== quantity) {
+      setQuantity(cartItem ? cartItem.quantity : 0);
+    }
+  }, [cartItems, id, quantity]);
+
+  const totalCartItems = useMemo(
+    () => cartItems.reduce((acc, item) => acc + item.quantity, 0),
+    [cartItems]
+  );
 
   const handleReadMoreClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -63,8 +70,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
     const newQuantity = quantity + 1;
     setQuantity(newQuantity);
     onAddToCart(id, newQuantity);
-    if (newQuantity === 1)
-    setTimeout(() => setAnimate(false), 300);
+    if (newQuantity === 1) setTimeout(() => setAnimate(false), 300);
   };
 
   const handleDecrement = () => {
@@ -76,11 +82,6 @@ const MenuItem: React.FC<MenuItemProps> = ({
       setTimeout(() => setAnimate(false), 300);
     }
   };
-
-  const totalCartItems = cartItems.reduce(
-    (acc, item) => acc + item.quantity,
-    0
-  );
 
   return (
     <>

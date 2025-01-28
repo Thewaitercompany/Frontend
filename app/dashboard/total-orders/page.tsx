@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 
 interface Order {
@@ -19,40 +19,47 @@ interface Order {
 const initialOrders: Order[] = [
   {
     id: 1,
-    image: '/fries.png',
-    name: 'Crispy Fries',
+    image: "/fries.png",
+    name: "Crispy Fries",
     price: 60,
-    date: '02/11/24',
-    time: '9:15pm',
+    date: "02/11/24",
+    time: "9:15pm",
     tableNo: 10,
-    contactDetails: 'Mr Patel/9897xxxxxx',
-    category: 'Starters'
+    contactDetails: "Mr Patel/9897xxxxxx",
+    category: "Starters",
   },
   {
     id: 2,
-    image: '/nugg.png',
-    name: 'Chicken Nuggets',
+    image: "/nugg.png",
+    name: "Chicken Nuggets",
     price: 80,
-    date: '02/11/24',
-    time: '8:35pm',
+    date: "02/11/24",
+    time: "8:35pm",
     tableNo: 10,
-    contactDetails: 'Mr Patel/9897xxxxxx',
-    category: 'Starters'
+    contactDetails: "Mr Patel/9897xxxxxx",
+    category: "Starters",
   },
 ];
 
 export default function TotalOrders() {
-  const [selectedCategory, setSelectedCategory] = useState('Starters');
+  const [selectedCategory, setSelectedCategory] = useState("Starters");
   const [orders] = useState(initialOrders);
 
-  const categories = ['Starters', 'Drinks', 'Desserts', 'Main Course', 'All Items'];
+  const categories = [
+    "Starters",
+    "Drinks",
+    "Desserts",
+    "Main Course",
+    "All Items",
+  ];
 
-  const filteredOrders = orders.filter(order => 
-    selectedCategory === 'All Items' || order.category === selectedCategory
+  const filteredOrders = orders.filter(
+    (order) =>
+      selectedCategory === "All Items" || order.category === selectedCategory
   );
 
   return (
-    (<div className="min-h-screen bg-[#f5f1eb] p-8 font-serif">
+    <div className="min-h-screen bg-[#f5f1eb] p-8 font-serif">
       {/* Header */}
       <header className="flex justify-between items-center mb-12">
         <div className="flex items-center gap-3">
@@ -65,17 +72,16 @@ export default function TotalOrders() {
               className="h-8 w-auto"
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
           </Link>
           <span className="text-xl text-gray-400">×</span>
           <span className="text-xl">Badshah&apos;s Kitchen</span>
         </div>
         <div className="text-right">
           <h2 className="text-xl font-medium">Dashboard</h2>
-          <p className="text-sm text-gray-600">
-            Saturday, November, 2024
-          </p>
+          <p className="text-sm text-gray-600">Saturday, November, 2024</p>
         </div>
       </header>
       {/* Overview Section */}
@@ -83,7 +89,7 @@ export default function TotalOrders() {
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-lg font-medium">Today&apos;s Overview</h2>
           <div className="flex gap-4">
-            <Link 
+            <Link
               href="/dashboard/tables"
               className="px-4 py-2 bg-white border border-gray-200 rounded-md text-sm hover:bg-[#C99E5A] transition-colors"
             >
@@ -99,7 +105,10 @@ export default function TotalOrders() {
         </div>
 
         <div className="grid grid-cols-5 gap-6">
-          <Link href="/dashboard/total-orders" className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors">
+          <Link
+            href="/dashboard/total-orders"
+            className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
+          >
             <h3 className="text-sm text-gray-600 mb-2">Total Orders</h3>
             <p className="text-2xl font-medium text-[#C99E5A]">200</p>
           </Link>
@@ -107,7 +116,10 @@ export default function TotalOrders() {
             <h3 className="text-sm text-gray-600 mb-2">Completed Orders</h3>
             <p className="text-2xl font-medium text-[#C99E5A]">170</p>
           </div>
-          <Link href="/dashboard/pending-orders" className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors">
+          <Link
+            href="/dashboard/pending-orders"
+            className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
+          >
             <h3 className="text-sm text-gray-600 mb-2">Pending Orders</h3>
             <p className="text-2xl font-medium text-[#C99E5A]">30</p>
           </Link>
@@ -131,9 +143,10 @@ export default function TotalOrders() {
                 key={category}
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-md text-sm transition-colors
-                  ${category === selectedCategory
-                    ? 'bg-[#C99E5A] text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ${
+                    category === selectedCategory
+                      ? "bg-[#C99E5A] text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                   }`}
               >
                 {category}
@@ -153,7 +166,9 @@ export default function TotalOrders() {
                 <th className="text-left py-4 px-4 font-medium">Date</th>
                 <th className="text-left py-4 px-4 font-medium">Time</th>
                 <th className="text-left py-4 px-4 font-medium">Table No.</th>
-                <th className="text-left py-4 px-4 font-medium">Contact Details</th>
+                <th className="text-left py-4 px-4 font-medium">
+                  Contact Details
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -168,7 +183,8 @@ export default function TotalOrders() {
                         className="object-cover rounded-lg"
                         style={{
                           maxWidth: "100%",
-                        }} />
+                        }}
+                      />
                     </div>
                   </td>
                   <td className="py-4 px-4">{order.name}</td>
@@ -183,6 +199,6 @@ export default function TotalOrders() {
           </table>
         </div>
       </div>
-    </div>)
+    </div>
   );
 }

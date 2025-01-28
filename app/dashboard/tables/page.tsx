@@ -1,47 +1,47 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
-import { Search } from 'lucide-react';
+import { Search } from "lucide-react";
 
 interface Table {
   id: string;
   totalSeats: number;
   occupiedSeats: number;
-  status: 'available' | 'booked' | 'partially-occupied';
+  status: "available" | "booked" | "partially-occupied";
 }
 
 const initialTables: Table[] = [
-  { id: '01', totalSeats: 4, occupiedSeats: 2, status: 'partially-occupied' },
-  { id: '02', totalSeats: 4, occupiedSeats: 0, status: 'available' },
-  { id: '03', totalSeats: 4, occupiedSeats: 4, status: 'booked' },
-  { id: '04', totalSeats: 6, occupiedSeats: 2, status: 'partially-occupied' },
+  { id: "01", totalSeats: 4, occupiedSeats: 2, status: "partially-occupied" },
+  { id: "02", totalSeats: 4, occupiedSeats: 0, status: "available" },
+  { id: "03", totalSeats: 4, occupiedSeats: 4, status: "booked" },
+  { id: "04", totalSeats: 6, occupiedSeats: 2, status: "partially-occupied" },
 ];
 
 export default function TableDetails() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const tables = initialTables;
 
-  const filteredTables = tables.filter(table => 
+  const filteredTables = tables.filter((table) =>
     table.id.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const getTableStyles = (status: Table['status']) => {
+  const getTableStyles = (status: Table["status"]) => {
     switch (status) {
-      case 'available':
-        return 'border-[#C99E5A] border-solid';
-      case 'booked':
-        return 'border-red-500 border-solid';
-      case 'partially-occupied':
-        return 'border-[#C99E5A] border-dashed';
+      case "available":
+        return "border-[#C99E5A] border-solid";
+      case "booked":
+        return "border-red-500 border-solid";
+      case "partially-occupied":
+        return "border-[#C99E5A] border-dashed";
       default:
-        return 'border-gray-300 border-solid';
+        return "border-gray-300 border-solid";
     }
   };
 
   return (
-    (<div className="min-h-screen bg-[#f5f1eb] p-6 font-serif">
+    <div className="min-h-screen bg-[#f5f1eb] p-6 font-serif">
       {/* Header */}
       <header className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-2">
@@ -54,19 +54,18 @@ export default function TableDetails() {
               className="h-8 lg:h-10 w-auto"
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
           </Link>
           <span className="text-xl text-gray-400">×</span>
           <span className="text-xl">Badshah&apos;s Kitchen</span>
         </div>
         <div className="text-right">
-         <Link href="/dashboard">
+          <Link href="/dashboard">
             <h2 className="text-xl font-medium">Dashboard</h2>
-            </Link>
-          <p className="text-sm text-gray-600">
-            Saturday, November, 2024
-          </p>
+          </Link>
+          <p className="text-sm text-gray-600">Saturday, November, 2024</p>
         </div>
       </header>
       {/* Today's Overview */}
@@ -74,7 +73,7 @@ export default function TableDetails() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg">Today&apos;s Overview</h2>
           <div className="flex gap-4">
-            <Link 
+            <Link
               href="/dashboard/tables"
               className="px-4 py-2 bg-white border border-gray-200 rounded-md text-sm hover:bg-[#C99E5A] transition-colors"
             >
@@ -90,7 +89,10 @@ export default function TableDetails() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          <Link href="/dashboard/total-orders" className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors">
+          <Link
+            href="/dashboard/total-orders"
+            className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
+          >
             <h3 className="text-sm text-gray-600 mb-2">Total Orders</h3>
             <p className="text-2xl font-medium text-[#C99E5A]">200</p>
           </Link>
@@ -98,7 +100,10 @@ export default function TableDetails() {
             <h3 className="text-sm text-black mb-1">Completed Orders</h3>
             <p className="text-2xl font-normal text-[#C99E5A]">170</p>
           </div>
-          <Link href="/dashboard/pending-orders" className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors">
+          <Link
+            href="/dashboard/pending-orders"
+            className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
+          >
             <h3 className="text-sm text-gray-600 mb-2">Pending Orders</h3>
             <p className="text-2xl font-medium text-[#C99E5A]">30</p>
           </Link>
@@ -147,17 +152,24 @@ export default function TableDetails() {
           {filteredTables.map((table) => (
             <div
               key={table.id}
-              className={`p-4 rounded-lg border-2 ${getTableStyles(table.status)}`}
+              className={`p-4 rounded-lg border-2 ${getTableStyles(
+                table.status
+              )}`}
             >
               <div className="text-2xl font-medium mb-4">{table.id}</div>
               <div className="space-y-1 text-sm">
-                <p>Total Seats = {table.totalSeats.toString().padStart(2, '0')}</p>
-                <p>Occupied Seats = {table.occupiedSeats.toString().padStart(2, '0')}</p>
+                <p>
+                  Total Seats = {table.totalSeats.toString().padStart(2, "0")}
+                </p>
+                <p>
+                  Occupied Seats ={" "}
+                  {table.occupiedSeats.toString().padStart(2, "0")}
+                </p>
               </div>
             </div>
           ))}
         </div>
       </div>
-    </div>)
+    </div>
   );
 }

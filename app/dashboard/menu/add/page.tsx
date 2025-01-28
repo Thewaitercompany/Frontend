@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import Image from "next/image";
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 interface MenuItem {
   image: string;
@@ -25,23 +25,25 @@ interface MenuItem {
 
 export default function AddMenuItem() {
   const [menuItem, setMenuItem] = useState<MenuItem>({
-    image: '',
-    name: '',
-    description: '',
-    ingredients: '',
-    cost: '',
-    price: '',
-    category: 'starters',
+    image: "",
+    name: "",
+    description: "",
+    ingredients: "",
+    cost: "",
+    price: "",
+    category: "starters",
     isVeg: false,
   });
 
-  const [previewImage, setPreviewImage] = useState<string>('');
+  const [previewImage, setPreviewImage] = useState<string>("");
   const [isVeg, setIsVeg] = useState<boolean>(false);
   const [isVegExample, setIsVegExample] = useState<boolean>(false); // Separate state for example item
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setMenuItem(prev => ({ ...prev, [name]: value }));
+    setMenuItem((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +63,7 @@ export default function AddMenuItem() {
   };
 
   return (
-    (<div className="min-h-screen bg-[#f5f1eb] p-6">
+    <div className="min-h-screen bg-[#f5f1eb] p-6">
       <header className="flex justify-between items-center mb-12">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center">
@@ -73,8 +75,9 @@ export default function AddMenuItem() {
               className="h-8 w-auto"
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
           </Link>
           <span className="text-xl text-gray-400">×</span>
           <span className="text-xl">Badshah&apos;s Kitchen</span>
@@ -82,17 +85,18 @@ export default function AddMenuItem() {
         <div className="text-right">
           <Link href="/dashboard">
             <h2 className="text-xl font-medium">Dashboard</h2>
-            </Link>
-          <p className="text-sm text-gray-600">
-            Saturday, November, 2024
-          </p>
+          </Link>
+          <p className="text-sm text-gray-600">Saturday, November, 2024</p>
         </div>
       </header>
       {/* Main Content Card */}
       <div className="bg-white rounded-3xl p-8">
         {/* Back Navigation */}
         <div className="mb-6">
-          <Link href="/dashboard/menu" className="flex items-center gap-2 text-gray-600">
+          <Link
+            href="/dashboard/menu"
+            className="flex items-center gap-2 text-gray-600"
+          >
             <ArrowLeft className="w-4 h-4" />
             <span>Add Menu Items</span>
           </Link>
@@ -121,16 +125,16 @@ export default function AddMenuItem() {
               className="rounded-xl"
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
           </div>
           <div>Chicken Noodles</div>
           <div>
-            These Fire Chicken Noodles are hot & spicy, but only have a handful of ingredients.
+            These Fire Chicken Noodles are hot & spicy, but only have a handful
+            of ingredients.
           </div>
-          <div>
-            Chicken, noodles, vegetables, garlic tossed with sauces.
-          </div>
+          <div>Chicken, noodles, vegetables, garlic tossed with sauces.</div>
           <div>₹ 50</div>
           <div>₹ 70</div>
           <div>
@@ -154,19 +158,20 @@ export default function AddMenuItem() {
               height={50}
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
             <button
               type="button"
               aria-label="Toggle vegetarian option"
               className={`relative w-10 h-5 rounded-full ${
-                !isVegExample ? 'bg-red-500' : 'bg-gray-200'
+                !isVegExample ? "bg-red-500" : "bg-gray-200"
               }`}
               onClick={() => setIsVegExample(!isVegExample)} // Toggle example item state
             >
               <span
                 className={`absolute w-4 h-4 bg-white rounded-full transition-transform ${
-                  !isVegExample ? 'right-0.5' : 'left-0.5'
+                  !isVegExample ? "right-0.5" : "left-0.5"
                 } top-0.5`}
               />
             </button>
@@ -177,8 +182,9 @@ export default function AddMenuItem() {
               height={50}
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
           </div>
         </div>
 
@@ -194,8 +200,9 @@ export default function AddMenuItem() {
                 className="rounded-xl mb-2"
                 style={{
                   maxWidth: "100%",
-                  height: "auto"
-                }} />
+                  height: "auto",
+                }}
+              />
             )}
             <label className="block w-20 h-20 border border-dashed border-gray-300 rounded-lg cursor-pointer">
               <input
@@ -255,9 +262,11 @@ export default function AddMenuItem() {
             />
           </div>
           <div>
-            <Select 
-              value={menuItem.category} 
-              onValueChange={(value) => setMenuItem(prev => ({ ...prev, category: value }))}
+            <Select
+              value={menuItem.category}
+              onValueChange={(value) =>
+                setMenuItem((prev) => ({ ...prev, category: value }))
+              }
             >
               <SelectTrigger className="w-full border-gray-200">
                 <SelectValue placeholder="Categories" />
@@ -278,19 +287,20 @@ export default function AddMenuItem() {
               height={50}
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
             <button
               type="button"
               aria-label="Toggle vegetarian option"
               className={`relative w-10 h-5 rounded-full ${
-                !isVeg ? 'bg-red-500' : 'bg-gray-200'
+                !isVeg ? "bg-red-500" : "bg-gray-200"
               }`}
               onClick={() => setIsVeg(!isVeg)} // Toggle state for new item form
             >
               <span
                 className={`absolute w-4 h-4 bg-white rounded-full transition-transform ${
-                  !isVeg ? 'right-0.5' : 'left-0.5'
+                  !isVeg ? "right-0.5" : "left-0.5"
                 } top-0.5`}
               />
             </button>
@@ -301,12 +311,13 @@ export default function AddMenuItem() {
               height={50}
               style={{
                 maxWidth: "100%",
-                height: "auto"
-              }} />
+                height: "auto",
+              }}
+            />
           </div>
         </div>
 
-         {/* Save Button */}
+        {/* Save Button */}
         <div className="flex justify-end">
           <button
             className="px-6 py-2 bg-[#C99E5A] text-white rounded-lg hover:bg-[#b88d49] transition-colors"
@@ -316,6 +327,6 @@ export default function AddMenuItem() {
           </button>
         </div>
       </div>
-    </div>)
+    </div>
   );
 }
