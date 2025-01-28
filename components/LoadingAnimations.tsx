@@ -1,54 +1,73 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react";
 
 interface LoadingAnimationsProps {
-  onComplete?: () => void
+  onComplete?: () => void;
 }
 
-export default function LoadingAnimations({ onComplete }: LoadingAnimationsProps) {
-  const [currentAnimation, setCurrentAnimation] = useState(1)
-  const video1Ref = useRef<HTMLVideoElement>(null)
-  const video2Ref = useRef<HTMLVideoElement>(null)
+export default function LoadingAnimations({
+  onComplete,
+}: LoadingAnimationsProps) {
+  const [currentAnimation, setCurrentAnimation] = useState(1);
+  const video1Ref = useRef<HTMLVideoElement>(null);
+  const video2Ref = useRef<HTMLVideoElement>(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const playAnimations = async () => {
       if (video1Ref.current && video2Ref.current) {
         try {
           // Play first animation
-          await video1Ref.current.play()
+          await video1Ref.current.play();
           await new Promise<void>((resolve) => {
             const onEnded = () => {
-              video1Ref.current?.removeEventListener("ended", onEnded)
-              resolve()
-            }
-            video1Ref.current?.addEventListener("ended", onEnded)
-          })
+              if (isMounted.current) {
+                video1Ref.current?.removeEventListener("ended", onEnded);
+                resolve();
+              }
+            };
+            video1Ref.current?.addEventListener("ended", onEnded);
+          });
+
+          if (!isMounted.current) return;
 
           // Switch to second animation
-          setCurrentAnimation(2)
+          setCurrentAnimation(2);
 
           // Play second animation
-          await video2Ref.current.play()
+          await video2Ref.current.play();
           await new Promise<void>((resolve) => {
             const onEnded = () => {
-              video2Ref.current?.removeEventListener("ended", onEnded)
-              resolve()
-            }
-            video2Ref.current?.addEventListener("ended", onEnded)
-          })
+              if (isMounted.current) {
+                video2Ref.current?.removeEventListener("ended", onEnded);
+                resolve();
+              }
+            };
+            video2Ref.current?.addEventListener("ended", onEnded);
+          });
+
+          if (!isMounted.current) return;
 
           // Both animations completed
-          onComplete?.()
+          onComplete?.();
         } catch (error) {
-          console.error("Error playing animations:", error)
-          onComplete?.()
+          console.error("Error playing animations:", error);
+          if (isMounted.current) {
+            onComplete?.();
+          }
         }
       }
-    }
+    };
 
-    playAnimations()
-  }, [onComplete])
+    playAnimations();
+  }, [onComplete]);
 
   return (
     <div className="fixed inset-0 bg-[#F1EEE6] z-50 flex items-center justify-center">
@@ -83,4 +102,3 @@ export default function LoadingAnimations({ onComplete }: LoadingAnimationsProps
     </div>
   );
 }
-
