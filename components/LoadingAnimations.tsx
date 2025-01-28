@@ -55,29 +55,33 @@ export default function LoadingAnimations({
   }
 
   return (
-    <div className="fixed inset-0 bg-[#F1EEE6] z-50 flex items-center justify-center">
-      <div className="relative w-full h-full max-w-md max-h-md">
-        <video
-          ref={video1Ref}
-          className="absolute inset-0 object-cover w-full h-full"
-          muted
-          playsInline
-          preload="auto"
-        >
-          <source src="/animation 1.mp4" type="video/mp4" />
-        </video>
-        <video
-          ref={video2Ref}
-          className={`absolute inset-0 object-cover w-full h-full transition-opacity duration-500 ${
-            currentAnimation === 2 ? "opacity-100" : "opacity-0"
-          }`}
-          muted
-          playsInline
-          preload="auto"
-        >
-          <source src="/animation 2.mp4" type="video/mp4" />
-        </video>
+  <div className="fixed inset-0 bg-[#F1EEE6] z-50 flex items-center justify-center">
+    <div className="relative w-full h-full max-w-md max-h-md aspect-square">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative w-full h-full max-w-[80vmin] max-h-[80vmin]">
+          <video
+            ref={video1Ref}
+            className="absolute inset-0 w-full h-full object-cover"
+            muted
+            playsInline
+            preload="auto"
+          >
+            <source src="/animation 1.mp4" type="video/mp4" />
+          </video>
+          <video
+            ref={video2Ref}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+              currentAnimation === 2 ? "opacity-100" : "opacity-0"
+            }`}
+            muted
+            playsInline
+            preload="auto"
+          >
+            <source src="/animation 2.mp4" type="video/mp4" />
+          </video>
+        </div>
       </div>
     </div>
-  );
+  </div>
+);
 }
