@@ -3,13 +3,7 @@ import type { Metadata } from "next";
 import { Roboto, Aleo } from "next/font/google";
 // import { Analytics } from "@vercel/analytics/react";
 // import { SpeedInsights } from "@vercel/speed-insights/next";
-import type { Viewport } from "next";
 
-// export const viewport: Viewport = {
-//   width: "device-width",
-//   initialScale: 1,
-//   maximumScale: 1,
-// };
 const roboto = Roboto({
   weight: ["400", "500", "700"],
   subsets: ["latin"],

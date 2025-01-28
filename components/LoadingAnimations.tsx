@@ -19,26 +19,30 @@ export default function LoadingAnimations({
       if (video1Ref.current && video2Ref.current) {
         try {
           await video1Ref.current.play();
-          await new Promise((resolve) => {
-            video1Ref.current!.onended = resolve;
+          await new Promise<void>((resolve) => {
+            const onEnded = () => {
+              video1Ref.current?.removeEventListener("ended", onEnded);
+              resolve();
+            };
+            video1Ref.current?.addEventListener("ended", onEnded);
           });
 
           setCurrentAnimation(2);
           await video2Ref.current.play();
-          await new Promise((resolve) => {
-            video2Ref.current!.onended = resolve;
+          await new Promise<void>((resolve) => {
+            const onEnded = () => {
+              video2Ref.current?.removeEventListener("ended", onEnded);
+              resolve();
+            };
+            video2Ref.current?.addEventListener("ended", onEnded);
           });
 
           setAnimationsCompleted(true);
-          if (onComplete) {
-            onComplete();
-          }
+          onComplete?.();
         } catch (error) {
           console.error("Error playing animations:", error);
           setAnimationsCompleted(true);
-          if (onComplete) {
-            onComplete();
-          }
+          onComplete?.();
         }
       }
     };
