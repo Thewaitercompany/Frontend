@@ -1,6 +1,6 @@
-import "../../styles/globals.css"
-import "../../styles/animations.css"
-import "../../styles/gradients.css"
+import "@/styles/globals.css"
+import "@/styles/animations.css"
+import "@/styles/gradients.css"
 import type React from "react"
 import { Roboto, Aleo } from "next/font/google"
 

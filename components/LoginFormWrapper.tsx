@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Phone } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -19,10 +19,15 @@ export default function LoginFormWrapper() {
     numberOfPeople: "",
   });
   const [error, setError] = useState("");
-  const [showAnimations, setShowAnimations] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleAnimationComplete = useCallback(() => {
-    setShowAnimations(false);
+  useEffect(() => {
+    // This effect will run once when the component mounts
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 4000); // Adjust this time to match the total duration of your animations
+
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -43,8 +48,8 @@ export default function LoginFormWrapper() {
     }
   };
 
-  if (showAnimations) {
-    return <LoadingAnimations onComplete={handleAnimationComplete} />;
+  if (isLoading) {
+    return <LoadingAnimations onComplete={() => setIsLoading(false)} />;
   }
 
   return (
