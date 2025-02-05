@@ -58,23 +58,30 @@ const MenuItem: React.FC<MenuItemProps> = ({
   };
 
   const handleAdd = () => {
-    setAnimate(true);
-    const newQuantity = quantity + 1;
-    setQuantity(newQuantity);
-    onAddToCart(id, newQuantity);
-    setTimeout(() => setAnimate(false), 300);
+    if (!animate) {
+      // Only trigger animation if not already animating
+      setAnimate(true);
+      const newQuantity = quantity + 1;
+      setQuantity(newQuantity);
+      onAddToCart(id, newQuantity);
+      setTimeout(() => setAnimate(false), 300);
+    }
   };
 
   const handleIncrement = () => {
-    setAnimate(true);
-    const newQuantity = quantity + 1;
-    setQuantity(newQuantity);
-    onAddToCart(id, newQuantity);
-    if (newQuantity === 1) setTimeout(() => setAnimate(false), 300);
+    if (!animate) {
+      // Only trigger animation if not already animating
+      setAnimate(true);
+      const newQuantity = quantity + 1;
+      setQuantity(newQuantity);
+      onAddToCart(id, newQuantity);
+      setTimeout(() => setAnimate(false), 300);
+    }
   };
 
   const handleDecrement = () => {
-    if (quantity > 0) {
+    if (quantity > 0 && !animate) {
+      // Only trigger animation if not already animating
       setAnimate(true);
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);

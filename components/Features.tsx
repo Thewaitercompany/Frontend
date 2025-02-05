@@ -31,8 +31,8 @@ const features: Feature[] = [
       }
     ],
     media: {
-      type: 'image',
-      src: "/ph2.png"
+      type: 'gif',
+      src: "/transform customer experience.gif"
     }
   },
   {
@@ -120,7 +120,7 @@ const backgroundImages = [
   { src: '/mushroom.png', left: '5%', top: '63%' },
   { src: '/Tomato.png', right: '10%', top: '80%' },
   { src: '/sweet ishan.png', right: '15%', top: '80%' },
-  { src: '/leaf.png', right: '80%', top: '90%' },
+  { src: '/leaf.png', right: '85%', top: '90%' },
 ]
 
 function MediaContent({ media }: { media: Feature['media'] }) {

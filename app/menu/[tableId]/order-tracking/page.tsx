@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, use, Suspense } from 'react';
-import { useRouter } from 'next/navigation';
-import OrderStatus from '@/components/OrderStatus';
-import Navbar from '@/components/Navbar';
+import type React from "react";
+import { useState, useEffect, use, Suspense } from "react";
+import { useRouter } from "next/navigation";
+import Navbar from "@/components/Navbar";
+import { Circle } from "lucide-react";
 
 interface OrderTrackingPageProps {
   params: Promise<{ tableId: string }>;
@@ -19,7 +20,6 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
   const totalBill = 200;
 
   useEffect(() => {
-    // Update time every minute
     const timer = setInterval(() => {
       setEstimatedTime(new Date(Date.now() + 20 * 60000));
     }, 60000);
@@ -32,51 +32,78 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
       <div className="min-h-screen bg-[#F1EEE6]">
         <Navbar tableId={resolvedParams.tableId} />
 
-        <main className="p-4 space-y-4">
+        <main className="p-6 max-w-md mx-auto space-y-8">
           {/* Order Status Card */}
-          <div className="bg-white rounded-xl p-6">
-            <h1 className="text-xl mb-8 text-center italic font-serif">
+          <div className="bg-white rounded-lg p-8">
+            <h2 className="text-center text-lg mb-6">
               Thank you for your order!
-            </h1>
+            </h2>
 
             {/* Estimated Time */}
-            <div className="bg-[#4E3E3B] text-white rounded-lg p-3 mb-8">
-              <div className="text-center">
-                <p className="text-sm mb-1">Estimated order time</p>
-                <p className="text-lg">
-                  {estimatedTime.toLocaleTimeString([], {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: true
-                  }).toLowerCase()}
-                </p>
-              </div>
+            <div className="bg-[#4A3F3F] text-white rounded-md p-3 mb-8">
+              <p className="text-center text-sm mb-1">Estimated order time</p>
+              <p className="text-center">
+                {estimatedTime
+                  .toLocaleTimeString([], {
+                    hour: "numeric",
+                    minute: "2-digit",
+                    hour12: true,
+                  })
+                  .toLowerCase()}
+              </p>
             </div>
 
-            <OrderStatus
-              orderId="123"
-              cookName="Mr Cook"
-              currentStatus="preparing"
-            />
+            {/* Order Status Timeline */}
+            <div className="space-y-8 relative">
+              <div className="relative pl-8 mb-2">
+                <div className="absolute left-0 top-1.5">
+                  <Circle className="h-3 w-3 fill-[#4A3F3F] text-[#4A3F3F]" />
+                </div>
+                <div className="absolute left-1.5 top-8 h-full w-[1px] bg-[#4A3F3F]" />
+                <p className="text-sm">
+                  Your order is being prepared by{" "}
+                  <span className="text-gray-600">Mr Cook</span>
+                </p>
+              </div>
+
+              <div className="relative pl-8 mb-2">
+                <div className="absolute left-0 top-1.5">
+                  <Circle className="h-3 w-3 stroke-[#4A3F3F]" />
+                </div>
+                <div className="absolute left-1.5 top-8 h-full w-[1px] bg-[#4A3F3F]" />
+                <p className="text-sm text-gray-600">
+                  On its way to your table!
+                </p>
+              </div>
+
+              <div className="relative pl-8 mb-2">
+                <div className="absolute left-0 top-1.5">
+                  <Circle className="h-3 w-3 stroke-[#4A3F3F]" />
+                </div>
+                <p className="text-sm text-gray-600">Delivered</p>
+              </div>
+            </div>
           </div>
 
           {/* Bill Details */}
-          <div className="bg-white rounded-xl p-6">
+          <div className="bg-white rounded-lg p-8">
             <div className="flex justify-between items-center mb-6">
-              <span className="text-lg">Total Bill</span>
-              <span className="text-lg">₹ {totalBill}</span>
+              <span>Total Bill</span>
+              <span>₹ {totalBill}</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               <button
-                onClick={() => router.push(`/checkout/${resolvedParams.tableId}`)}
-                className="w-full bg-[#9D8480] text-white py-2.5 rounded-md text-[15px]"
+                onClick={() =>
+                  router.push(`/checkout/${resolvedParams.tableId}`)
+                }
+                className="w-full bg-[#9D8480] text-white py-2.5 rounded text-sm"
               >
                 Check Out
               </button>
               <button
                 onClick={() => router.push(`/menu/${resolvedParams.tableId}`)}
-                className="w-full bg-[#9D8480] text-white py-2.5 rounded-md text-[15px]"
+                className="w-full bg-[#9D8480] text-white py-2.5 rounded text-sm"
               >
                 Back to Menu
               </button>
@@ -89,4 +116,3 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
 };
 
 export default OrderTrackingPage;
-

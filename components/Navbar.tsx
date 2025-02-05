@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 import Image from "next/image";
-import logo from '/public/logo.png';
-import table from '/public/table.png';
+import logo from "/public/logo.png";
+import table from "/public/table.png";
 
 interface NavbarProps {
   tableId: string;
@@ -13,20 +13,17 @@ const Navbar: React.FC<NavbarProps> = ({ tableId }) => {
   return (
     <div className="bg-[#ffffff] px-3 py-2">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="h-6">
+        <div className="flex items-center gap-1">
+          <div className="h-6 w-20 relative">
             <Image
               src={logo || "/placeholder.svg"}
               alt="logo"
-              className="h-full w-auto"
-              style={{
-                maxWidth: "100%",
-                height: "auto"
-              }} />
+              fill
+              className="object-contain object-left"
+              sizes="80px"
+            />
           </div>
-          <span className="text-gray-900 text-base">
-            x Kitchen
-          </span>
+          <span className="text-gray-900 text-base">x Kitchen</span>
         </div>
         <div className="flex items-center gap-2">
           <Image
@@ -35,11 +32,10 @@ const Navbar: React.FC<NavbarProps> = ({ tableId }) => {
             className="w-4 h-4"
             style={{
               maxWidth: "100%",
-              height: "auto"
-            }} />
-          <span className="text-gray-900 text-sm">
-            Table no. {tableId}
-          </span>
+              height: "auto",
+            }}
+          />
+          <span className="text-gray-900 text-sm">Table no. {tableId}</span>
         </div>
       </div>
     </div>
@@ -47,4 +43,3 @@ const Navbar: React.FC<NavbarProps> = ({ tableId }) => {
 };
 
 export default Navbar;
-

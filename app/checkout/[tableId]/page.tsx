@@ -135,7 +135,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ params }) => {
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="bg-[#B4A19E] text-white px-6 py-2 rounded-md font-serif"
+                className="bg-[#9D8480] text-white px-6 py-2 rounded-md font-serif"
               >
                 Submit
               </button>
@@ -151,14 +151,14 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ params }) => {
           onClick={() => {
             console.log("Payment process initiated");
           }}
-          className="bg-[#B4A19E] text-white py-3 rounded-md font-serif"
+          className="bg-[#9D8480] text-white py-3 rounded-md font-serif"
         >
           Pay Now
         </button>
         <button
           type="button"
           onClick={() => router.push(`/menu/${resolvedParams.tableId}`)}
-          className="bg-[#B4A19E] text-white py-3 rounded-md font-serif"
+          className="bg-[#9D8480] text-white py-3 rounded-md font-serif"
         >
           Back to Menu
         </button>
