@@ -40,7 +40,7 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
             </h2>
 
             {/* Estimated Time */}
-            <div className="bg-[#4A3F3F] text-white rounded-md p-3 mb-8">
+            <div className="bg-[#4D3E3B] text-white rounded-md p-3 mb-8">
               <p className="text-center text-sm mb-1">Estimated order time</p>
               <p className="text-center">
                 {estimatedTime
@@ -57,9 +57,9 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
             <div className="space-y-8 relative">
               <div className="relative pl-8 mb-2">
                 <div className="absolute left-0 top-1.5">
-                  <Circle className="h-3 w-3 fill-[#4A3F3F] text-[#4A3F3F]" />
+                  <Circle className="h-3 w-3 fill-[#4D3E3B] text-[#4D3E3B]" />
                 </div>
-                <div className="absolute left-1.5 top-8 h-full w-[1px] bg-[#4A3F3F]" />
+                <div className="absolute left-1.5 top-8 h-full w-[1px] bg-[#4D3E3B]" />
                 <p className="text-sm">
                   Your order is being prepared by{" "}
                   <span className="text-gray-600">Mr Cook</span>
@@ -68,9 +68,9 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
 
               <div className="relative pl-8 mb-2">
                 <div className="absolute left-0 top-1.5">
-                  <Circle className="h-3 w-3 stroke-[#4A3F3F]" />
+                  <Circle className="h-3 w-3 stroke-[#4D3E3B]" />
                 </div>
-                <div className="absolute left-1.5 top-8 h-full w-[1px] bg-[#4A3F3F]" />
+                <div className="absolute left-1.5 top-8 h-full w-[1px] bg-[#4D3E3B]" />
                 <p className="text-sm text-gray-600">
                   On its way to your table!
                 </p>
@@ -78,7 +78,7 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
 
               <div className="relative pl-8 mb-2">
                 <div className="absolute left-0 top-1.5">
-                  <Circle className="h-3 w-3 stroke-[#4A3F3F]" />
+                  <Circle className="h-3 w-3 stroke-[#4D3E3B]" />
                 </div>
                 <p className="text-sm text-gray-600">Delivered</p>
               </div>
@@ -92,18 +92,18 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
               <span>₹ {totalBill}</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
+            <div className="flex gap-4">
               <button
                 onClick={() =>
                   router.push(`/checkout/${resolvedParams.tableId}`)
                 }
-                className="w-full bg-[#9D8480] text-white py-2.5 rounded text-sm"
+                className="flex-1 py-3 bg-[#B39793] text-white rounded-md text-base font-medium"
               >
                 Check Out
               </button>
               <button
                 onClick={() => router.push(`/menu/${resolvedParams.tableId}`)}
-                className="w-full bg-[#9D8480] text-white py-2.5 rounded text-sm"
+                className="flex-1 py-3 bg-[#B39793] text-white rounded-md text-base font-medium"
               >
                 Back to Menu
               </button>

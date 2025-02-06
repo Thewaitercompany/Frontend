@@ -6,7 +6,7 @@ import { Phone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
-import LoadingAnimations from "@/components/LoadingAnimations";
+// import LoadingAnimations from "@/components/LoadingAnimations";
 import Cookies from "js-cookie";
 
 export default function LoginPage() {
@@ -56,9 +56,9 @@ export default function LoginPage() {
     );
   }
 
-  if (showAnimations) {
-    return <LoadingAnimations onComplete={() => setShowAnimations(false)} />;
-  }
+  // if (showAnimations) {
+  //   return <LoadingAnimations onComplete={() => setShowAnimations(false)} />;
+  // }
 
   return (
     <div className="min-h-screen bg-[#F1EEE6] flex flex-col">

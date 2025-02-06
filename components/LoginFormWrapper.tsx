@@ -6,8 +6,10 @@ import { Phone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
-import LoadingAnimations from "@/components/LoadingAnimations";
+// import LoadingAnimations from "@/components/LoadingAnimations";
 import Cookies from "js-cookie";
+import logo from "/public/logo.png";
+import Image from "next/image"
 
 export default function LoginFormWrapper() {
   const router = useRouter();
@@ -48,20 +50,24 @@ export default function LoginFormWrapper() {
     }
   };
 
-  if (isLoading) {
-    return <LoadingAnimations onComplete={() => setIsLoading(false)} />;
-  }
+    // if (isLoading) {
+    //   return <LoadingAnimations onComplete={() => setIsLoading(false)} />;
+    // }
 
   return (
     <div className="min-h-screen bg-[#F1EEE6] flex flex-col">
       <Navbar tableId={tableId} />
 
       <div className="flex-1 flex items-center justify-center px-4">
-        <div className="w-full max-w-md bg-[#C4B3AE] rounded-lg p-6 space-y-6">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-[#4A3F3C]">
-              THE WAITER COMPANY
-            </h1>
+        <div className="w-full max-w-md bg-[#B39793] rounded-lg p-6 space-y-6">
+          <div className="h-16 w-36 relative flex items-center justify-center mx-auto">
+            <Image
+              src={logo || "/placeholder.svg"}
+              alt="logo"
+              fill
+              className="object-contain"
+              sizes="128px"
+            />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -116,12 +122,23 @@ export default function LoginFormWrapper() {
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full bg-[#4A3F3C] hover:bg-[#3A2F2C] text-white"
-            >
-              Log In
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                type="submit"
+                className="bg-[#4E3E3B] hover:bg-[#3A2F2C] text-white"
+                style={{
+                  width: "136px",
+                  height: "31px",
+                  top: "513px",
+                  left: "127px",
+                  gap: "0px",
+                  borderRadius: "6px 6px 6px 6px",
+                  opacity: "1",
+                }}
+              >
+                Log In
+              </Button>
+            </div>
           </form>
         </div>
       </div>

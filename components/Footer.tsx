@@ -52,7 +52,7 @@ export default function Footer() {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className="flex items-center gap-3 text-base text-[#4E3E3B] hover:text-[#8A7F7C] transition-colors group md:justify-start justify-center"
+                    className="flex items-center gap-3 text-base text-[#4E3E3B] hover:text-[#8A7F7C] transition-colors group justify-center md:justify-start"
                   >
                     <Icon className="h-5 w-5" />
                     <span className="font-serif">{link.name}</span>
@@ -76,17 +76,17 @@ export default function Footer() {
 
             {/* Contact Info */}
             <div className="space-y-4 text-center md:text-left">
-              <p className="flex items-center gap-3 text-base text-[#4E3E3B] md:justify-start justify-center">
+              <p className="flex items-center gap-3 text-base text-[#4E3E3B] justify-center md:justify-start">
                 <MapPin className="h-5 w-5" />
                 <span className="font-serif">RV College</span>
               </p>
-              <p className="flex items-center gap-3 text-base text-[#4E3E3B] md:justify-start justify-center">
+              <p className="flex items-center gap-3 text-base text-[#4E3E3B] justify-center md:justify-start">
                 <Phone className="h-5 w-5" />
-                <span className="font-serif">+91 8219058337</span>
+                <span className="font-serif">+91 7878449528</span>
               </p>
-              <p className="flex items-center gap-3 text-base text-[#4E3E3B] md:justify-start justify-center">
+              <p className="flex items-center gap-3 text-base text-[#4E3E3B] justify-center md:justify-start">
                 <Mail className="h-5 w-5" />
-                <span className="font-serif">email@gmail.com</span>
+                <span className="font-serif">founder@thewaitercompany.in</span>
               </p>
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function Footer() {
               <Image
                 src="/logo.png"
                 alt="The Waiter Company"
-                width={160}
+                width={140}
                 height={50}
                 className="opacity-90"
               />

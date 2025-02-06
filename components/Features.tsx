@@ -116,7 +116,7 @@ const features: Feature[] = [
 const backgroundImages = [
   { src: '/beetroot.png', left: '5%', top: '25%' },
   { src: '/freedhaniya.png', right: '10%', top: '1%' },
-  { src: '/garlic.png', right: '15%', top: '45%' },
+  { src: '/garlic.png', right: '5%', top: '45%' },
   { src: '/mushroom.png', left: '5%', top: '63%' },
   { src: '/Tomato.png', right: '10%', top: '80%' },
   { src: '/sweet ishan.png', right: '15%', top: '80%' },

@@ -35,10 +35,10 @@ export default function Hero() {
               </motion.p>
             </div>
             <motion.h2
-              className="text-2xl sm:text-4xl lg:text-6xl text-[#9D848080] opacity-60 italic leading-tight mt-8 md:mt-16 font-light font-aleo"
+              className="text-2xl sm:text-4xl lg:text-6xl text-[#B39793] italic leading-tight mt-8 md:mt-16 font-normal font-aleo"
               style={{ fontFamily: "aleo" }}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 0.6 }}
+              animate={{ opacity: 0.8 }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
               Kitchen ke bahar hum dekhlenge!

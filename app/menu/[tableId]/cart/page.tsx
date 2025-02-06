@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect, use } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, use } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ShoppingCart } from 'lucide-react';
-import Navbar from '@/components/Navbar';
+import { ShoppingCart } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 interface CartPageProps {
   params: Promise<{ tableId: string }>;
@@ -22,37 +22,63 @@ export default function CartPage({ params }: CartPageProps) {
   const router = useRouter();
   const resolvedParams = use(params);
   const { tableId } = resolvedParams;
-  
+
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [previousOrder, setPreviousOrder] = useState<CartItem[]>([]);
-  
+
   // Initialize cart items and previous order
   useEffect(() => {
     setCartItems([
-      { id: 1, name: 'Crispy fries', price: 60, image: '/fries.png', quantity: 2 },
-      { id: 2, name: 'Chicken Nugget', price: 80, image: '/nugg.png', quantity: 1 },
+      {
+        id: 1,
+        name: "Crispy fries",
+        price: 60,
+        image: "/fries.png",
+        quantity: 2,
+      },
+      {
+        id: 2,
+        name: "Chicken Nugget",
+        price: 80,
+        image: "/nugg.png",
+        quantity: 1,
+      },
     ]);
     setPreviousOrder([
-      { id: 1, name: 'Crispy fries', price: 60, image: '/fries.png', quantity: 1 },
+      {
+        id: 1,
+        name: "Crispy fries",
+        price: 60,
+        image: "/fries.png",
+        quantity: 1,
+      },
     ]);
   }, []);
 
   const updateQuantity = (id: number, change: number) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id
-          ? { ...item, quantity: Math.max(0, item.quantity + change) }
-          : item
-      ).filter(item => item.quantity > 0)
+    setCartItems((prevItems) =>
+      prevItems
+        .map((item) =>
+          item.id === id
+            ? { ...item, quantity: Math.max(0, item.quantity + change) }
+            : item
+        )
+        .filter((item) => item.quantity > 0)
     );
   };
 
   const getCurrentTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
   };
 
   const getPreviousTotal = () => {
-    return previousOrder.reduce((total, item) => total + item.price * item.quantity, 0);
+    return previousOrder.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
   };
 
   const getTotalBill = () => {
@@ -74,7 +100,7 @@ export default function CartPage({ params }: CartPageProps) {
   return (
     <div className="flex flex-col min-h-screen bg-[#F1EEE6]">
       <Navbar tableId={tableId} />
-      
+
       <main className="flex-1 p-4 space-y-4">
         {/* Current Order */}
         <div className="bg-white rounded-xl p-4">
@@ -82,7 +108,7 @@ export default function CartPage({ params }: CartPageProps) {
             <ShoppingCart className="w-5 h-5" />
             <h2 className="text-lg font-medium">Current Order</h2>
           </div>
-          
+
           <div className="space-y-4">
             {cartItems.map((item) => (
               <div key={item.id} className="flex items-center gap-3">
@@ -116,7 +142,7 @@ export default function CartPage({ params }: CartPageProps) {
               </div>
             ))}
           </div>
-          
+
           <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
             <span className="text-base font-medium">Total</span>
             <span className="text-base">₹ {getCurrentTotal()}</span>
@@ -129,7 +155,7 @@ export default function CartPage({ params }: CartPageProps) {
             <ShoppingCart className="w-5 h-5" />
             <h2 className="text-lg font-medium">Previous Order</h2>
           </div>
-          
+
           <div className="space-y-4">
             {previousOrder.map((item) => (
               <div key={item.id} className="flex items-center gap-3">
@@ -149,7 +175,7 @@ export default function CartPage({ params }: CartPageProps) {
               </div>
             ))}
           </div>
-          
+
           <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
             <span className="text-base font-medium">Total</span>
             <span className="text-base">₹ {getPreviousTotal()}</span>
@@ -170,13 +196,13 @@ export default function CartPage({ params }: CartPageProps) {
           <div className="flex gap-4">
             <button
               onClick={handlePlaceOrder}
-              className="flex-1 py-3 bg-[#9D8480] text-white rounded-md text-base font-medium"
+              className="flex-1 py-3 bg-[#B39793] text-white rounded-md text-base font-medium"
             >
               Place Order
             </button>
             <button
               onClick={handleBackToMenu}
-              className="flex-1 py-3 bg-[#9D8480] text-white rounded-md text-base font-medium"
+              className="flex-1 py-3 bg-[#B39793] text-white rounded-md text-base font-medium"
             >
               Back to Menu
             </button>
@@ -186,4 +212,3 @@ export default function CartPage({ params }: CartPageProps) {
     </div>
   );
 }
-

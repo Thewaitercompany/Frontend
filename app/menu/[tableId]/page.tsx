@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
-import LoadingAnimations from "@/components/LoadingAnimations";
+// import LoadingAnimations from "@/components/LoadingAnimations";
 
 const MenuContent = dynamic(() => import("@/components/MenuContent"), {
-  loading: () => <LoadingAnimations />,
+  // loading: () => <LoadingAnimations />,
 });
 
 interface PageProps {
@@ -16,7 +16,8 @@ export default async function MenuPage({ params }: PageProps) {
   const resolvedParams = await params;
 
   return (
-    <Suspense fallback={<LoadingAnimations />}>
+    // <Suspense fallback={<LoadingAnimations />}>
+    <Suspense fallback={null}>
       <MenuContent tableId={resolvedParams.tableId} />
     </Suspense>
   );

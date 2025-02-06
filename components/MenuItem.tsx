@@ -283,7 +283,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
             {/* View Cart Button */}
             <div className="bg-white px-4 py-3 border-t">
               <button
-                className="w-full py-3 bg-[#9D8480] text-white rounded-lg font-medium hover:bg-[#8A716D] transition-colors"
+                className="w-full py-3 bg-[#B39793] text-white rounded-lg font-medium hover:bg-[#8A716D] transition-colors"
                 onClick={() => tableId && router.push(`/menu/${tableId}/cart`)}
               >
                 View Cart ({totalCartItems} items)

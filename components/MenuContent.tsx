@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import LoadingAnimations from "@/components/LoadingAnimations";
+// import LoadingAnimations from "@/components/LoadingAnimations";
 import Navbar from "@/components/Navbar";
 import MenuItem from "@/components/MenuItem";
 import SearchBar from "@/components/SearchBar";
@@ -143,9 +143,9 @@ export default function MenuContent({ tableId }: MenuContentProps) {
     setIsFilterMenuVisible(isVisible);
   };
 
-  if (showAnimations) {
-    return <LoadingAnimations />;
-  }
+  // if (showAnimations) {
+  //   return <LoadingAnimations />;
+  // }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F1EEE6]">
@@ -181,7 +181,7 @@ export default function MenuContent({ tableId }: MenuContentProps) {
           type="button"
           aria-label="View Cart"
           onClick={() => router.push(`/menu/${tableId}/cart`)}
-          className="w-full bg-[#9D8480] text-white py-3 rounded-lg text-[15px]"
+          className="w-full bg-[#B39793] text-white py-3 rounded-lg text-[15px]"
         >
           View Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)}{" "}
           items)

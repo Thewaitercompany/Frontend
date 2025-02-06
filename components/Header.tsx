@@ -53,9 +53,9 @@ export default function Header() {
             <Image
               src="/logo.png"
               alt="The Waiter Company"
-              width={200}
+              width={150}
               height={100}
-              className="h-12 w-auto"
+              className="h-10 w-auto"
             />
           </Link>
 
