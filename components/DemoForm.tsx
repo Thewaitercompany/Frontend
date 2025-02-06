@@ -1,34 +1,75 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import Image from 'next/image'
+import { useState } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import emailjs from "@emailjs/browser";
 
 const formVariants = {
   hidden: {
     opacity: 0,
-    y: 20
+    y: 20,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
       duration: 0.6,
-      ease: "easeOut"
-    }
-  }
-}
+      ease: "easeOut",
+    },
+  },
+};
+
+// Replace these with your EmailJS credentials
+const EMAILJS_SERVICE_ID = "service_qi9an8i";
+const EMAILJS_TEMPLATE_ID = "template_qcncunp";
+const EMAILJS_PUBLIC_KEY = "c9-nLDwVSLi4__FGT";
 
 export default function DemoForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setIsSubmitting(false)
-  }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const form = e.currentTarget;
+      const formData = {
+        restaurant_name: form.restaurant.value,
+        city: form.city.value,
+        contact_name: form.name.value,
+        phone: form.phone.value,
+        email: form.email.value,
+      };
+
+      console.log("Sending form data:", formData);
+
+      const result = await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        formData,
+        EMAILJS_PUBLIC_KEY
+      );
+
+      console.log("EmailJS Response:", result);
+
+      if (result.status === 200) {
+        setSubmitStatus("success");
+        form.reset();
+      } else {
+        setSubmitStatus("error");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      setSubmitStatus("error");
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setSubmitStatus("idle"), 3000);
+    }
+  };
 
   return (
     <section className="py-16 bg-[#ffffff]" id="demo">
@@ -50,7 +91,7 @@ export default function DemoForm() {
                 Let The Waiter Company call you with the recipe for success.
               </p>
 
-              {/* GIF Space - Visible only on mobile, below the text */}
+              {/* Mobile GIF */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -78,6 +119,7 @@ export default function DemoForm() {
                   <input
                     type="text"
                     id="restaurant"
+                    name="restaurant"
                     required
                     placeholder="Enter restaurant name"
                     className="w-full px-4 py-3 border border-gray-300 rounded-md text-[#4E3E3B] focus:outline-none focus:ring-1 focus:ring-[#B29792] focus:border-[#B29792] bg-white placeholder:text-[#8A7F7C] shadow-sm"
@@ -91,6 +133,7 @@ export default function DemoForm() {
                   <input
                     type="text"
                     id="city"
+                    name="city"
                     required
                     placeholder="Enter Location of your Restaurant"
                     className="w-full px-4 py-3 border border-gray-300 rounded-md text-[#4E3E3B] focus:outline-none focus:ring-1 focus:ring-[#B29792] focus:border-[#B29792] bg-white placeholder:text-[#8A7F7C] shadow-sm"
@@ -105,6 +148,7 @@ export default function DemoForm() {
                     <input
                       type="text"
                       id="name"
+                      name="name"
                       required
                       placeholder="Enter your name"
                       className="w-full px-4 py-3 border border-gray-300 rounded-md text-[#4E3E3B] focus:outline-none focus:ring-1 focus:ring-[#B29792] focus:border-[#B29792] bg-white placeholder:text-[#8A7F7C] shadow-sm"
@@ -120,6 +164,7 @@ export default function DemoForm() {
                     <input
                       type="tel"
                       id="phone"
+                      name="phone"
                       required
                       placeholder="Enter Phone Number"
                       className="w-full px-4 py-3 border border-gray-300 rounded-md text-[#4E3E3B] focus:outline-none focus:ring-1 focus:ring-[#B29792] focus:border-[#B29792] bg-white placeholder:text-[#8A7F7C] shadow-sm"
@@ -134,11 +179,24 @@ export default function DemoForm() {
                   <input
                     type="email"
                     id="email"
+                    name="email"
                     required
                     placeholder="Enter Email ID"
                     className="w-full px-4 py-3 border border-gray-300 rounded-md text-[#4E3E3B] focus:outline-none focus:ring-1 focus:ring-[#B29792] focus:border-[#B29792] bg-white placeholder:text-[#8A7F7C] shadow-sm"
                   />
                 </div>
+
+                {submitStatus === "success" && (
+                  <div className="text-green-600 font-medium">
+                    Thank you! We'll contact you soon.
+                  </div>
+                )}
+
+                {submitStatus === "error" && (
+                  <div className="text-red-600 font-medium">
+                    Something went wrong. Please try again.
+                  </div>
+                )}
 
                 <button
                   type="submit"
@@ -151,7 +209,7 @@ export default function DemoForm() {
             </div>
           </motion.div>
 
-          {/* GIF Space */}
+          {/* Desktop GIF */}
           <div className="hidden md:flex items-center justify-center h-full">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -174,4 +232,3 @@ export default function DemoForm() {
     </section>
   );
 }
-
