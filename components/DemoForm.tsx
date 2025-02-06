@@ -40,7 +40,7 @@ export default function DemoForm() {
       const formData = {
         restaurant_name: form.restaurant.value,
         city: form.city.value,
-        contact_name: form.name.value,
+        contact_name: (form.elements.namedItem("name") as HTMLInputElement).value,
         phone: form.phone.value,
         email: form.email.value,
       };
@@ -188,7 +188,7 @@ export default function DemoForm() {
 
                 {submitStatus === "success" && (
                   <div className="text-green-600 font-medium">
-                    Thank you! We'll contact you soon.
+                    Thank you! We&apos;ll contact you soon.
                   </div>
                 )}
 
