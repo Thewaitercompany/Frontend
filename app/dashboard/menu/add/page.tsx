@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/select";
 
 interface MenuItem {
+  image?: string | null; 
+  rating?: number;
   name: string;
   description: string;
   ingredients: string;
@@ -88,9 +90,12 @@ export default function AddMenuItem() {
       });
     } catch (error) {
       console.error("Error:", error);
-      alert(error.message);
-    } finally {
-      setIsSubmitting(false);
+      
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("An unexpected error occurred.");
+      }
     }
   };
   

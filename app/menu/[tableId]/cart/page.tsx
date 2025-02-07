@@ -213,7 +213,7 @@ export default function CartPage({ params }: CartPageProps) {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F1EEE6]">
-      <Navbar tableId={Number(tableId)} />
+      <Navbar tableId={tableId} />
 
       <main className="flex-1 p-4 space-y-4">
         {/* Current Order */}

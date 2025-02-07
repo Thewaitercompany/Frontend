@@ -2,67 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-// import LoadingAnimations from "@/components/LoadingAnimations";
 import Navbar from "@/components/Navbar";
 import MenuItem from "@/components/MenuItem";
 import SearchBar from "@/components/SearchBar";
 import FilterMenu from "@/components/FilterMenu";
 import Cookies from "js-cookie";
 
-// Sample menu data
-const menuItems = [
-  {
-    id: 1,
-    name: "Crispy fries",
-    price: 60,
-    description:
-      "Crispy, golden-brown fries served piping hot with a sprinkle of salt.",
-    longDescription:
-      "Crispy, golden-brown fries served piping hot with a sprinkle of salt. A classic side dish that pairs perfectly with burgers, sandwiches, or as a snack on its own.",
-    image: "/fries.png",
-    rating: 4.1,
-    isVeg: true,
-  },
-  {
-    id: 2,
-    name: "Chicken nuggets",
-    price: 80,
-    description:
-      "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried.",
-    longDescription:
-      "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried. They are a popular fast food item, often served with french fries and dipping sauces like ketchup, mustard, or BBQ sauce.",
-    image: "/nugg.png",
-    rating: 4.3,
-    isVeg: false,
-  },
-  {
-    id: 3,
-    name: "Crispy fries",
-    price: 60,
-    description:
-      "Crispy, golden-brown fries served piping hot with a sprinkle of salt.",
-    longDescription:
-      "Crispy, golden-brown fries served piping hot with a sprinkle of salt. A classic side dish that pairs perfectly with burgers, sandwiches, or as a snack on its own.",
-    image: "/fries.png",
-    rating: 4.1,
-    isVeg: true,
-  },
-  {
-    id: 4,
-    name: "Chicken nuggets",
-    price: 80,
-    description:
-      "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried.",
-    longDescription:
-      "Chicken nuggets are bite-sized pieces of chicken meat that are typically breaded and deep-fried. They are a popular fast food item, often served with french fries and dipping sauces like ketchup, mustard, or BBQ sauce.",
-    image: "/nugg.png",
-    rating: 4.3,
-    isVeg: false,
-  },
-];
-
+// ✅ Fixed: Changed `id` to `_id` and used strings
 interface MenuItemType {
-  id: number;
+  _id: string; // Changed from `id: number` to `_id: string`
   name: string;
   price: number;
   description: string;
@@ -73,6 +21,30 @@ interface MenuItemType {
   quantity?: number;
 }
 
+// ✅ Sample menu data updated with `_id: string`
+const menuItems: MenuItemType[] = [
+  {
+    _id: "1",
+    name: "Crispy fries",
+    price: 60,
+    description: "Crispy, golden-brown fries served piping hot with a sprinkle of salt.",
+    longDescription: "A classic side dish that pairs perfectly with burgers, sandwiches, or as a snack on its own.",
+    image: "/fries.png",
+    rating: 4.1,
+    isVeg: true,
+  },
+  {
+    _id: "2",
+    name: "Chicken nuggets",
+    price: 80,
+    description: "Bite-sized pieces of chicken meat that are typically breaded and deep-fried.",
+    longDescription: "Often served with fries and dipping sauces like ketchup, mustard, or BBQ sauce.",
+    image: "/nugg.png",
+    rating: 4.3,
+    isVeg: false,
+  },
+];
+
 interface MenuContentProps {
   tableId: string;
 }
@@ -81,9 +53,10 @@ export default function MenuContent({ tableId }: MenuContentProps) {
   const router = useRouter();
   const [showAnimations, setShowAnimations] = useState(true);
   const [filteredItems, setFilteredItems] = useState<MenuItemType[]>(menuItems);
-  const [cartItems, setCartItems] = useState<
-    Array<{ id: number; quantity: number }>
-  >([]);
+  
+  // ✅ Fixed: Used `_id: string` instead of `id: number`
+  const [cartItems, setCartItems] = useState<Array<{ _id: string; quantity: number }>>([]);
+  
   const [isFilterMenuVisible, setIsFilterMenuVisible] = useState(true);
 
   useEffect(() => {
@@ -94,10 +67,9 @@ export default function MenuContent({ tableId }: MenuContentProps) {
   }, [router, tableId]);
 
   useEffect(() => {
-    // This effect will run after the LoadingAnimations component unmounts
     const timer = setTimeout(() => {
       setShowAnimations(false);
-    }, 5000); // Adjust this time based on the total duration of your animations
+    }, 5000); 
 
     return () => clearTimeout(timer);
   }, []);
@@ -121,9 +93,10 @@ export default function MenuContent({ tableId }: MenuContentProps) {
     );
   };
 
-  const updateCart = (id: number, quantity: number) => {
+  // ✅ Fixed: `updateCart` now expects `_id: string`
+  const updateCart = (_id: string, quantity: number) => {
     setCartItems((prevItems) => {
-      const existingItemIndex = prevItems.findIndex((item) => item.id === id);
+      const existingItemIndex = prevItems.findIndex((item) => item._id === _id);
       if (existingItemIndex !== -1) {
         const updatedItems = [...prevItems];
         if (quantity === 0) {
@@ -133,7 +106,7 @@ export default function MenuContent({ tableId }: MenuContentProps) {
         }
         return updatedItems;
       } else if (quantity > 0) {
-        return [...prevItems, { id, quantity }];
+        return [...prevItems, { _id, quantity }];
       }
       return prevItems;
     });
@@ -142,10 +115,6 @@ export default function MenuContent({ tableId }: MenuContentProps) {
   const toggleFilterMenu = (isVisible: boolean) => {
     setIsFilterMenuVisible(isVisible);
   };
-
-  // if (showAnimations) {
-  //   return <LoadingAnimations />;
-  // }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F1EEE6]">
@@ -160,9 +129,9 @@ export default function MenuContent({ tableId }: MenuContentProps) {
       <main className="flex-1 p-4 space-y-4">
         {filteredItems.map((item) => (
           <MenuItem
-            key={item.id}
+            key={item._id} // ✅ Changed `id` to `_id`
             {...item}
-            onAddToCart={updateCart}
+            onAddToCart={updateCart} // ✅ IDs now match properly
             toggleFilterMenu={toggleFilterMenu}
             cartItems={cartItems}
             tableId={tableId}
@@ -183,8 +152,7 @@ export default function MenuContent({ tableId }: MenuContentProps) {
           onClick={() => router.push(`/menu/${tableId}/cart`)}
           className="w-full bg-[#B39793] text-white py-3 rounded-lg text-[15px]"
         >
-          View Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)}{" "}
-          items)
+          View Cart ({cartItems.reduce((acc, item) => acc + (item.quantity || 0), 0)} items)
         </button>
       </div>
     </div>

@@ -60,19 +60,18 @@ export default function TotalOrders() {
         const data = await response.json();
         
         // Flattening orders: Display each item as a separate row
-        const formattedOrders: OrderItem[] = data.flatMap((order: any) =>
-          order.items.map((item: any) => ({
+        const formattedOrders: Order[] = data.flatMap((order: any) =>
+          order.items?.map((item: any) => ({
             id: item._id,
             image: item.image || "/default.png",
             name: item.name,
             price: item.price,
-            orderId: order._id, // Unique order reference
             date: new Date(order.createdAt).toLocaleDateString(),
             time: new Date(order.createdAt).toLocaleTimeString(),
             tableNo: order.tableNumber,
             contactDetails: order.contactDetails || "Unknown",
             category: item.category || "Uncategorized",
-          }))
+          })) || []
         );
 
         setOrders(formattedOrders);
