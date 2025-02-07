@@ -57,30 +57,28 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
             <div className="space-y-8 relative">
               <div className="relative pl-8 mb-2">
                 <div className="absolute left-0 top-1.5">
-                  <Circle className="h-3 w-3 fill-[#4D3E3B] text-[#4D3E3B]" />
+                  <Circle className="h-3 w-3 fill-[#6C5B58]" />
                 </div>
-                <div className="absolute left-1.5 top-8 h-full w-[1px] bg-[#4D3E3B]" />
+                <div className="absolute left-1.5 top-8 h-full w-[1px] bg-[#36251B]" />
                 <p className="text-sm">
                   Your order is being prepared by{" "}
-                  <span className="text-gray-600">Mr Cook</span>
+                  <span className="text-black">Mr Cook</span>
                 </p>
               </div>
 
               <div className="relative pl-8 mb-2">
                 <div className="absolute left-0 top-1.5">
-                  <Circle className="h-3 w-3 stroke-[#4D3E3B]" />
+                  <Circle className="h-3 w-3 stroke-[#6C5B58]" />
                 </div>
-                <div className="absolute left-1.5 top-8 h-full w-[1px] bg-[#4D3E3B]" />
-                <p className="text-sm text-gray-600">
-                  On its way to your table!
-                </p>
+                <div className="absolute left-1.5 top-8 h-full w-[1px] bg-[#6C5B58]" />
+                <p className="text-sm text-black">On its way to your table!</p>
               </div>
 
               <div className="relative pl-8 mb-2">
                 <div className="absolute left-0 top-1.5">
-                  <Circle className="h-3 w-3 stroke-[#4D3E3B]" />
+                  <Circle className="h-3 w-3 stroke-[#36251B]" />
                 </div>
-                <p className="text-sm text-gray-600">Delivered</p>
+                <p className="text-sm text-black">Delivered</p>
               </div>
             </div>
           </div>
