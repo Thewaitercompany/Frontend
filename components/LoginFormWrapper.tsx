@@ -1,58 +1,73 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Phone } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
-// import LoadingAnimations from "@/components/LoadingAnimations";
 import Cookies from "js-cookie";
+import Image from "next/image";
 import logo from "/public/logo.png";
-import Image from "next/image"
 
 export default function LoginFormWrapper() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const tableId = searchParams.get("tableId") || "1";
+  const tableId = searchParams.get("tableId") || "1"; // Get tableId from URL
+
   const [formData, setFormData] = useState({
-    mobileNumber: "",
+    phonenumber: "",
     name: "",
-    numberOfPeople: "",
+    headcount: "",
+    tableNumber: tableId, // Include table number in form data
   });
+
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    // This effect will run once when the component mounts
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 4000); // Adjust this time to match the total duration of your animations
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!formData.mobileNumber || !formData.name || !formData.numberOfPeople) {
+    setError("");
+    setIsLoading(true);
+  
+    if (!formData.phonenumber || !formData.name || !formData.headcount || !formData.tableNumber) {
       setError("Please fill in all fields");
+      setIsLoading(false);
       return;
     }
-
+  
     try {
+      const response = await fetch("https://qr-customer-sj9m.onrender.com/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Something went wrong");
+      }
+  
+      // Extract tableNumber and phonenumber from response
+      const { phonenumber, tableNumber } = result.data;
+  
+      // Store user data securely
       Cookies.set("auth", "true", { expires: 1 });
-      Cookies.set("userData", JSON.stringify(formData), { expires: 1 });
-      router.push(`/menu/${tableId}`);
-    } catch (error) {
-      console.error("Failed to save login information:", error);
-      setError("Failed to save login information. Please try again.");
+      Cookies.set("userData", JSON.stringify(result.data), { expires: 1 });
+      localStorage.setItem("phonenumber", phonenumber);
+      localStorage.setItem("tableNumber", tableNumber);
+  
+      // Redirect to menu with correct tableNumber
+      router.push(`/menu/${tableNumber}`);
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-    // if (isLoading) {
-    //   return <LoadingAnimations onComplete={() => setIsLoading(false)} />;
-    // }
+  
 
   return (
     <div className="min-h-screen bg-[#F1EEE6] flex flex-col">
@@ -82,9 +97,9 @@ export default function LoginFormWrapper() {
               <div className="relative">
                 <Input
                   type="tel"
-                  value={formData.mobileNumber}
+                  value={formData.phonenumber}
                   onChange={(e) =>
-                    setFormData({ ...formData, mobileNumber: e.target.value })
+                    setFormData({ ...formData, phonenumber: e.target.value })
                   }
                   className="pl-8 bg-white border-none"
                   placeholder="+91"
@@ -112,15 +127,18 @@ export default function LoginFormWrapper() {
               <label className="text-sm text-[#4A3F3C]">Number of people</label>
               <Input
                 type="number"
-                value={formData.numberOfPeople}
+                value={formData.headcount}
                 onChange={(e) =>
-                  setFormData({ ...formData, numberOfPeople: e.target.value })
+                  setFormData({ ...formData, headcount: e.target.value })
                 }
                 className="bg-white border-none"
                 placeholder="Enter Number of people"
                 required
               />
             </div>
+
+            {/* Hidden input field to ensure tableNumber is included in the request */}
+            <input type="hidden" value={formData.tableNumber} />
 
             <div className="flex justify-center">
               <Button
@@ -136,7 +154,7 @@ export default function LoginFormWrapper() {
                   opacity: "1",
                 }}
               >
-                Log In
+                {isLoading ? "Logging In..." : "Log In"}
               </Button>
             </div>
           </form>

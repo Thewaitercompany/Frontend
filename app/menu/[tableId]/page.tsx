@@ -6,33 +6,33 @@ import Navbar from "@/components/Navbar";
 import MenuItem from "@/components/MenuItem";
 import SearchBar from "@/components/SearchBar";
 import FilterMenu from "@/components/FilterMenu";
+import Cookies from "js-cookie";
 
 interface MenuItemType {
-  _id: string; // Add this field to match the backend
+  _id: string;
   name: string;
   price: number;
   description: string;
   longDescription?: string;
-  image?: string; // Optional if missing in the response
+  image?: string;
   rating: number;
   isVeg: boolean;
-  quantity?: number; // Optional for cart logic
+  quantity?: number;
 }
 
 export default function MenuPage() {
   const router = useRouter();
   const params = useParams();
   const tableId = params.tableId as string;
-
   const [menuItems, setMenuItems] = useState<MenuItemType[]>([]);
   const [filteredItems, setFilteredItems] = useState<MenuItemType[]>([]);
   const [cartItems, setCartItems] = useState<
     Array<{ _id: string; quantity: number }>
   >([]);
   const [isFilterMenuVisible, setIsFilterMenuVisible] = useState(true);
-  const [error, setError] = useState<string | null>(null); // Added error state
+  const [error, setError] = useState<string | null>(null);
+  const [phonenumber, setPhonenumber] = useState<string>("");
 
-  // Fetch menu items from backend
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
@@ -50,6 +50,47 @@ export default function MenuPage() {
 
     fetchMenuItems();
   }, []);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Retrieve user data from Cookies or LocalStorage
+        const userDataString = Cookies.get("userData");
+        let storedPhoneNumber = null;
+  
+        if (userDataString) {
+          try {
+            const userData = JSON.parse(userDataString);
+            storedPhoneNumber = userData.phonenumber;
+          } catch (error) {
+            console.error("Error parsing userData from cookies:", error);
+          }
+        }
+  
+        // Fallback to localStorage if not found in Cookies
+        if (!storedPhoneNumber) {
+          storedPhoneNumber = localStorage.getItem("phonenumber");
+        }
+  
+        if (!storedPhoneNumber) {
+          console.warn("Phone number not found in cookies or localStorage");
+          return;
+        }
+  
+        const response = await fetch(`https://qr-customer-sj9m.onrender.com/user?phonenumber=${storedPhoneNumber}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        const data = await response.json();
+        setPhonenumber(data.phonenumber);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+  
+    fetchUserData();
+  }, []);
+  
 
   const handleFilterChange = (isVeg: boolean) => {
     if (isVeg) {
@@ -71,10 +112,7 @@ export default function MenuPage() {
   };
 
   const updateCart = async (_id: string, quantity: number) => {
-    // Copy the existing cart items
     const updatedCartItems = [...cartItems];
-
-    // Find if the item already exists in the cart
     const existingItem = updatedCartItems.find((i) => i._id === _id);
 
     if (existingItem) {
@@ -83,23 +121,20 @@ export default function MenuPage() {
       updatedCartItems.push({ _id, quantity });
     }
 
-    // Update the cart state
     setCartItems(updatedCartItems);
 
-    // Send the updated cart to the backend
     try {
       const payload = {
         cart: {
-          tableNumber: parseInt(tableId, 10), // Ensure tableId is parsed as an integer
+          tableNumber: parseInt(tableId, 10),
           items: updatedCartItems.map((cartItem) => ({
-            productId: cartItem._id, // Use _id from the cartItems state
+            productId: cartItem._id,
             quantity: cartItem.quantity,
           })),
+          phonenumber,
           status: "active",
         },
       };
-
-      console.log("Payload to backend:", JSON.stringify(payload, null, 2)); // Debugging
 
       const response = await fetch("https://qr-customer-sj9m.onrender.com/cart", {
         method: "POST",
@@ -115,25 +150,9 @@ export default function MenuPage() {
       console.log("Updated cart:", updatedCart);
     } catch (err) {
       console.error("Error updating cart:", err);
-
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Failed to update cart.");
-      }
+      setError(err instanceof Error ? err.message : "Failed to update cart.");
     }
   };
-
-
-
-
-
-  console.log("Cart items state:", cartItems); // Debug cartItems
-  // Debug payload
-
-
-
-
 
   const toggleFilterMenu = (isVisible: boolean) => {
     setIsFilterMenuVisible(isVisible);
@@ -142,19 +161,13 @@ export default function MenuPage() {
   return (
     <div className="flex flex-col min-h-screen bg-[#F1EEE6]">
       <Navbar tableId={tableId} />
-
-      <SearchBar
-        tableId={tableId}
-        onFilterChange={handleFilterChange}
-        onSearch={handleSearch}
-      />
-
+      <SearchBar tableId={tableId} onFilterChange={handleFilterChange} onSearch={handleSearch} />
       <main className="flex-1 p-4 space-y-4">
         {filteredItems.map((item) => (
           <MenuItem
             key={item._id}
             {...item}
-            image={item.image || "/default.png"} // Ensure a default image is always set
+            image={item.image || "/default.png"}
             onAddToCart={(_id, quantity) => updateCart(String(_id), quantity)}
             toggleFilterMenu={toggleFilterMenu}
             cartItems={cartItems}
@@ -162,13 +175,11 @@ export default function MenuPage() {
           />
         ))}
       </main>
-
       {isFilterMenuVisible && (
         <div className="fixed bottom-[88px] right-4 z-50">
           <FilterMenu onFilterChange={handleFilterChange} isVisible={true} />
         </div>
       )}
-
       <div className="sticky bottom-0 p-4 bg-[#F1EEE6]">
         <button
           type="button"
@@ -176,8 +187,7 @@ export default function MenuPage() {
           onClick={() => router.push(`/menu/${tableId}/cart`)}
           className="w-full bg-[#9D8480] text-white py-3 rounded-lg text-[15px]"
         >
-          View Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)}{" "}
-          items)
+          View Cart ({cartItems.reduce((acc, item) => acc + item.quantity, 0)} items)
         </button>
       </div>
     </div>

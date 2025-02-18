@@ -69,7 +69,7 @@ export default function TotalOrders() {
             date: new Date(order.createdAt).toLocaleDateString(),
             time: new Date(order.createdAt).toLocaleTimeString(),
             tableNo: order.tableNumber,
-            contactDetails: order.contactDetails || "Unknown",
+            contactDetails: order.phoneNumber || "Unknown",
             category: item.category || "Uncategorized",
           })) || []
         );
