@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -43,7 +43,7 @@ const initialOrders: Order[] = [
 
 export default function TotalOrders() {
   const [selectedCategory, setSelectedCategory] = useState("Starters");
-  const [orders, setOrders] = useState<Order[]>(initialOrders);
+  const [orders] = useState(initialOrders);
 
   const categories = [
     "Starters",
@@ -53,43 +53,10 @@ export default function TotalOrders() {
     "All Items",
   ];
 
-  useEffect(() => {
-    async function fetchOrders() {
-      try {
-        const response = await fetch("https://qr-customer-sj9m.onrender.com/orders");
-        const data = await response.json();
-        
-        // Flattening orders: Display each item as a separate row
-        const formattedOrders: OrderItem[] = data.flatMap((order: any) =>
-          order.items.map((item: any) => ({
-            id: item._id,
-            image: item.image || "/default.png",
-            name: item.name,
-            price: item.price,
-            orderId: order._id, // Unique order reference
-            date: new Date(order.createdAt).toLocaleDateString(),
-            time: new Date(order.createdAt).toLocaleTimeString(),
-            tableNo: order.tableNumber,
-            contactDetails: order.contactDetails || "Unknown",
-            category: item.category || "Uncategorized",
-          }))
-        );
-
-        setOrders(formattedOrders);
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      }
-    }
-
-    fetchOrders();
-    const interval = setInterval(fetchOrders, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const filteredOrders =
-    selectedCategory === "All Items"
-      ? orders
-      : orders.filter((order) => order.category === selectedCategory);
+  const filteredOrders = orders.filter(
+    (order) =>
+      selectedCategory === "All Items" || order.category === selectedCategory
+  );
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-8 font-serif">
@@ -103,7 +70,10 @@ export default function TotalOrders() {
               width={150}
               height={50}
               className="h-8 w-auto"
-              style={{ maxWidth: "100%", height: "auto" }}
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+              }}
             />
           </Link>
           <span className="text-xl text-gray-400">×</span>
@@ -114,7 +84,6 @@ export default function TotalOrders() {
           <p className="text-sm text-gray-600">Saturday, November, 2024</p>
         </div>
       </header>
-
       {/* Overview Section */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-8">
@@ -164,7 +133,6 @@ export default function TotalOrders() {
           </div>
         </div>
       </div>
-
       {/* Orders Section */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
         {/* Category Filters */}
@@ -174,11 +142,12 @@ export default function TotalOrders() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-md text-sm transition-colors ${
-                  category === selectedCategory
-                    ? "bg-[#C99E5A] text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
+                className={`px-4 py-2 rounded-md text-sm transition-colors
+                  ${
+                    category === selectedCategory
+                      ? "bg-[#C99E5A] text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
               >
                 {category}
               </button>
@@ -206,13 +175,17 @@ export default function TotalOrders() {
               {filteredOrders.map((order) => (
                 <tr key={order.id} className="border-b">
                   <td className="py-4 px-4">
-                    <Image
-                      src={order.image}
-                      alt={order.name}
-                      width={64}
-                      height={64}
-                      className="rounded-lg object-cover"
-                    />
+                    <div className="relative w-16 h-16">
+                      <Image
+                        src={order.image}
+                        alt={order.name}
+                        fill
+                        className="object-cover rounded-lg"
+                        style={{
+                          maxWidth: "100%",
+                        }}
+                      />
+                    </div>
                   </td>
                   <td className="py-4 px-4">{order.name}</td>
                   <td className="py-4 px-4">₹ {order.price}</td>
