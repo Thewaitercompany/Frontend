@@ -13,7 +13,7 @@ interface APIOrder {
   items: OrderItem[];
   status: "pending" | "preparing" | "cooking" | "ready";
   waiterDetails?: string;
-  phoneNumber?: string; // ✅ Add this line to avoid TypeScript errors
+  customerDetails?: string;
   image?: string;
 }
 
@@ -66,19 +66,16 @@ export default function PendingOrders() {
 
         const data: APIOrder[] = await response.json();
 
-        const formattedOrders: Order[] = data.flatMap((order, orderIndex) =>
-          order.items.map((item, itemIndex) => ({
-            id: orderIndex * 100 + itemIndex + 1, // Unique ID for each item
-            name: item.name || "Unknown Item",
-            quantity: item.quantity || 0,
-            status: order.status,
-            waiterDetails: order.waiterDetails || "To be updated",
-            customerDetails: order.phoneNumber || "To be updated",
-            image: order.image || "/default-food.png",
-          }))
-        );
-        
-        console.log("Fetched orders:", data);
+        const formattedOrders: Order[] = data.map((order, index) => ({
+          id: index + 1,
+          name: order.items?.[0]?.name || "Unknown Item",
+          quantity: order.items?.[0]?.quantity || 0,
+          status: order.status,
+          waiterDetails: order.waiterDetails || "To be updated",
+          customerDetails: order.customerDetails || "To be updated",
+          image: order.image || "/default-food.png",
+        }));
+
         setOrders(formattedOrders);
       } catch (err) {
         setError((err as Error).message);
@@ -88,7 +85,6 @@ export default function PendingOrders() {
     }
 
     fetchOrders();
-    
   }, []);
 
   return (
@@ -110,7 +106,7 @@ export default function PendingOrders() {
             />
           </Link>
           <span className="text-xl text-gray-400">×</span>
-          <span className="text-xl">Smart Cafe</span>
+          <span className="text-xl">Badshah&apos;s Kitchen</span>
         </div>
         <div className="text-right">
           <Link href="/dashboard">

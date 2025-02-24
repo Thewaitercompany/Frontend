@@ -160,7 +160,7 @@ export default function Dashboard() {
           </div>
           <Link href="/dashboard/pending-orders" className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors">
             <h3 className="text-sm text-gray-600 mb-2">Pending Orders</h3>
-            <p className="text-2xl font-medium text-[#C99E5A]">0</p>
+            <p className="text-2xl font-medium text-[#C99E5A]">30</p>
           </Link>
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <h3 className="text-sm text-gray-600 mb-2">Total Sales</h3>
