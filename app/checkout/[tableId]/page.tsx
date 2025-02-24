@@ -66,7 +66,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ params }) => {
 
   return (
     <div className="min-h-screen bg-[#F1EEE6]">
-      <Navbar tableId={tableId} />
+      <Navbar tableId={Number(tableId)} />
 
       <main className="p-4 space-y-4">
         {/* Order Summary Card */}

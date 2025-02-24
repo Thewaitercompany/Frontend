@@ -115,12 +115,7 @@ export default function MenuPage() {
       console.log("Updated cart:", updatedCart);
     } catch (err) {
       console.error("Error updating cart:", err);
-
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Failed to update cart.");
-      }
+      setError(err.message || "Failed to update cart.");
     }
   };
 
@@ -152,10 +147,9 @@ export default function MenuPage() {
       <main className="flex-1 p-4 space-y-4">
         {filteredItems.map((item) => (
           <MenuItem
-            key={item._id}
-            {...item}
-            image={item.image || "/default.png"} // Ensure a default image is always set
-            onAddToCart={(_id, quantity) => updateCart(String(_id), quantity)}
+            key={item._id} // Use _id from backend
+            {...item} // Spread all props, including _id
+            onAddToCart={(_id, quantity) => updateCart(_id, quantity)}
             toggleFilterMenu={toggleFilterMenu}
             cartItems={cartItems}
             tableId={tableId}

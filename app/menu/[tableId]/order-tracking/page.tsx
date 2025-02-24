@@ -102,7 +102,7 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
   return (
     <Suspense fallback={null}>
       <div className="min-h-screen bg-[#F1EEE6]">
-      {resolvedParams && <Navbar tableId={String(resolvedParams.tableId)} />}
+        {resolvedParams && <Navbar tableId={resolvedParams.tableId} />}
 
         <main className="p-4 space-y-4">
           {/* Order Status Card */}
@@ -143,10 +143,8 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
               {/* Checkout Button */}
               <button
                 onClick={() => {
-                  if (resolvedParams) {
-                    handleCheckout();
-                    router.push(`/checkout/${resolvedParams.tableId}`);
-                  }
+                  handleCheckout();
+                  router.push(`/checkout/${resolvedParams.tableId}`);
                 }}
                 className="w-full bg-[#9D8480] text-white py-2.5 rounded-md text-[15px]"
                 disabled={loading}
@@ -154,8 +152,7 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
                 {loading ? 'Processing...' : 'Check Out'}
               </button>
               <button
-                onClick={() => router.push(`/menu/${resolvedParams?.tableId}`)}
-
+                onClick={() => router.push(`/menu/${resolvedParams.tableId}`)}
                 className="w-full bg-[#9D8480] text-white py-2.5 rounded-md text-[15px]"
               >
                 Back to Menu
