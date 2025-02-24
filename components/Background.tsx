@@ -8,7 +8,6 @@ const backgroundImages = [
   { src: '/garlic.png', left: '15%', top: '40%' },
   { src: '/leaf.png', right: '5%', top: '60%' },
   { src: '/mushroom.png', left: '10%', top: '70%' },
-  { src: '/sweet ishan.png', right: '15%', top: '80%' },
   { src: '/Tomato.png', left: '20%', top: '90%' },
 ]
 
