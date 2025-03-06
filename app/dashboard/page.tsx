@@ -1,6 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { useOrders } from "@/hooks/useOrders"
+
+
 import {
   AreaChart,
   Area,
@@ -107,6 +110,7 @@ const footstepData = [
 const COLORS = ["#6B8AF4", "#FF7F6B", "#96D160", "#FFB572", "#FF8FD2"];
 
 export default function Dashboard() {
+  const [currentDate, setCurrentDate] = useState("");
   const [selectedPeriod, setSelectedPeriod] = useState("Monthly");
   const [selectedMonth, setSelectedMonth] =
     useState<keyof typeof monthlyData>("October");
@@ -116,6 +120,20 @@ export default function Dashboard() {
     setSelectedMonth(month);
     setRevenueData(monthlyData[month]);
   };
+  const {  orders, totalOrderCount, pendingOrderCount } = useOrders();
+
+  useEffect(() => {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
+    setCurrentDate(now.toLocaleDateString("en-US", options));
+  }, []);
+
+  
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-8 font-serif">
@@ -141,7 +159,7 @@ export default function Dashboard() {
           <Link href="/dashboard">
             <h2 className="text-xl font-medium">Dashboard</h2>
           </Link>
-          <p className="text-sm text-gray-600">Saturday, November, 2024</p>
+          <p className="text-sm text-gray-600">{currentDate}</p>
         </div>
       </header>
       <div className="mb-8">
@@ -169,19 +187,19 @@ export default function Dashboard() {
             className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
           >
             <h3 className="text-sm text-gray-600 mb-2">Total Orders</h3>
-            <p className="text-2xl font-medium text-[#C99E5A]">200</p>
+            <p className="text-2xl font-medium text-[#C99E5A]">{totalOrderCount}</p>
           </Link>
 
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <h3 className="text-sm text-gray-600 mb-2">Completed Orders</h3>
-            <p className="text-2xl font-medium text-[#C99E5A]">170</p>
+            <p className="text-2xl font-medium text-[#C99E5A]">{totalOrderCount - pendingOrderCount}</p>
           </div>
           <Link
             href="/dashboard/pending-orders"
             className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
           >
             <h3 className="text-sm text-gray-600 mb-2">Pending Orders</h3>
-            <p className="text-2xl font-medium text-[#C99E5A]">30</p>
+            <p className="text-2xl font-medium text-[#C99E5A]">{pendingOrderCount}</p>
           </Link>
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <h3 className="text-sm text-gray-600 mb-2">Total Sales</h3>

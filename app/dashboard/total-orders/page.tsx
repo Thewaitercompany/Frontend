@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useOrders } from "@/hooks/useOrders";
 
 interface Order {
   id: number;
@@ -16,34 +17,12 @@ interface Order {
   category: string;
 }
 
-const initialOrders: Order[] = [
-  {
-    id: 1,
-    image: "/fries.png",
-    name: "Crispy Fries",
-    price: 60,
-    date: "02/11/24",
-    time: "9:15pm",
-    tableNo: 10,
-    contactDetails: "Mr Patel/9897xxxxxx",
-    category: "Starters",
-  },
-  {
-    id: 2,
-    image: "/nugg.png",
-    name: "Chicken Nuggets",
-    price: 80,
-    date: "02/11/24",
-    time: "8:35pm",
-    tableNo: 10,
-    contactDetails: "Mr Patel/9897xxxxxx",
-    category: "Starters",
-  },
-];
 
 export default function TotalOrders() {
   const [selectedCategory, setSelectedCategory] = useState("Starters");
-  const [orders] = useState(initialOrders);
+  const { totalOrderCount, pendingOrderCount } = useOrders();
+  const completedOrderCount = totalOrderCount - pendingOrderCount;
+  const [orders, setOrders] = useState<Order[]>([]);
 
   const categories = [
     "Starters",
@@ -53,10 +32,55 @@ export default function TotalOrders() {
     "All Items",
   ];
 
-  const filteredOrders = orders.filter(
-    (order) =>
-      selectedCategory === "All Items" || order.category === selectedCategory
-  );
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
+    setCurrentDate(now.toLocaleDateString("en-US", options));
+  }, []);
+
+  useEffect(() => {
+    async function fetchOrders() {
+      try {
+        const response = await fetch("https://qr-customer-sj9m.onrender.com/orders");
+        const data = await response.json();
+        
+        // Flattening orders: Display each item as a separate row
+        const formattedOrders: Order[] = data.flatMap((order: any) =>
+          order.items?.map((item: any) => ({
+            id: item._id,
+            image: item.image || "/default.png",
+            name: item.name,
+            price: item.price,
+            date: new Date(order.createdAt).toLocaleDateString(),
+            time: new Date(order.createdAt).toLocaleTimeString(),
+            tableNo: order.tableNumber,
+            contactDetails: order.phoneNumber || "Unknown",
+            category: item.category || "Uncategorized",
+          })) || []
+        );
+        console.error("fetching orders:", formattedOrders);
+        setOrders(formattedOrders);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    }
+
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const filteredOrders =
+    selectedCategory === "All Items"
+      ? orders
+      : orders.filter((order) => order.category === selectedCategory);
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-8 font-serif">
@@ -70,10 +94,7 @@ export default function TotalOrders() {
               width={150}
               height={50}
               className="h-8 w-auto"
-              style={{
-                maxWidth: "100%",
-                height: "auto",
-              }}
+              style={{ maxWidth: "100%", height: "auto" }}
             />
           </Link>
           <span className="text-xl text-gray-400">×</span>
@@ -81,9 +102,10 @@ export default function TotalOrders() {
         </div>
         <div className="text-right">
           <h2 className="text-xl font-medium">Dashboard</h2>
-          <p className="text-sm text-gray-600">Saturday, November, 2024</p>
+          <p className="text-sm text-gray-600">{currentDate}</p>
         </div>
       </header>
+
       {/* Overview Section */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-8">
@@ -110,18 +132,18 @@ export default function TotalOrders() {
             className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
           >
             <h3 className="text-sm text-gray-600 mb-2">Total Orders</h3>
-            <p className="text-2xl font-medium text-[#C99E5A]">200</p>
+            <p className="text-2xl font-medium text-[#C99E5A]">{totalOrderCount}</p>
           </Link>
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <h3 className="text-sm text-gray-600 mb-2">Completed Orders</h3>
-            <p className="text-2xl font-medium text-[#C99E5A]">170</p>
+            <p className="text-2xl font-medium text-[#C99E5A]">{completedOrderCount}</p>
           </div>
           <Link
             href="/dashboard/pending-orders"
             className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
           >
             <h3 className="text-sm text-gray-600 mb-2">Pending Orders</h3>
-            <p className="text-2xl font-medium text-[#C99E5A]">30</p>
+            <p className="text-2xl font-medium text-[#C99E5A]">{pendingOrderCount}</p>
           </Link>
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <h3 className="text-sm text-gray-600 mb-2">Total Sales</h3>
@@ -133,6 +155,7 @@ export default function TotalOrders() {
           </div>
         </div>
       </div>
+
       {/* Orders Section */}
       <div className="bg-white rounded-xl p-6 shadow-sm">
         {/* Category Filters */}
@@ -142,12 +165,11 @@ export default function TotalOrders() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-md text-sm transition-colors
-                  ${
-                    category === selectedCategory
-                      ? "bg-[#C99E5A] text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
+                className={`px-4 py-2 rounded-md text-sm transition-colors ${
+                  category === selectedCategory
+                    ? "bg-[#C99E5A] text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
               >
                 {category}
               </button>
@@ -175,17 +197,13 @@ export default function TotalOrders() {
               {filteredOrders.map((order) => (
                 <tr key={order.id} className="border-b">
                   <td className="py-4 px-4">
-                    <div className="relative w-16 h-16">
-                      <Image
-                        src={order.image}
-                        alt={order.name}
-                        fill
-                        className="object-cover rounded-lg"
-                        style={{
-                          maxWidth: "100%",
-                        }}
-                      />
-                    </div>
+                    <Image
+                      src={order.image}
+                      alt={order.name}
+                      width={64}
+                      height={64}
+                      className="rounded-lg object-cover"
+                    />
                   </td>
                   <td className="py-4 px-4">{order.name}</td>
                   <td className="py-4 px-4">₹ {order.price}</td>

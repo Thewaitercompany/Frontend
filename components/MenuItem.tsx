@@ -7,22 +7,22 @@ import { Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface MenuItemProps {
-  id: number;
+  _id: string;
   name: string;
   price: number;
   description: string;
   image: string | StaticImageData;
   rating: number;
   isVeg: boolean;
-  onAddToCart: (id: number, quantity: number) => void;
+  onAddToCart: (_id: string, quantity: number) => void;
   toggleFilterMenu: (show: boolean) => void;
-  cartItems: Array<{ id: number; quantity: number }>;
+  cartItems: Array<{ _id: string; quantity: number }>;
   longDescription?: string;
   tableId?: string;
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({
-  id,
+  _id,
   name,
   price,
   description,
@@ -40,11 +40,12 @@ const MenuItem: React.FC<MenuItemProps> = ({
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
-    const cartItem = cartItems.find((item) => item.id === id);
+    const cartItem = cartItems.find((item) => item._id === _id);
     if (cartItem?.quantity !== quantity) {
       setQuantity(cartItem ? cartItem.quantity : 0);
     }
-  }, [cartItems, id, quantity]);
+  }, [cartItems, _id, quantity]);
+  
 
   const totalCartItems = useMemo(
     () => cartItems.reduce((acc, item) => acc + item.quantity, 0),
@@ -59,11 +60,10 @@ const MenuItem: React.FC<MenuItemProps> = ({
 
   const handleAdd = () => {
     if (!animate) {
-      // Only trigger animation if not already animating
       setAnimate(true);
       const newQuantity = quantity + 1;
       setQuantity(newQuantity);
-      onAddToCart(id, newQuantity);
+      onAddToCart(_id, newQuantity);
       setTimeout(() => setAnimate(false), 300);
     }
   };
@@ -74,7 +74,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       setAnimate(true);
       const newQuantity = quantity + 1;
       setQuantity(newQuantity);
-      onAddToCart(id, newQuantity);
+      onAddToCart(_id, newQuantity);
       setTimeout(() => setAnimate(false), 300);
     }
   };
@@ -85,7 +85,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
       setAnimate(true);
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
-      onAddToCart(id, newQuantity);
+      onAddToCart(_id, newQuantity);
       setTimeout(() => setAnimate(false), 300);
     }
   };
