@@ -1,7 +1,20 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { waiterMiddleware } from "./middleware-waiter"
+import { chefMiddleware } from "./middleware-chef"
 
 export function middleware(request: NextRequest) {
+  // Check if the request is for chef routes
+  if (request.nextUrl.pathname.startsWith("/chef")) {
+    return chefMiddleware(request);
+  }
+
+  // Check if the request is for waiter table routes
+  if (request.nextUrl.pathname.startsWith("/waiter-table")) {
+    return waiterMiddleware(request);
+  }
+
+  // Customer menu middleware logic
   const isLoggedIn = request.cookies.has("auth")
 
   // If trying to access menu pages (except login) and not logged in, redirect to login
@@ -20,6 +33,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/menu/:path*"],
+  matcher: ["/menu/:path*", "/waiter-table/:path*", "/chef/:path*"],
 }
-
