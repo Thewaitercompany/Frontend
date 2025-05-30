@@ -153,6 +153,15 @@ const mockOrderItems = {
   ],
 };
 
+interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+  special?: string;
+}
+
 export default function TableDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -161,7 +170,7 @@ export default function TableDetailPage() {
 
   const [table, setTable] = useState<any | null>(null);
   const [customer, setCustomer] = useState({ name: "", phone: "" });
-  const [orderItems, setOrderItems] = useState([]);
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -222,6 +231,40 @@ export default function TableDetailPage() {
     setLoading(false);
   }, [restaurantId, tableId]);
 
+  // Handle order data from URL
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const orderData = searchParams.get("order");
+
+    if (orderData) {
+      try {
+        const items = JSON.parse(decodeURIComponent(orderData)) as OrderItem[];
+        setOrderItems(items);
+
+        // Calculate the running bill
+        const totalBill = items.reduce(
+          (sum, item) => sum + item.price * item.quantity,
+          0
+        );
+
+        // Update the table with new status and running bill
+        if (table) {
+          setTable({
+            ...table,
+            status: "occupied",
+            runningBill: totalBill,
+          });
+        }
+
+        // Remove the order parameter from the URL
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, "", newUrl);
+      } catch (error) {
+        console.error("Error parsing order data:", error);
+      }
+    }
+  }, [table]);
+
   const handleStatusChange = (
     newStatus: "occupied" | "available" | "booked"
   ) => {
@@ -238,9 +281,29 @@ export default function TableDetailPage() {
   };
 
   const handleNewOrder = () => {
-    // In a real application, you would navigate to a new order page
-    // For now, we'll just show an alert
-    alert("This would navigate to a new order creation page");
+    router.push(
+      `/waiter-table/${restaurantId}/table-details/${tableId}/new-order`
+    );
+  };
+
+  const handleOrderConfirm = (items: OrderItem[]) => {
+    // Update the table's order items
+    setOrderItems(items);
+
+    // Calculate the running bill
+    const totalBill = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+
+    // Update the table with new status and running bill
+    if (table) {
+      setTable({
+        ...table,
+        status: "occupied",
+        runningBill: totalBill,
+      });
+    }
   };
 
   const handleBackClick = () => {
@@ -269,27 +332,28 @@ export default function TableDetailPage() {
     );
   }
 
- return (
-   <div>
-     <button
-       onClick={handleBackClick}
-       className="flex items-center text-[#4E3E3B] mb-4"
-     >
-       <ArrowLeft className="h-5 w-5 mr-1" /> Back to Tables
-     </button>
+  return (
+    <div>
+      <button
+        onClick={handleBackClick}
+        className="flex items-center text-[#4E3E3B] mb-4"
+      >
+        <ArrowLeft className="h-5 w-5 mr-1" /> Back to Tables
+      </button>
 
-     <TableDetail
-       id={table.id}
-       number={table.number}
-       status={table.status}
-       capacity={table.capacity}
-       runningBill={table.runningBill}
-       customer={customer}
-       orderItems={orderItems}
-       onStatusChange={handleStatusChange}
-       onCustomerUpdate={handleCustomerUpdate}
-       restaurantId={restaurantId}
-     />
-   </div>
- );
+      <TableDetail
+        id={table.id}
+        number={table.number}
+        status={table.status}
+        capacity={table.capacity}
+        runningBill={table.runningBill}
+        customer={customer}
+        orderItems={orderItems}
+        onStatusChange={handleStatusChange}
+        onCustomerUpdate={handleCustomerUpdate}
+        onNewOrder={handleNewOrder}
+        restaurantId={restaurantId}
+      />
+    </div>
+  );
 }

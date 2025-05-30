@@ -4,6 +4,15 @@ import React from "react";
 import { useParams, useRouter } from "next/navigation";
 import NewOrderFlow from "@/components/waiter-table/NewOrderFlow";
 
+interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+  special?: string;
+}
+
 export default function NewOrderPage() {
   const params = useParams();
   const router = useRouter();
@@ -14,11 +23,13 @@ export default function NewOrderPage() {
     router.back();
   };
 
-  const handleOrderConfirm = (items: any[]) => {
-    // In a real application, you would handle the order submission
-    // For now, just navigate back to the table details
-    console.log("Order confirmed with items:", items);
-    router.push(`/waiter-table/${restaurantId}/table-details/${tableId}`);
+  const handleOrderConfirm = (items: OrderItem[]) => {
+    // In a real application, you would make an API call to save the order
+    // For now, we'll use the URL to pass the order data back
+    const orderData = encodeURIComponent(JSON.stringify(items));
+    router.push(
+      `/waiter-table/${restaurantId}/table-details/${tableId}?order=${orderData}`
+    );
   };
 
   return (
