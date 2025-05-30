@@ -282,33 +282,50 @@ const OrderCard: React.FC<OrderCardProps> = ({
       )}
 
       {/* Items Table Format */}
-      <div className="grid grid-cols-6 font-semibold text-sm border-b pb-2 text-gray-700">
+      <div className="hidden sm:grid grid-cols-6 font-semibold text-sm border-b pb-2 text-gray-700">
+        <div>Action</div>
         <div>Image</div>
         <div>Name</div>
-        <div>Price</div>
         <div>Qty</div>
         <div>Special</div>
-        <div>Action</div>
+        
       </div>
+
 
       {items.map((item) => (
         <div
           key={`${orderId}-${item.id}`}
-          className="grid grid-cols-6 items-center py-3 border-b last:border-0 text-sm"
+          className="relative grid grid-cols-1 sm:grid-cols-6 items-start gap-2 sm:gap-0 py-3 border-b last:border-0 text-sm"
         >
-          <div className="w-12 h-12 relative">
-            <Image
-              src={item.image || "/placeholder.svg"}
-              alt={item.name}
-              fill
-              className="object-cover rounded"
-            />
+          {/* Cancel Icon on Top-Right for Mobile */}
+          <X
+            className="absolute top-1 right-1 sm:static h-4 w-4 text-red-500 cursor-pointer"
+            onClick={() => setConfirmReject(true)}
+          />
+
+          {/* Image */}
+          <div className="flex sm:block items-center">
+            <div className="w-12 h-12 relative">
+              <Image
+                src={item.image || "/placeholder.svg"}
+                alt={item.name}
+                fill
+                className="object-cover rounded"
+              />
+            </div>
           </div>
-          <div className="truncate">{item.name}</div>
-          <div>₹ {item.price}</div>
+
+          {/* Name */}
+          <div className="truncate text-gray-800">{item.name}</div>
+
+          {/* Quantity */}
           <div>{item.quantity}</div>
+
+          {/* Special */}
           <div className="text-amber-600 italic">{item.special || "-"}</div>
-          <div className="flex items-center gap-2">
+
+          {/* Action */}
+          <div className="flex items-center gap-2 sm:justify-start justify-end">
             {isPrepared && (
               <Button
                 onClick={() => handleMarkPrepared(item.id)}
@@ -318,13 +335,10 @@ const OrderCard: React.FC<OrderCardProps> = ({
                 Prepared
               </Button>
             )}
-            <X
-              className="h-4 w-4 text-red-500 cursor-pointer"
-              onClick={() => setConfirmReject(true)}
-            />
           </div>
         </div>
       ))}
+
 
       {showActions && (
         <div className="pt-4">
