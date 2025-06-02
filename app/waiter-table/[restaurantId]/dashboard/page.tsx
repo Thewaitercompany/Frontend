@@ -13,71 +13,141 @@ import {
   Star,
 } from "lucide-react";
 
+interface Table {
+  id: string;
+  number: string;
+  status: "occupied" | "available" | "booked";
+  capacity: string;
+  runningBill?: number;
+}
+
+interface Customer {
+  name: string;
+  phone: string;
+}
+
+interface MenuItem {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  description: string;
+  rating: number;
+  isVeg: boolean;
+}
+
+interface CartItem extends MenuItem {
+  quantity: number;
+  special?: string;
+}
+
+interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+  special?: string;
+}
+
+interface Order {
+  id: string;
+  tableNumber: string;
+  time: string;
+  items: OrderItem[];
+}
+
+interface CustomerForm {
+  mobile: string;
+  name: string;
+  people: string;
+}
+
 // Mock data matching the screenshots
-const mockTables = [
+const mockTables: Table[] = [
   {
     id: "01",
     number: "01",
-    status: "occupied",
+    status: "occupied" as const,
     capacity: "2/4",
     runningBill: 250,
   },
-  { id: "02", number: "02", status: "available", capacity: "0/4" },
+  {
+    id: "02",
+    number: "02",
+    status: "available" as const,
+    capacity: "0/4",
+  },
   {
     id: "03",
     number: "03",
-    status: "booked",
+    status: "booked" as const,
     capacity: "4/4",
     runningBill: 550,
   },
   {
     id: "04",
     number: "04",
-    status: "occupied",
+    status: "occupied" as const,
     capacity: "2/4",
     runningBill: 170,
   },
   {
     id: "05",
     number: "05",
-    status: "booked",
+    status: "booked" as const,
     capacity: "6/6",
     runningBill: 1250,
   },
-  { id: "06", number: "06", status: "available", capacity: "0/6" },
-  { id: "07", number: "07", status: "available", capacity: "0/4" },
+  {
+    id: "06",
+    number: "06",
+    status: "available" as const,
+    capacity: "0/6",
+  },
+  {
+    id: "07",
+    number: "07",
+    status: "available" as const,
+    capacity: "0/4",
+  },
   {
     id: "08",
     number: "08",
-    status: "booked",
+    status: "booked" as const,
     capacity: "6/6",
     runningBill: 750,
   },
   {
     id: "09",
     number: "09",
-    status: "booked",
+    status: "booked" as const,
     capacity: "4/6",
     runningBill: 150,
   },
   {
     id: "10",
     number: "10",
-    status: "occupied",
+    status: "occupied" as const,
     capacity: "2/4",
     runningBill: 280,
   },
-  { id: "11", number: "11", status: "available", capacity: "0/4" },
+  {
+    id: "11",
+    number: "11",
+    status: "available" as const,
+    capacity: "0/4",
+  },
   {
     id: "12",
     number: "12",
-    status: "booked",
+    status: "booked" as const,
     capacity: "4/4",
     runningBill: 450,
   },
 ];
 
-const mockCustomers = {
+const mockCustomers: Record<string, Customer> = {
   "01": { name: "Walk-in Customer", phone: "" },
   "03": { name: "Mohan Pyare", phone: "921953****" },
   "05": { name: "Ram Singh", phone: "924933****" },
@@ -137,11 +207,12 @@ const mockMenuItems = [
 // Main Dashboard Component
 const WaiterDashboard = () => {
   const [currentView, setCurrentView] = useState("dashboard");
-  const [selectedTable, setSelectedTable] = useState(null);
-  const [pendingOrders, setPendingOrders] = useState(mockPendingOrders);
+  const [selectedTable, setSelectedTable] = useState<Table | null>(null);
+  const [pendingOrders, setPendingOrders] =
+    useState<Order[]>(mockPendingOrders);
   const [showReceiveOrderModal, setShowReceiveOrderModal] = useState(false);
   const [showTooltips, setShowTooltips] = useState(true);
-  const [customerForm, setCustomerForm] = useState({
+  const [customerForm, setCustomerForm] = useState<CustomerForm>({
     mobile: "",
     name: "",
     people: "",
@@ -149,7 +220,7 @@ const WaiterDashboard = () => {
 
   // Table Grid Component
   const TableGrid = () => {
-    const getStatusColor = (status, capacity) => {
+    const getStatusColor = (status: Table["status"], capacity: string) => {
       const isPartiallyOccupied =
         capacity &&
         capacity.includes("/") &&
@@ -170,7 +241,7 @@ const WaiterDashboard = () => {
       }
     };
 
-    const hasPendingOrder = (tableId) => tableId === "01";
+    const hasPendingOrder = (tableId: string) => tableId === "01";
 
     return (
       <div className="bg-white rounded-lg p-3 mx-4 shadow-sm">
@@ -243,7 +314,11 @@ const WaiterDashboard = () => {
   const PendingOrdersView = () => (
     <div className="min-h-screen bg-[#F5F1EB]">
       <div className="bg-white px-4 py-3 flex items-center border-b">
-        <button onClick={() => setCurrentView("dashboard")} className="p-1">
+        <button
+          onClick={() => setCurrentView("dashboard")}
+          className="p-1"
+          aria-label="Go back"
+        >
           <ArrowLeft className="h-5 w-5" />
         </button>
         <span className="text-sm font-medium ml-2">Pending orders (1)</span>
@@ -321,13 +396,17 @@ const WaiterDashboard = () => {
   // Table Summary View
   const TableSummaryView = () => {
     const table = selectedTable;
-    const customer = mockCustomers[table?.id];
+    const customer = table ? mockCustomers[table.id] : undefined;
 
     return (
       <div className="min-h-screen bg-[#F5F1EB]">
         <div className="bg-white px-4 py-3 flex items-center justify-between border-b">
           <div className="flex items-center gap-2">
-            <button onClick={() => setCurrentView("dashboard")} className="p-1">
+            <button
+              onClick={() => setCurrentView("dashboard")}
+              className="p-1"
+              aria-label="Go back"
+            >
               <ArrowLeft className="h-5 w-5" />
             </button>
             <span className="text-sm font-medium">Table summary</span>
@@ -341,7 +420,7 @@ const WaiterDashboard = () => {
 
         <div className="p-4">
           <div className="bg-white rounded-lg p-4 shadow-sm">
-            {customer && (
+            {customer && table && (
               <div className="mb-4">
                 <div className="flex justify-between items-start mb-2">
                   <div>
@@ -372,7 +451,7 @@ const WaiterDashboard = () => {
             )}
 
             {/* Mock Order Items */}
-            {table.runningBill && (
+            {table?.runningBill && (
               <div className="space-y-4">
                 <div className="border-t pt-4">
                   <div className="flex justify-between items-center mb-3">
@@ -391,7 +470,7 @@ const WaiterDashboard = () => {
                     <div className="flex-1">
                       <div className="font-medium text-sm">Rajma Chawal</div>
                       <div className="text-xs text-gray-500">
-                        *Extra spices, don't add dhania
+                        *Extra spices, don&apos;t add dhania
                       </div>
                     </div>
                     <div className="text-right">
@@ -497,7 +576,7 @@ const WaiterDashboard = () => {
               </div>
             )}
 
-            {!customer && !table.runningBill && (
+            {!customer && !table?.runningBill && table && (
               <div className="text-center py-8">
                 <div className="text-gray-500 mb-4">
                   Table {table.number} is available
@@ -539,10 +618,10 @@ const WaiterDashboard = () => {
 
   // New Order Flow
   const NewOrderFlow = () => {
-    const [cartItems, setCartItems] = useState([]);
+    const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [showCart, setShowCart] = useState(false);
 
-    const addToCart = (item) => {
+    const addToCart = (item: MenuItem) => {
       setCartItems((prev) => {
         const existing = prev.find((cartItem) => cartItem.id === item.id);
         if (existing) {
@@ -566,7 +645,11 @@ const WaiterDashboard = () => {
       return (
         <div className="fixed inset-0 bg-[#F5F1EB] z-50">
           <div className="bg-white p-4 shadow-sm flex items-center border-b">
-            <button onClick={() => setShowCart(false)} className="mr-3">
+            <button
+              onClick={() => setShowCart(false)}
+              className="mr-3"
+              aria-label="Go back to menu"
+            >
               <ArrowLeft className="h-5 w-5" />
             </button>
             <h2 className="font-medium">View Cart</h2>
@@ -618,6 +701,7 @@ const WaiterDashboard = () => {
           <button
             onClick={() => setCurrentView("tableSummary")}
             className="mr-3"
+            aria-label="Go back to table summary"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
@@ -690,12 +774,12 @@ const WaiterDashboard = () => {
   };
 
   // Event Handlers
-  const handleTableClick = (table) => {
+  const handleTableClick = (table: Table) => {
     setSelectedTable(table);
     setCurrentView("tableSummary");
   };
 
-  const handleServeItem = (orderId, itemId) => {
+  const handleServeItem = (orderId: string, itemId: string) => {
     setPendingOrders((prevOrders) =>
       prevOrders
         .map((order) => {
@@ -715,7 +799,7 @@ const WaiterDashboard = () => {
     setShowReceiveOrderModal(true);
   };
 
-  const handleCustomerFormSubmit = (e) => {
+  const handleCustomerFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowReceiveOrderModal(false);
     setCustomerForm({ mobile: "", name: "", people: "" });
@@ -780,9 +864,15 @@ const WaiterDashboard = () => {
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white w-[90%] max-w-md rounded-lg overflow-hidden">
             <div className="p-4 border-b flex items-center justify-between">
-              <h2 className="font-medium">Enter Customer's Mobile Number</h2>
+              <h2 className="font-medium">
+                Enter Customer&apos;s Mobile Number
+              </h2>
               <span className="text-xs text-gray-500">🍽️ Table no. 02</span>
-              <button onClick={() => setShowReceiveOrderModal(false)}>
+              <button
+                onClick={() => setShowReceiveOrderModal(false)}
+                className="p-1"
+                aria-label="Close modal"
+              >
                 <X className="h-5 w-5" />
               </button>
             </div>
