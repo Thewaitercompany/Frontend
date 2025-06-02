@@ -2,7 +2,14 @@
 
 import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Search, Filter, ClipboardList, Bell, X } from "lucide-react";
+import {
+  Search,
+  Filter,
+  ClipboardList,
+  Bell,
+  X,
+  ArrowLeft,
+} from "lucide-react";
 import TableGrid from "@/components/waiter-table/TableGrid";
 import { Button } from "@/components/ui/button";
 
@@ -110,13 +117,16 @@ export default function WaiterDashboardPage() {
   const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"receive" | "pending">("receive");
   const [showReceiveOrderModal, setShowReceiveOrderModal] = useState(false);
-  const [showPendingOrdersModal, setShowPendingOrdersModal] = useState(false);
+  const [showPendingOrdersPage, setShowPendingOrdersPage] = useState(false);
   const [pendingOrders, setPendingOrders] = useState(dummyPendingOrders);
   const [customerForm, setCustomerForm] = useState({
     mobile: "",
     name: "",
     people: "",
   });
+  const [selectedTable, setSelectedTable] = useState<string | null>(null);
+  const [showTableDetail, setShowTableDetail] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   // Filtering logic
   React.useEffect(() => {
@@ -141,136 +151,429 @@ export default function WaiterDashboardPage() {
     setIsFilterMenuOpen(false);
   };
 
-  // Dummy: open receive order modal when clicking Receive Order
+  // Handle receive order - Updated to open modal
   const handleReceiveOrder = () => {
     setShowReceiveOrderModal(true);
   };
-  // Dummy: open pending orders modal when clicking Pending Orders
+
+  // Handle pending orders - show as full page
   const handlePendingOrders = () => {
-    setShowPendingOrdersModal(true);
+    setShowPendingOrdersPage(true);
   };
 
-  // Dummy: handle customer form submit
+  // Handle customer form submit
   const handleCustomerFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setShowReceiveOrderModal(false);
     setCustomerForm({ mobile: "", name: "", people: "" });
-    // Optionally, add logic to update table state
   };
 
-  return (
-    <div className="min-h-screen bg-[#F5F1EB] pb-24">
-      {/* Top Navigation Tabs */}
-      <div className="flex items-center justify-between px-4 pt-4 pb-2 bg-[#F5F1EB] sticky top-0 z-20">
-        <div className="flex gap-2 w-full">
-          <button
-            className={`flex-1 py-2 rounded-t-lg border-b-2 text-sm font-medium transition-colors ${
-              activeTab === "receive"
-                ? "border-[#B39793] bg-white text-[#B39793]"
-                : "border-transparent bg-[#F5F1EB] text-gray-700"
-            }`}
-            onClick={() => setActiveTab("receive")}
-          >
-            Receive order
-          </button>
-          <button
-            className={`flex-1 py-2 rounded-t-lg border-b-2 text-sm font-medium transition-colors relative ${
-              activeTab === "pending"
-                ? "border-[#B39793] bg-white text-[#B39793]"
-                : "border-transparent bg-[#F5F1EB] text-gray-700"
-            }`}
-            onClick={() => setActiveTab("pending")}
-          >
-            Pending orders
-            {pendingOrders.length > 0 && (
-              <span className="ml-1 px-2 py-0.5 bg-[#B39793] text-white rounded-full text-xs absolute -top-2 right-2">
-                {pendingOrders.length}
-              </span>
-            )}
-          </button>
-        </div>
-      </div>
+  // Handle serving an item
+  const handleServeItem = (orderNo: string, itemId: string) => {
+    setPendingOrders((prevOrders) =>
+      prevOrders
+        .map((order) => {
+          if (order.orderNo === orderNo) {
+            const updatedItems = order.items.filter(
+              (item) => item.id !== itemId
+            );
+            return { ...order, items: updatedItems };
+          }
+          return order;
+        })
+        .filter((order) => order.items.length > 0)
+    );
+  };
 
-      {/* Search & Filter */}
-      <div className="mb-4 px-4">
-        <div className="flex items-center justify-between">
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Search tables"
-              className="w-full pl-10 pr-4 py-2.5 rounded-full bg-white text-gray-700 placeholder:text-gray-400 border-none focus:outline-none focus:ring-2 focus:ring-[#B39793]"
-              value={searchQuery}
-              onChange={handleSearch}
-            />
+  // Handle table click
+  const handleTableClick = (table: any) => {
+    setSelectedTable(table.id);
+    setShowTableDetail(true);
+  };
+
+  // Get table data by id
+  const getTableData = (tableId: string) => {
+    const table = tables.find((t) => t.id === tableId);
+    if (!table) return null;
+
+    // Mock customer data for demonstration
+    const customerData =
+      table.status === "occupied" || table.status === "booked"
+        ? {
+            name: table.id === "03" ? "Mohan Pyare" : "Ram Singh",
+            mobile: table.id === "03" ? "921953****" : "924933****",
+            people: table.capacity.split("/")[0],
+          }
+        : null;
+
+    // Mock order data
+    const orderData = table.runningBill
+      ? {
+          orders: [
+            {
+              id: "123455",
+              time: "09:41am",
+              items: [
+                {
+                  name: "Rajma Chawal",
+                  price: 130,
+                  quantity: 1,
+                  special: "Extra spices, don't add dhaniya",
+                },
+                {
+                  name: "Crispy Fries",
+                  price: 60,
+                  quantity: 2,
+                  special: "without mayonnaise",
+                },
+              ],
+            },
+            {
+              id: "123456",
+              time: "09:50am",
+              items: [
+                {
+                  name: "Chicken Nuggets",
+                  price: 80,
+                  quantity: 1,
+                  special: "without mayonnaise",
+                },
+                {
+                  name: "Crispy Fries",
+                  price: 60,
+                  quantity: 1,
+                  special: "without mayonnaise",
+                },
+              ],
+            },
+          ],
+          total: table.runningBill,
+          gst: Math.round(table.runningBill * 0.1),
+        }
+      : null;
+
+    return { table, customer: customerData, orders: orderData };
+  };
+
+  // If showing table details
+  if (showTableDetail && selectedTable) {
+    const tableData = getTableData(selectedTable);
+    if (!tableData) return null;
+
+    const { table, customer, orders } = tableData;
+
+    return (
+      <div className="min-h-screen bg-[#F5F1EB]">
+        {/* Header */}
+        <div className="bg-white px-4 py-3 flex items-center justify-between border-b">
+          <div className="flex items-center gap-2">
+            <button onClick={() => setShowTableDetail(false)} className="p-1">
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+            <span className="text-sm font-medium">Table summary</span>
           </div>
-          <button
-            type="button"
-            onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}
-            className="p-2.5 bg-white rounded-full flex items-center justify-center relative ml-2"
-          >
-            <Filter className="h-5 w-5 text-gray-600" />
-            {filterStatus && (
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#B39793] rounded-full"></span>
-            )}
-          </button>
+          {orders && (
+            <div className="text-xs text-gray-500">
+              View order related details, take orders or finish billing.
+            </div>
+          )}
         </div>
-        {isFilterMenuOpen && (
-          <div className="bg-white rounded-lg shadow-md p-3 space-y-1 mt-2 animate-in slide-in-from-top duration-200">
-            <button
-              onClick={() => handleFilterClick("occupied")}
-              className={`w-full text-left px-3 py-2 rounded-md ${
-                filterStatus === "occupied"
-                  ? "bg-[#fff3e0] text-[#f57c00]"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              Occupied Tables
-            </button>
-            <button
-              onClick={() => handleFilterClick("available")}
-              className={`w-full text-left px-3 py-2 rounded-md ${
-                filterStatus === "available"
-                  ? "bg-[#e8f5e9] text-[#43a047]"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              Available Tables
-            </button>
-            <button
-              onClick={() => handleFilterClick("booked")}
-              className={`w-full text-left px-3 py-2 rounded-md ${
-                filterStatus === "booked"
-                  ? "bg-[#ffebee] text-[#e53935]"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              Booked Tables
-            </button>
+
+        <div className="p-4">
+          <div className="bg-white rounded-lg p-4 shadow-sm">
+            {/* Customer Info */}
+            {customer && (
+              <div className="mb-4">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <div className="font-medium">{customer.name}</div>
+                    <div className="text-sm text-gray-500">
+                      {customer.mobile}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      Order Id: 1234567890
+                    </div>
+                  </div>
+                  <div className="text-right text-sm text-gray-500">
+                    <div className="flex items-center gap-1 mb-1">
+                      <span>🍽️</span>
+                      <span>Table no. {table.number}</span>
+                    </div>
+                    <div className="flex items-center gap-1 mb-1">
+                      <span>👥</span>
+                      <span>{customer.people}/4</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span>🕘</span>
+                      <span>09:41am</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Orders */}
+            {orders && (
+              <div className="space-y-4">
+                {orders.orders.map((order) => (
+                  <div key={order.id} className="border-t pt-4">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-sm text-gray-600">
+                        Order No.: {order.id}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        🕘 {order.time}
+                      </span>
+                    </div>
+
+                    {order.items.map((item, index) => (
+                      <div key={index} className="flex items-center gap-3 mb-3">
+                        <img
+                          src="/placeholder.svg"
+                          alt={item.name}
+                          className="w-12 h-12 rounded-lg object-cover"
+                        />
+                        <div className="flex-1">
+                          <div className="font-medium text-sm">{item.name}</div>
+                          <div className="text-xs text-gray-500">
+                            *{item.special}
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm">x{item.quantity}</div>
+                          <div className="text-sm font-medium">
+                            ₹ {item.price}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+
+                {/* Bill Summary */}
+                <div className="border-t pt-4 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Total</span>
+                    <span>₹ {orders.total - orders.gst}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Tax Type</span>
+                    <span>Present</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>GST</span>
+                    <span>10%</span>
+                    <span>₹ {orders.gst}</span>
+                  </div>
+                  <div className="flex justify-between font-medium border-t pt-2">
+                    <span>Total Amount Payable</span>
+                    <span>₹ {orders.total}</span>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 mt-6">
+                  <Button
+                    onClick={() => {
+                      // Navigate to menu/order page for this table
+                      router.push(
+                        `/waiter-table/${restaurantId}/table-details/${table.id}/menu`
+                      );
+                    }}
+                    className="flex-1 bg-[#B39793] hover:bg-[#A08783] text-white"
+                  >
+                    Take Order
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      // Handle finish billing
+                      setShowTableDetail(false);
+                    }}
+                    className="flex-1 bg-[#B39793] hover:bg-[#A08783] text-white"
+                  >
+                    Finish Billing
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Empty state for available tables */}
+            {!customer && (
+              <div className="text-center py-8">
+                <div className="text-gray-500 mb-4">
+                  Table {table.number} is available
+                </div>
+                <Button
+                  onClick={() => {
+                    setShowTableDetail(false);
+                    setShowReceiveOrderModal(true);
+                  }}
+                  className="bg-[#B39793] hover:bg-[#A08783] text-white"
+                >
+                  Receive Order
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Tooltip */}
+        {showTooltip && (
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div className="bg-[#B39793] text-white p-4 rounded-lg mx-4 max-w-sm">
+              <p className="text-sm mb-4">
+                View order related details, take orders or finish billing.
+              </p>
+              <div className="flex justify-end gap-2">
+                <Button
+                  onClick={() => setShowTooltip(false)}
+                  variant="outline"
+                  className="text-[#B39793] border-white bg-white"
+                >
+                  Done
+                </Button>
+              </div>
+            </div>
           </div>
         )}
       </div>
+    );
+  }
+  if (showPendingOrdersPage) {
+    return (
+      <div className="min-h-screen bg-[#F5F1EB]">
+        {/* Header */}
+        <div className="bg-white px-4 py-3 flex items-center justify-between border-b">
+          <button
+            onClick={() => setShowPendingOrdersPage(false)}
+            className="p-1"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </button>
+
+          <div className="flex items-center gap-2">
+            <ClipboardList className="h-4 w-4" />
+            <span className="text-sm font-medium">
+              Pending orders ({pendingOrders.length})
+            </span>
+          </div>
+        </div>
+
+        {/* Orders List */}
+        <div className="px-4 pb-6 mt-6">
+          {pendingOrders.length === 0 ? (
+            <div className="text-center text-gray-500 mt-8">
+              No pending orders
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {pendingOrders.map((order) => (
+                <div key={order.orderNo}>
+                  {order.items.map((item) => (
+                    <div
+                      key={`${order.orderNo}-${item.id}`}
+                      className="bg-white rounded-lg p-4 mb-3 shadow-sm"
+                    >
+                      {/* Order Header */}
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="text-sm font-medium text-gray-800">
+                          Order No.: {order.orderNo}
+                        </div>
+                        <div className="flex items-center gap-4 text-xs text-gray-500">
+                          <div className="flex items-center gap-1">
+                            <span>🕘</span>
+                            <span>{order.time}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span>🍽️</span>
+                            <span>Table no. {order.tableNo}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Item Details */}
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-16 h-16 rounded-lg object-cover"
+                        />
+                        <div className="flex-1">
+                          <div className="font-medium text-gray-800">
+                            {item.name}
+                          </div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            ₹ {item.price}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            x{item.quantity}
+                          </div>
+                          {item.special && (
+                            <div className="text-xs italic text-gray-500 mt-1">
+                              *{item.special}
+                            </div>
+                          )}
+                        </div>
+                        <Button
+                          onClick={() =>
+                            handleServeItem(order.orderNo, item.id)
+                          }
+                          className="bg-[#B39793] hover:bg-[#A08783] text-white px-6 py-2 rounded-lg text-sm"
+                        >
+                          Served
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Main dashboard view
+  return (
+    <div className="min-h-screen bg-[#F5F1EB] pb-24">
+      {/* Top Navigation Tabs */}
+      <div className="px-4 pt-4 pb-2 bg-[#F5F1EB]">
+        <div className="flex gap-2 w-full">
+          <button
+            className={`flex-1 py-3 rounded-lg text-sm font-medium transition-colors border flex items-center justify-center gap-2 ${
+              activeTab === "receive"
+                ? "border-[#B39793] bg-white text-[#B39793]"
+                : "border-gray-200 bg-white text-gray-700"
+            }`}
+            onClick={() => {
+              setActiveTab("receive");
+              handleReceiveOrder(); // Open modal when clicking receive order tab
+            }}
+          >
+            <ClipboardList className="h-4 w-4" />
+            Receive order
+          </button>
+          <button
+            className={`flex-1 py-3 rounded-lg text-sm font-medium transition-colors border flex items-center justify-center gap-2 relative ${
+              activeTab === "pending"
+                ? "border-[#B39793] bg-white text-[#B39793]"
+                : "border-gray-200 bg-white text-gray-700"
+            }`}
+            onClick={handlePendingOrders}
+          >
+            <ClipboardList className="h-4 w-4" />
+            Pending orders ({pendingOrders.length})
+          </button>
+        </div>
+      </div>
 
       {/* Table Grid */}
-      <div className="px-4">
-        <TableGrid tables={filteredTables} restaurantId={restaurantId} />
-      </div>
-
-      {/* Floating Action Buttons */}
-      <div className="fixed bottom-24 right-4 space-y-3 z-30">
-        <Button
-          onClick={handlePendingOrders}
-          className="rounded-full h-12 w-12 bg-[#B39793] hover:bg-[#a08884] flex items-center justify-center shadow-md p-0"
-        >
-          <ClipboardList className="h-5 w-5" />
-        </Button>
-        <Button
-          onClick={handleReceiveOrder}
-          className="rounded-full h-12 w-12 bg-[#B39793] hover:bg-[#a08884] flex items-center justify-center shadow-md p-0"
-        >
-          <Bell className="h-5 w-5" />
-        </Button>
-      </div>
+      <TableGrid
+        tables={filteredTables}
+        restaurantId={restaurantId}
+        onTableClick={handleTableClick}
+      />
 
       {/* Receive Order Modal */}
       {showReceiveOrderModal && (
@@ -321,78 +624,12 @@ export default function WaiterDashboardPage() {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-[#B39793] text-white"
+                className="w-full bg-[#B39793] hover:bg-[#A08783] text-white"
                 aria-label="Receive order"
               >
                 Receive Order
               </Button>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* Pending Orders Modal */}
-      {showPendingOrdersModal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white w-[90%] max-w-md rounded-lg overflow-hidden">
-            <div className="p-4 border-b flex items-center justify-between">
-              <h2 className="font-medium">Pending Orders</h2>
-              <button
-                onClick={() => setShowPendingOrdersModal(false)}
-                aria-label="Close pending orders"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <div className="p-4 space-y-4">
-              {pendingOrders.length === 0 ? (
-                <div className="text-center text-gray-500">
-                  No pending orders
-                </div>
-              ) : (
-                pendingOrders.map((order) => (
-                  <div
-                    key={order.orderNo}
-                    className="bg-[#F5F1EB] rounded-lg p-3 mb-2"
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="font-medium">
-                        Order No.: {order.orderNo}
-                      </div>
-                      <div className="text-xs text-gray-500">{order.time}</div>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      {order.items.map((item) => (
-                        <div key={item.id} className="flex items-center gap-3">
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-12 h-12 rounded object-cover"
-                          />
-                          <div className="flex-1">
-                            <div className="font-medium">{item.name}</div>
-                            <div className="text-xs text-gray-500">
-                              ₹ {item.price} x{item.quantity}
-                            </div>
-                            {item.special && (
-                              <div className="text-xs italic text-gray-400">
-                                *{item.special}
-                              </div>
-                            )}
-                          </div>
-                          <Button
-                            className="bg-[#B39793] text-white px-4 py-1 rounded"
-                            size="sm"
-                          >
-                            Served
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
           </div>
         </div>
       )}
