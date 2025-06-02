@@ -1,27 +1,100 @@
 "use client";
 
-import React, { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 import {
-  Search,
-  Filter,
-  ClipboardList,
-  Bell,
-  X,
   ArrowLeft,
+  Search,
+  ClipboardList,
+  X,
+  Bell,
+  Users,
+  Phone,
+  Clock,
+  Star,
 } from "lucide-react";
-import TableGrid from "@/components/waiter-table/TableGrid";
-import { Button } from "@/components/ui/button";
 
-// Dummy pending orders data
-const dummyPendingOrders = [
+// Mock data matching the screenshots
+const mockTables = [
   {
-    orderNo: "123456",
+    id: "01",
+    number: "01",
+    status: "occupied",
+    capacity: "2/4",
+    runningBill: 250,
+  },
+  { id: "02", number: "02", status: "available", capacity: "0/4" },
+  {
+    id: "03",
+    number: "03",
+    status: "booked",
+    capacity: "4/4",
+    runningBill: 550,
+  },
+  {
+    id: "04",
+    number: "04",
+    status: "occupied",
+    capacity: "2/4",
+    runningBill: 170,
+  },
+  {
+    id: "05",
+    number: "05",
+    status: "booked",
+    capacity: "6/6",
+    runningBill: 1250,
+  },
+  { id: "06", number: "06", status: "available", capacity: "0/6" },
+  { id: "07", number: "07", status: "available", capacity: "0/4" },
+  {
+    id: "08",
+    number: "08",
+    status: "booked",
+    capacity: "6/6",
+    runningBill: 750,
+  },
+  {
+    id: "09",
+    number: "09",
+    status: "booked",
+    capacity: "4/6",
+    runningBill: 150,
+  },
+  {
+    id: "10",
+    number: "10",
+    status: "occupied",
+    capacity: "2/4",
+    runningBill: 280,
+  },
+  { id: "11", number: "11", status: "available", capacity: "0/4" },
+  {
+    id: "12",
+    number: "12",
+    status: "booked",
+    capacity: "4/4",
+    runningBill: 450,
+  },
+];
+
+const mockCustomers = {
+  "01": { name: "Walk-in Customer", phone: "" },
+  "03": { name: "Mohan Pyare", phone: "921953****" },
+  "05": { name: "Ram Singh", phone: "924933****" },
+  "08": { name: "Customer Name", phone: "9876543210" },
+  "09": { name: "Priya Sharma", phone: "9765432109" },
+  "10": { name: "Customer Name", phone: "9123456789" },
+  "12": { name: "Raj Kumar", phone: "9087654321" },
+};
+
+const mockPendingOrders = [
+  {
+    id: "123456",
+    tableNumber: "01",
     time: "09:50am",
-    tableNo: "01",
     items: [
       {
-        id: "2",
+        id: "1",
         name: "Chicken Nuggets",
         price: 80,
         quantity: 1,
@@ -29,7 +102,7 @@ const dummyPendingOrders = [
         special: "without mayonnaise",
       },
       {
-        id: "1",
+        id: "2",
         name: "Crispy Fries",
         price: 60,
         quantity: 1,
@@ -37,242 +110,229 @@ const dummyPendingOrders = [
         special: "without mayonnaise",
       },
     ],
-    status: "pending",
   },
 ];
 
-// Mock data for tables (same as before)
-const mockTables = [
+const mockMenuItems = [
   {
-    id: "01",
-    number: "01",
-    status: "occupied" as const,
-    capacity: "2/4",
-    runningBill: 250,
-  },
-  { id: "02", number: "02", status: "available" as const, capacity: "0/4" },
-  {
-    id: "03",
-    number: "03",
-    status: "booked" as const,
-    capacity: "4/4",
-    runningBill: 550,
+    id: "1",
+    name: "Crispy fries",
+    price: 60,
+    image: "/placeholder.svg",
+    description: "Crispy, golden-brown fries served piping hot",
+    rating: 4.1,
+    isVeg: true,
   },
   {
-    id: "04",
-    number: "04",
-    status: "occupied" as const,
-    capacity: "2/4",
-    runningBill: 170,
-  },
-  {
-    id: "05",
-    number: "05",
-    status: "booked" as const,
-    capacity: "6/6",
-    runningBill: 1250,
-  },
-  { id: "06", number: "06", status: "available" as const, capacity: "0/6" },
-  { id: "07", number: "07", status: "available" as const, capacity: "0/4" },
-  {
-    id: "08",
-    number: "08",
-    status: "booked" as const,
-    capacity: "6/6",
-    runningBill: 750,
-  },
-  {
-    id: "09",
-    number: "09",
-    status: "booked" as const,
-    capacity: "4/6",
-    runningBill: 150,
-  },
-  {
-    id: "10",
-    number: "10",
-    status: "occupied" as const,
-    capacity: "2/4",
-    runningBill: 280,
-  },
-  { id: "11", number: "11", status: "available" as const, capacity: "0/4" },
-  {
-    id: "12",
-    number: "12",
-    status: "booked" as const,
-    capacity: "4/4",
-    runningBill: 450,
+    id: "2",
+    name: "Chicken Nuggets",
+    price: 80,
+    image: "/placeholder.svg",
+    description: "Crispy, golden-brown nuggets",
+    rating: 4.2,
+    isVeg: false,
   },
 ];
 
-export default function WaiterDashboardPage() {
-  const params = useParams();
-  const router = useRouter();
-  const restaurantId = params.restaurantId as string;
-
-  const [tables, setTables] = useState(mockTables);
-  const [filteredTables, setFilteredTables] = useState(mockTables);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState<string | null>(null);
-  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"receive" | "pending">("receive");
+// Main Dashboard Component
+const WaiterDashboard = () => {
+  const [currentView, setCurrentView] = useState("dashboard");
+  const [selectedTable, setSelectedTable] = useState(null);
+  const [pendingOrders, setPendingOrders] = useState(mockPendingOrders);
   const [showReceiveOrderModal, setShowReceiveOrderModal] = useState(false);
-  const [showPendingOrdersPage, setShowPendingOrdersPage] = useState(false);
-  const [pendingOrders, setPendingOrders] = useState(dummyPendingOrders);
+  const [showTooltips, setShowTooltips] = useState(true);
   const [customerForm, setCustomerForm] = useState({
     mobile: "",
     name: "",
     people: "",
   });
-  const [selectedTable, setSelectedTable] = useState<string | null>(null);
-  const [showTableDetail, setShowTableDetail] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
 
-  // Filtering logic
-  React.useEffect(() => {
-    let filtered = tables;
-    if (searchQuery) {
-      filtered = filtered.filter((table) =>
-        table.number.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-    if (filterStatus) {
-      filtered = filtered.filter((table) => table.status === filterStatus);
-    }
-    setFilteredTables(filtered);
-  }, [tables, searchQuery, filterStatus]);
+  // Table Grid Component
+  const TableGrid = () => {
+    const getStatusColor = (status, capacity) => {
+      const isPartiallyOccupied =
+        capacity &&
+        capacity.includes("/") &&
+        parseInt(capacity.split("/")[0]) > 0 &&
+        parseInt(capacity.split("/")[0]) < parseInt(capacity.split("/")[1]);
 
-  // Handlers
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-  const handleFilterClick = (status: string) => {
-    setFilterStatus(status === filterStatus ? null : status);
-    setIsFilterMenuOpen(false);
-  };
+      switch (status) {
+        case "occupied":
+          return isPartiallyOccupied
+            ? "border-yellow-400 border-2 border-dashed"
+            : "border-orange-300 border-2";
+        case "available":
+          return "border-yellow-400 border-2";
+        case "booked":
+          return "border-red-300 border-2";
+        default:
+          return "border-gray-300 border-2";
+      }
+    };
 
-  // Handle receive order - Updated to open modal
-  const handleReceiveOrder = () => {
-    setShowReceiveOrderModal(true);
-  };
+    const hasPendingOrder = (tableId) => tableId === "01";
 
-  // Handle pending orders - show as full page
-  const handlePendingOrders = () => {
-    setShowPendingOrdersPage(true);
-  };
+    return (
+      <div className="bg-white rounded-lg p-3 mx-4 shadow-sm">
+        <div className="grid grid-cols-3 gap-2">
+          {mockTables.map((table) => (
+            <div
+              key={table.id}
+              onClick={() => handleTableClick(table)}
+              className={`relative bg-white ${getStatusColor(
+                table.status,
+                table.capacity
+              )} 
+                p-2 rounded-lg shadow-sm flex flex-col items-center cursor-pointer 
+                transition-transform active:scale-95 min-h-[100px] w-full`}
+            >
+              {hasPendingOrder(table.id) && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold border border-white z-10">
+                  !
+                </span>
+              )}
 
-  // Handle customer form submit
-  const handleCustomerFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setShowReceiveOrderModal(false);
-    setCustomerForm({ mobile: "", name: "", people: "" });
-  };
+              <div className="text-center mb-1 font-bold text-gray-800 text-base">
+                {table.number}
+              </div>
 
-  // Handle serving an item
-  const handleServeItem = (orderNo: string, itemId: string) => {
-    setPendingOrders((prevOrders) =>
-      prevOrders
-        .map((order) => {
-          if (order.orderNo === orderNo) {
-            const updatedItems = order.items.filter(
-              (item) => item.id !== itemId
-            );
-            return { ...order, items: updatedItems };
-          }
-          return order;
-        })
-        .filter((order) => order.items.length > 0)
+              {table.runningBill ? (
+                <div className="text-center mb-1 flex-1 flex flex-col justify-center px-1">
+                  <div className="text-[10px] text-gray-600 mb-1 leading-tight">
+                    Running Bill
+                  </div>
+                  <div className="text-xs font-bold text-gray-800">
+                    ₹ {table.runningBill}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-[10px] text-gray-500 mb-1 text-center flex-1 flex items-center justify-center px-1">
+                  <span className="leading-tight">No active order</span>
+                </div>
+              )}
+
+              <div className="flex items-center gap-1 mt-auto text-[10px] text-gray-600">
+                <Users className="w-2.5 h-2.5" />
+                <span>{table.capacity}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-4 mt-4 text-xs px-2">
+          <div className="flex items-center gap-1">
+            <span className="w-3 h-3 bg-white border-2 border-orange-300 rounded-sm inline-block"></span>
+            <span className="text-gray-600 text-xs">
+              Selected Seat Occupied
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="w-3 h-3 bg-white border-2 border-yellow-400 rounded-sm inline-block"></span>
+            <span className="text-gray-600 text-xs">Table Available</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="w-3 h-3 bg-white border-2 border-red-300 rounded-sm inline-block"></span>
+            <span className="text-gray-600 text-xs">Table Booked</span>
+          </div>
+        </div>
+      </div>
     );
   };
 
-  // Handle table click
-  const handleTableClick = (table: any) => {
-    setSelectedTable(table.id);
-    setShowTableDetail(true);
-  };
+  // Pending Orders View
+  const PendingOrdersView = () => (
+    <div className="min-h-screen bg-[#F5F1EB]">
+      <div className="bg-white px-4 py-3 flex items-center border-b">
+        <button onClick={() => setCurrentView("dashboard")} className="p-1">
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+        <span className="text-sm font-medium ml-2">Pending orders (1)</span>
+      </div>
 
-  // Get table data by id
-  const getTableData = (tableId: string) => {
-    const table = tables.find((t) => t.id === tableId);
-    if (!table) return null;
+      <div className="px-4 pb-6 mt-6">
+        {pendingOrders.length === 0 ? (
+          <div className="text-center text-gray-500 mt-8">
+            No pending orders
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {pendingOrders.map((order) => (
+              <div key={order.id}>
+                {order.items.map((item) => (
+                  <div
+                    key={`${order.id}-${item.id}`}
+                    className="bg-white rounded-lg p-4 mb-3 shadow-sm"
+                  >
+                    <div className="flex justify-between items-center mb-3">
+                      <div className="text-sm font-medium text-gray-800">
+                        Order No.: {order.id}
+                      </div>
+                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          <span>{order.time}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span>🍽️</span>
+                          <span>Table no. {order.tableNumber}</span>
+                        </div>
+                      </div>
+                    </div>
 
-    // Mock customer data for demonstration
-    const customerData =
-      table.status === "occupied" || table.status === "booked"
-        ? {
-            name: table.id === "03" ? "Mohan Pyare" : "Ram Singh",
-            mobile: table.id === "03" ? "921953****" : "924933****",
-            people: table.capacity.split("/")[0],
-          }
-        : null;
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-16 h-16 rounded-lg object-cover"
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-800">
+                          {item.name}
+                        </div>
+                        <div className="text-sm text-gray-600 mt-1">
+                          ₹ {item.price}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          x{item.quantity}
+                        </div>
+                        {item.special && (
+                          <div className="text-xs italic text-gray-500 mt-1">
+                            *{item.special}
+                          </div>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => handleServeItem(order.id, item.id)}
+                        className="bg-[#B39793] hover:bg-[#A08783] text-white px-6 py-2 rounded-lg text-sm"
+                      >
+                        Served
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 
-    // Mock order data
-    const orderData = table.runningBill
-      ? {
-          orders: [
-            {
-              id: "123455",
-              time: "09:41am",
-              items: [
-                {
-                  name: "Rajma Chawal",
-                  price: 130,
-                  quantity: 1,
-                  special: "Extra spices, don't add dhaniya",
-                },
-                {
-                  name: "Crispy Fries",
-                  price: 60,
-                  quantity: 2,
-                  special: "without mayonnaise",
-                },
-              ],
-            },
-            {
-              id: "123456",
-              time: "09:50am",
-              items: [
-                {
-                  name: "Chicken Nuggets",
-                  price: 80,
-                  quantity: 1,
-                  special: "without mayonnaise",
-                },
-                {
-                  name: "Crispy Fries",
-                  price: 60,
-                  quantity: 1,
-                  special: "without mayonnaise",
-                },
-              ],
-            },
-          ],
-          total: table.runningBill,
-          gst: Math.round(table.runningBill * 0.1),
-        }
-      : null;
-
-    return { table, customer: customerData, orders: orderData };
-  };
-
-  // If showing table details
-  if (showTableDetail && selectedTable) {
-    const tableData = getTableData(selectedTable);
-    if (!tableData) return null;
-
-    const { table, customer, orders } = tableData;
+  // Table Summary View
+  const TableSummaryView = () => {
+    const table = selectedTable;
+    const customer = mockCustomers[table?.id];
 
     return (
       <div className="min-h-screen bg-[#F5F1EB]">
-        {/* Header */}
         <div className="bg-white px-4 py-3 flex items-center justify-between border-b">
           <div className="flex items-center gap-2">
-            <button onClick={() => setShowTableDetail(false)} className="p-1">
+            <button onClick={() => setCurrentView("dashboard")} className="p-1">
               <ArrowLeft className="h-5 w-5" />
             </button>
             <span className="text-sm font-medium">Table summary</span>
           </div>
-          {orders && (
+          {showTooltips && (
             <div className="text-xs text-gray-500">
               View order related details, take orders or finish billing.
             </div>
@@ -281,14 +341,13 @@ export default function WaiterDashboardPage() {
 
         <div className="p-4">
           <div className="bg-white rounded-lg p-4 shadow-sm">
-            {/* Customer Info */}
             {customer && (
               <div className="mb-4">
                 <div className="flex justify-between items-start mb-2">
                   <div>
                     <div className="font-medium">{customer.name}</div>
                     <div className="text-sm text-gray-500">
-                      {customer.mobile}
+                      {customer.phone}
                     </div>
                     <div className="text-sm text-gray-500">
                       Order Id: 1234567890
@@ -300,11 +359,11 @@ export default function WaiterDashboardPage() {
                       <span>Table no. {table.number}</span>
                     </div>
                     <div className="flex items-center gap-1 mb-1">
-                      <span>👥</span>
-                      <span>{customer.people}/4</span>
+                      <Users className="w-3 h-3" />
+                      <span>{table.capacity}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <span>🕘</span>
+                      <Clock className="w-3 h-3" />
                       <span>09:41am</span>
                     </div>
                   </div>
@@ -312,49 +371,105 @@ export default function WaiterDashboardPage() {
               </div>
             )}
 
-            {/* Orders */}
-            {orders && (
+            {/* Mock Order Items */}
+            {table.runningBill && (
               <div className="space-y-4">
-                {orders.orders.map((order) => (
-                  <div key={order.id} className="border-t pt-4">
-                    <div className="flex justify-between items-center mb-3">
-                      <span className="text-sm text-gray-600">
-                        Order No.: {order.id}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        🕘 {order.time}
-                      </span>
-                    </div>
-
-                    {order.items.map((item, index) => (
-                      <div key={index} className="flex items-center gap-3 mb-3">
-                        <img
-                          src="/placeholder.svg"
-                          alt={item.name}
-                          className="w-12 h-12 rounded-lg object-cover"
-                        />
-                        <div className="flex-1">
-                          <div className="font-medium text-sm">{item.name}</div>
-                          <div className="text-xs text-gray-500">
-                            *{item.special}
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-sm">x{item.quantity}</div>
-                          <div className="text-sm font-medium">
-                            ₹ {item.price}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                <div className="border-t pt-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <span className="text-sm text-gray-600">
+                      Order No.: 123455
+                    </span>
+                    <span className="text-sm text-gray-500">🕘 09:41am</span>
                   </div>
-                ))}
 
-                {/* Bill Summary */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <img
+                      src="/placeholder.svg"
+                      alt="Rajma Chawal"
+                      className="w-12 h-12 rounded-lg object-cover"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium text-sm">Rajma Chawal</div>
+                      <div className="text-xs text-gray-500">
+                        *Extra spices, don't add dhania
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm">x1</div>
+                      <div className="text-sm font-medium">₹ 130</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 mb-3">
+                    <img
+                      src="/placeholder.svg"
+                      alt="Crispy Fries"
+                      className="w-12 h-12 rounded-lg object-cover"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium text-sm">Crispy Fries</div>
+                      <div className="text-xs text-gray-500">
+                        *without mayonnaise
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm">x2</div>
+                      <div className="text-sm font-medium">₹ 120</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t pt-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <span className="text-sm text-gray-600">
+                      Order No.: 123456
+                    </span>
+                    <span className="text-sm text-gray-500">🕘 09:50am</span>
+                  </div>
+
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-red-500 text-sm">!</span>
+                    <img
+                      src="/placeholder.svg"
+                      alt="Chicken Nuggets"
+                      className="w-12 h-12 rounded-lg object-cover"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium text-sm">Chicken Nuggets</div>
+                      <div className="text-xs text-gray-500">
+                        *without mayonnaise
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm">x1</div>
+                      <div className="text-sm font-medium">₹ 80</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-red-500 text-sm">!</span>
+                    <img
+                      src="/placeholder.svg"
+                      alt="Crispy Fries"
+                      className="w-12 h-12 rounded-lg object-cover"
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium text-sm">Crispy Fries</div>
+                      <div className="text-xs text-gray-500">
+                        *without mayonnaise
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm">x1</div>
+                      <div className="text-sm font-medium">₹ 60</div>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="border-t pt-4 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Total</span>
-                    <span>₹ {orders.total - orders.gst}</span>
+                    <span>₹ 390</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Tax Type</span>
@@ -363,230 +478,311 @@ export default function WaiterDashboardPage() {
                   <div className="flex justify-between text-sm">
                     <span>GST</span>
                     <span>10%</span>
-                    <span>₹ {orders.gst}</span>
+                    <span>₹ 39</span>
                   </div>
                   <div className="flex justify-between font-medium border-t pt-2">
                     <span>Total Amount Payable</span>
-                    <span>₹ {orders.total}</span>
+                    <span>₹ 429</span>
                   </div>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex gap-3 mt-6">
-                  <Button
-                    onClick={() => {
-                      // Navigate to menu/order page for this table
-                      router.push(
-                        `/waiter-table/${restaurantId}/table-details/${table.id}/menu`
-                      );
-                    }}
-                    className="flex-1 bg-[#B39793] hover:bg-[#A08783] text-white"
-                  >
+                  <button className="flex-1 bg-[#B39793] hover:bg-[#A08783] text-white py-3 rounded-md font-medium">
                     Take Order
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      // Handle finish billing
-                      setShowTableDetail(false);
-                    }}
-                    className="flex-1 bg-[#B39793] hover:bg-[#A08783] text-white"
-                  >
+                  </button>
+                  <button className="flex-1 bg-[#B39793] hover:bg-[#A08783] text-white py-3 rounded-md font-medium">
                     Finish Billing
-                  </Button>
+                  </button>
                 </div>
               </div>
             )}
 
-            {/* Empty state for available tables */}
-            {!customer && (
+            {!customer && !table.runningBill && (
               <div className="text-center py-8">
                 <div className="text-gray-500 mb-4">
                   Table {table.number} is available
                 </div>
-                <Button
+                <button
                   onClick={() => {
-                    setShowTableDetail(false);
+                    setCurrentView("dashboard");
                     setShowReceiveOrderModal(true);
                   }}
-                  className="bg-[#B39793] hover:bg-[#A08783] text-white"
+                  className="bg-[#B39793] hover:bg-[#A08783] text-white px-6 py-2 rounded-md"
                 >
                   Receive Order
-                </Button>
+                </button>
               </div>
             )}
           </div>
         </div>
 
-        {/* Tooltip */}
-        {showTooltip && (
+        {showTooltips && (
           <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
             <div className="bg-[#B39793] text-white p-4 rounded-lg mx-4 max-w-sm">
               <p className="text-sm mb-4">
                 View order related details, take orders or finish billing.
               </p>
               <div className="flex justify-end gap-2">
-                <Button
-                  onClick={() => setShowTooltip(false)}
-                  variant="outline"
-                  className="text-[#B39793] border-white bg-white"
+                <button
+                  onClick={() => setShowTooltips(false)}
+                  className="text-[#B39793] border border-white bg-white px-3 py-1 rounded text-sm"
                 >
                   Done
-                </Button>
+                </button>
               </div>
             </div>
           </div>
         )}
       </div>
     );
-  }
-  if (showPendingOrdersPage) {
+  };
+
+  // New Order Flow
+  const NewOrderFlow = () => {
+    const [cartItems, setCartItems] = useState([]);
+    const [showCart, setShowCart] = useState(false);
+
+    const addToCart = (item) => {
+      setCartItems((prev) => {
+        const existing = prev.find((cartItem) => cartItem.id === item.id);
+        if (existing) {
+          return prev.map((cartItem) =>
+            cartItem.id === item.id
+              ? { ...cartItem, quantity: cartItem.quantity + 1 }
+              : cartItem
+          );
+        } else {
+          return [
+            ...prev,
+            { ...item, quantity: 1, special: "without mayonnaise" },
+          ];
+        }
+      });
+    };
+
+    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+    if (showCart) {
+      return (
+        <div className="fixed inset-0 bg-[#F5F1EB] z-50">
+          <div className="bg-white p-4 shadow-sm flex items-center border-b">
+            <button onClick={() => setShowCart(false)} className="mr-3">
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+            <h2 className="font-medium">View Cart</h2>
+          </div>
+          <div className="flex-1 p-4 overflow-auto">
+            {cartItems.map((item) => (
+              <div
+                key={item.id}
+                className="bg-white p-4 rounded-lg shadow-sm mb-4"
+              >
+                <div className="flex items-center gap-3">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-16 h-16 rounded-lg object-cover"
+                  />
+                  <div className="flex-1">
+                    <div className="font-medium">{item.name}</div>
+                    <div className="text-sm text-gray-600">₹{item.price}</div>
+                    {item.special && (
+                      <div className="text-xs italic text-gray-500">
+                        *{item.special}
+                      </div>
+                    )}
+                  </div>
+                  <span className="font-medium">x{item.quantity}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="bg-white border-t p-4">
+            <button
+              onClick={() => {
+                setCurrentView("tableSummary");
+                setShowCart(false);
+              }}
+              className="w-full bg-[#B39793] text-white py-3 rounded-lg"
+            >
+              Accept Order
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     return (
-      <div className="min-h-screen bg-[#F5F1EB]">
-        {/* Header */}
-        <div className="bg-white px-4 py-3 flex items-center justify-between border-b">
+      <div className="fixed inset-0 bg-[#F5F1EB] z-50">
+        <div className="bg-white p-4 shadow-sm flex items-center border-b">
           <button
-            onClick={() => setShowPendingOrdersPage(false)}
-            className="p-1"
+            onClick={() => setCurrentView("tableSummary")}
+            className="mr-3"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <input
+              type="text"
+              placeholder="Search dishes"
+              className="w-full pl-9 pr-3 py-2 bg-gray-100 rounded-full text-sm focus:outline-none"
+            />
+          </div>
+          <button className="ml-3 px-3 py-1 rounded-full text-xs border bg-gray-100 text-gray-700">
+            Veg Only
+          </button>
+        </div>
 
-          <div className="flex items-center gap-2">
-            <ClipboardList className="h-4 w-4" />
-            <span className="text-sm font-medium">
-              Pending orders ({pendingOrders.length})
-            </span>
+        <div className="flex-1 overflow-auto p-4">
+          <div className="space-y-4">
+            {mockMenuItems.map((item) => (
+              <div key={item.id} className="bg-white rounded-lg mb-3 flex p-3">
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[15px] font-medium text-gray-900">
+                      {item.name}
+                    </span>
+                    <div className="flex items-center">
+                      <Star className="h-3.5 w-3.5 fill-black stroke-none" />
+                      <span className="text-xs text-gray-500 ml-0.5">
+                        {item.rating}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mb-1">
+                    <span className="text-[13px] text-gray-900">
+                      ₹ {item.price}
+                    </span>
+                  </div>
+                  <p className="text-[13px] text-gray-500 mt-1 leading-snug">
+                    {item.description}
+                  </p>
+                  <button
+                    onClick={() => addToCart(item)}
+                    className="mt-2 px-4 py-1 bg-[#B29792] text-[13px] text-black rounded-md hover:bg-[#a08884]"
+                  >
+                    Add
+                  </button>
+                </div>
+                <div className="w-[135px] h-[125px] relative self-center ml-3">
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-full h-full rounded-lg object-cover"
+                  />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Orders List */}
-        <div className="px-4 pb-6 mt-6">
-          {pendingOrders.length === 0 ? (
-            <div className="text-center text-gray-500 mt-8">
-              No pending orders
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {pendingOrders.map((order) => (
-                <div key={order.orderNo}>
-                  {order.items.map((item) => (
-                    <div
-                      key={`${order.orderNo}-${item.id}`}
-                      className="bg-white rounded-lg p-4 mb-3 shadow-sm"
-                    >
-                      {/* Order Header */}
-                      <div className="flex justify-between items-center mb-3">
-                        <div className="text-sm font-medium text-gray-800">
-                          Order No.: {order.orderNo}
-                        </div>
-                        <div className="flex items-center gap-4 text-xs text-gray-500">
-                          <div className="flex items-center gap-1">
-                            <span>🕘</span>
-                            <span>{order.time}</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <span>🍽️</span>
-                            <span>Table no. {order.tableNo}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Item Details */}
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-16 h-16 rounded-lg object-cover"
-                        />
-                        <div className="flex-1">
-                          <div className="font-medium text-gray-800">
-                            {item.name}
-                          </div>
-                          <div className="text-sm text-gray-600 mt-1">
-                            ₹ {item.price}
-                          </div>
-                          <div className="text-sm text-gray-600">
-                            x{item.quantity}
-                          </div>
-                          {item.special && (
-                            <div className="text-xs italic text-gray-500 mt-1">
-                              *{item.special}
-                            </div>
-                          )}
-                        </div>
-                        <Button
-                          onClick={() =>
-                            handleServeItem(order.orderNo, item.id)
-                          }
-                          className="bg-[#B39793] hover:bg-[#A08783] text-white px-6 py-2 rounded-lg text-sm"
-                        >
-                          Served
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          )}
+        <div className="bg-white border-t p-4">
+          <button
+            onClick={() => setShowCart(true)}
+            className="w-full py-3 bg-[#B39793] text-white rounded-lg"
+          >
+            View Cart ({totalItems} items)
+          </button>
         </div>
       </div>
     );
-  }
+  };
 
-  // Main dashboard view
-  return (
+  // Event Handlers
+  const handleTableClick = (table) => {
+    setSelectedTable(table);
+    setCurrentView("tableSummary");
+  };
+
+  const handleServeItem = (orderId, itemId) => {
+    setPendingOrders((prevOrders) =>
+      prevOrders
+        .map((order) => {
+          if (order.id === orderId) {
+            const updatedItems = order.items.filter(
+              (item) => item.id !== itemId
+            );
+            return { ...order, items: updatedItems };
+          }
+          return order;
+        })
+        .filter((order) => order.items.length > 0)
+    );
+  };
+
+  const handleReceiveOrder = () => {
+    setShowReceiveOrderModal(true);
+  };
+
+  const handleCustomerFormSubmit = (e) => {
+    e.preventDefault();
+    setShowReceiveOrderModal(false);
+    setCustomerForm({ mobile: "", name: "", people: "" });
+  };
+
+  // Main Dashboard View
+  const DashboardView = () => (
     <div className="min-h-screen bg-[#F5F1EB] pb-24">
-      {/* Top Navigation Tabs */}
+      {/* Navigation Tabs */}
       <div className="px-4 pt-4 pb-2 bg-[#F5F1EB]">
         <div className="flex gap-2 w-full">
           <button
-            className={`flex-1 py-3 rounded-lg text-sm font-medium transition-colors border flex items-center justify-center gap-2 ${
-              activeTab === "receive"
-                ? "border-[#B39793] bg-white text-[#B39793]"
-                : "border-gray-200 bg-white text-gray-700"
-            }`}
-            onClick={() => {
-              setActiveTab("receive");
-              handleReceiveOrder(); // Open modal when clicking receive order tab
-            }}
+            className="flex-1 py-3 rounded-lg text-sm font-medium border bg-white text-gray-700 flex items-center justify-center gap-2"
+            onClick={handleReceiveOrder}
           >
-            <ClipboardList className="h-4 w-4" />
+            <img src="/ro.svg" alt="Pending Orders" className="h-4 w-4" />
             Receive order
           </button>
           <button
-            className={`flex-1 py-3 rounded-lg text-sm font-medium transition-colors border flex items-center justify-center gap-2 relative ${
-              activeTab === "pending"
-                ? "border-[#B39793] bg-white text-[#B39793]"
-                : "border-gray-200 bg-white text-gray-700"
-            }`}
-            onClick={handlePendingOrders}
+            className="flex-1 py-3 rounded-lg text-sm font-medium border bg-white text-gray-700 flex items-center justify-center gap-2 relative"
+            onClick={() => setCurrentView("pendingOrders")}
           >
-            <ClipboardList className="h-4 w-4" />
+            <img src="/po.svg" alt="Pending Orders" className="h-4 w-4" />
             Pending orders ({pendingOrders.length})
           </button>
         </div>
       </div>
 
       {/* Table Grid */}
-      <TableGrid
-        tables={filteredTables}
-        restaurantId={restaurantId}
-        onTableClick={handleTableClick}
-      />
+      <TableGrid />
+
+      {/* Tooltips */}
+      {showTooltips && (
+        <>
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div className="bg-[#B39793] text-white p-4 rounded-lg mx-4 max-w-sm">
+              <p className="text-sm mb-4">
+                View tables by occupancy: click table to receive orders,
+                summary, and billing.
+              </p>
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setShowTooltips(false)}
+                  className="text-[#B39793] border border-white bg-white px-3 py-1 rounded text-sm"
+                >
+                  Skip
+                </button>
+                <button
+                  onClick={() => setShowTooltips(false)}
+                  className="text-white border border-white px-3 py-1 rounded text-sm"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Receive Order Modal */}
       {showReceiveOrderModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white w-[90%] max-w-md rounded-lg overflow-hidden">
             <div className="p-4 border-b flex items-center justify-between">
-              <h2 className="font-medium">
-                Enter Customer&apos;s Mobile Number
-              </h2>
-              <button
-                onClick={() => setShowReceiveOrderModal(false)}
-                aria-label="Close customer form"
-              >
+              <h2 className="font-medium">Enter Customer's Mobile Number</h2>
+              <span className="text-xs text-gray-500">🍽️ Table no. 02</span>
+              <button onClick={() => setShowReceiveOrderModal(false)}>
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -622,17 +818,30 @@ export default function WaiterDashboardPage() {
                   type="number"
                 />
               </div>
-              <Button
+              <button
                 type="submit"
-                className="w-full bg-[#B39793] hover:bg-[#A08783] text-white"
-                aria-label="Receive order"
+                className="w-full bg-[#B39793] hover:bg-[#A08783] text-white py-3 rounded-md"
               >
                 Receive Order
-              </Button>
+              </button>
             </form>
           </div>
         </div>
       )}
     </div>
   );
-}
+
+  // Render based on current view
+  switch (currentView) {
+    case "pendingOrders":
+      return <PendingOrdersView />;
+    case "tableSummary":
+      return <TableSummaryView />;
+    case "newOrder":
+      return <NewOrderFlow />;
+    default:
+      return <DashboardView />;
+  }
+};
+
+export default WaiterDashboard;
