@@ -1,38 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
-  User,
-  Phone,
-  PlusCircle,
   ArrowLeft,
-  Clock,
-  Plus,
-  Minus,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-interface MenuItem {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category?: string;
-}
-
-interface OrderItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-  special?: string;
-}
-
 interface Table {
   id: string;
   number: string;

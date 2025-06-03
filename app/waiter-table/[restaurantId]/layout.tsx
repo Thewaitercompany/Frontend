@@ -23,4 +23,4 @@ export default function RestaurantLayout({
       <main className="flex-1 p-4 pb-20">{children}</main>
     </div>
   );
-}
+} 

@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Roboto, Aleo } from "next/font/google";
 
 const roboto = Roboto({
@@ -16,10 +16,14 @@ const aleo = Aleo({
   variable: "--font-aleo",
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "The Waiter Company - Chef Dashboard",
   description: "Kitchen staff dashboard for managing orders",
-  viewport: "width=device-width, initial-scale=1",
 };
 
 export default function ChefLayout({

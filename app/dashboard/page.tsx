@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useState,useEffect } from "react";
-import { useOrders } from "@/hooks/useOrders"
-
-
+import React, { useState, useEffect } from "react";
+import { useOrders } from "@/hooks/useOrders";
 import {
   AreaChart,
   Area,
@@ -120,7 +118,7 @@ export default function Dashboard() {
     setSelectedMonth(month);
     setRevenueData(monthlyData[month]);
   };
-  const {  orders, totalOrderCount, pendingOrderCount } = useOrders();
+  const { totalOrderCount, pendingOrderCount } = useOrders();
 
   useEffect(() => {
     const now = new Date();
@@ -132,8 +130,6 @@ export default function Dashboard() {
     };
     setCurrentDate(now.toLocaleDateString("en-US", options));
   }, []);
-
-  
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-8 font-serif">
@@ -187,19 +183,25 @@ export default function Dashboard() {
             className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
           >
             <h3 className="text-sm text-gray-600 mb-2">Total Orders</h3>
-            <p className="text-2xl font-medium text-[#C99E5A]">{totalOrderCount}</p>
+            <p className="text-2xl font-medium text-[#C99E5A]">
+              {totalOrderCount}
+            </p>
           </Link>
 
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <h3 className="text-sm text-gray-600 mb-2">Completed Orders</h3>
-            <p className="text-2xl font-medium text-[#C99E5A]">{totalOrderCount - pendingOrderCount}</p>
+            <p className="text-2xl font-medium text-[#C99E5A]">
+              {totalOrderCount - pendingOrderCount}
+            </p>
           </div>
           <Link
             href="/dashboard/pending-orders"
             className="bg-white rounded-xl p-6 shadow-sm hover:bg-[#C99E5A] transition-colors"
           >
             <h3 className="text-sm text-gray-600 mb-2">Pending Orders</h3>
-            <p className="text-2xl font-medium text-[#C99E5A]">{pendingOrderCount}</p>
+            <p className="text-2xl font-medium text-[#C99E5A]">
+              {pendingOrderCount}
+            </p>
           </Link>
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <h3 className="text-sm text-gray-600 mb-2">Total Sales</h3>
