@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import TableDetail from "@/components/waiter-table/TableDetail";
+import NewOrderFlow from "@/components/waiter-table/NewOrderFlow";
+import { Loader2 } from "lucide-react";
 
 // Mock data for tables (same as in the dashboard page)
 const mockTables = [
@@ -153,94 +155,115 @@ const mockOrderItems = {
   ],
 };
 
-export default function TableDetailPage() {
+interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+  special?: string;
+}
+
+interface Table {
+  id: string;
+  number: string;
+  status: "available" | "occupied" | "reserved";
+  capacity: number;
+  currentOrder?: {
+    items: any[];
+    total: number;
+  };
+}
+
+interface Customer {
+  id: string;
+  name: string;
+  mobileNumber: string;
+  numberOfPeople: number;
+}
+
+const TableDetailPage = () => {
   const params = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const restaurantId = params.restaurantId as string;
   const tableId = params.tableId as string;
 
-  const [table, setTable] = useState<any | null>(null);
-  const [customer, setCustomer] = useState({ name: "", phone: "" });
-  const [orderItems, setOrderItems] = useState([]);
+  const [table, setTable] = useState<Table | null>(null);
+  const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showNewOrder, setShowNewOrder] = useState(false);
 
   useEffect(() => {
-    // In a real application, you would fetch the table data from an API
-    // Example:
-    // const fetchTable = async () => {
-    //   try {
-    //     setLoading(true);
-    //     const response = await fetch(`https://backend-axu7.onrender.com/restaurant/${restaurantId}/tables/${tableId}`);
-    //     if (!response.ok) {
-    //       throw new Error("Table not found");
-    //     }
-    //     const data = await response.json();
-    //     setTable(data);
-    //
-    //     // Fetch customer info
-    //     const customerResponse = await fetch(`https://backend-axu7.onrender.com/restaurant/${restaurantId}/tables/${tableId}/customer`);
-    //     if (customerResponse.ok) {
-    //       const customerData = await customerResponse.json();
-    //       setCustomer({
-    //         name: customerData.name || "",
-    //         phone: customerData.phone || ""
-    //       });
-    //     }
-    //
-    //     // Fetch order items
-    //     const orderResponse = await fetch(`https://backend-axu7.onrender.com/restaurant/${restaurantId}/tables/${tableId}/orders/current`);
-    //     if (orderResponse.ok) {
-    //       const orderData = await orderResponse.json();
-    //       setOrderItems(orderData.items || []);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching table:", error);
-    //     setError(error.message || "Failed to load table");
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-    // fetchTable();
-
+    // In a real app, fetch table details from an API
     // For now, we'll use mock data
-    const mockTable = mockTables.find((t) => t.id === tableId);
-    if (mockTable) {
-      setTable(mockTable);
-      setCustomer(
-        mockCustomers[tableId as keyof typeof mockCustomers] || {
-          name: "",
-          phone: "",
-        }
-      );
-      setOrderItems(
-        mockOrderItems[tableId as keyof typeof mockOrderItems] || []
-      );
-    } else {
-      setError("Table not found");
-    }
+    const mockTable: Table = {
+      id: tableId,
+      number: tableId,
+      status: "available",
+      capacity: 4,
+    };
+
+    setTable(mockTable);
     setLoading(false);
-  }, [restaurantId, tableId]);
+  }, [tableId]);
+
+  useEffect(() => {
+    // Check for order data in URL
+    const orderData = searchParams.get("order");
+    if (orderData) {
+      try {
+        const items = JSON.parse(decodeURIComponent(orderData));
+        if (table) {
+          const total = items.reduce(
+            (sum: number, item: any) => sum + item.price * item.quantity,
+            0
+          );
+          setTable({
+            ...table,
+            status: "occupied",
+            currentOrder: {
+              items,
+              total,
+            },
+          });
+        }
+        // Clean up URL
+        router.replace(
+          `/waiter-table/${restaurantId}/table-details/${tableId}`
+        );
+      } catch (error) {
+        console.error("Error parsing order data:", error);
+      }
+    }
+  }, [searchParams, table, restaurantId, tableId, router]);
 
   const handleStatusChange = (
-    newStatus: "occupied" | "available" | "booked"
+    newStatus: "available" | "occupied" | "reserved"
   ) => {
     if (table) {
-      setTable({ ...table, status: newStatus });
+      setTable({
+        ...table,
+        status: newStatus,
+      });
     }
   };
 
-  const handleCustomerUpdate = (customerData: {
-    name: string;
-    phone: string;
-  }) => {
-    setCustomer(customerData);
+  const handleCustomerUpdate = (updatedCustomer: Customer) => {
+    setCustomer(updatedCustomer);
   };
 
   const handleNewOrder = () => {
-    // In a real application, you would navigate to a new order page
-    // For now, we'll just show an alert
-    alert("This would navigate to a new order creation page");
+    setShowNewOrder(true);
+  };
+
+  const handleOrderConfirm = (items: any[]) => {
+    const orderData = encodeURIComponent(JSON.stringify(items));
+    router.push(
+      `/waiter-table/${restaurantId}/table-details/${tableId}?order=${orderData}`
+    );
+    setShowNewOrder(false);
   };
 
   const handleBackClick = () => {
@@ -249,47 +272,45 @@ export default function TableDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="w-8 h-8 border-4 border-t-[#B39793] border-r-[#B39793] border-b-[#B39793] border-l-transparent rounded-full animate-spin"></div>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
-  if (error || !table) {
+  if (error) {
     return (
-      <div className="text-center py-10">
-        <div className="text-red-500 mb-4">{error || "Table not found"}</div>
-        <button
-          onClick={handleBackClick}
-          className="text-[#4E3E3B] font-medium flex items-center mx-auto"
-        >
-          <ArrowLeft className="h-4 w-4 mr-1" /> Go Back
-        </button>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-red-500">{error}</div>
       </div>
     );
   }
 
- return (
-   <div>
-     <button
-       onClick={handleBackClick}
-       className="flex items-center text-[#4E3E3B] mb-4"
-     >
-       <ArrowLeft className="h-5 w-5 mr-1" /> Back to Tables
-     </button>
+  if (!table) {
+    return null;
+  }
 
-     <TableDetail
-       id={table.id}
-       number={table.number}
-       status={table.status}
-       capacity={table.capacity}
-       runningBill={table.runningBill}
-       customer={customer}
-       orderItems={orderItems}
-       onStatusChange={handleStatusChange}
-       onCustomerUpdate={handleCustomerUpdate}
-       restaurantId={restaurantId}
-     />
-   </div>
- );
-}
+  return (
+    <div className="min-h-screen bg-[#F5F1EB]">
+      {showNewOrder ? (
+        <NewOrderFlow
+          restaurantId={restaurantId}
+          tableId={tableId}
+          onClose={() => setShowNewOrder(false)}
+          onOrderConfirm={handleOrderConfirm}
+        />
+      ) : (
+        <TableDetail
+          table={table}
+          customer={customer}
+          onStatusChange={handleStatusChange}
+          onCustomerUpdate={handleCustomerUpdate}
+          onNewOrder={handleNewOrder}
+          onBackClick={handleBackClick}
+        />
+      )}
+    </div>
+  );
+};
+
+export default TableDetailPage;

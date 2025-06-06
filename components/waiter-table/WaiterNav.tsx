@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import logo from "/public/logo.png";
 
 interface WaiterNavProps {
   restaurantId: string;
@@ -11,7 +10,6 @@ interface WaiterNavProps {
 }
 
 const WaiterNav: React.FC<WaiterNavProps> = ({
-  restaurantId,
   restaurantName = "Smart cafe",
 }) => {
   const pathname = usePathname();
@@ -35,7 +33,7 @@ const WaiterNav: React.FC<WaiterNavProps> = ({
         <div className="flex items-center">
           <div className="h-6 w-20 relative">
             <Image
-              src={logo}
+              src="/logo.png"
               alt="The Waiter Company"
               fill
               className="object-contain object-left"

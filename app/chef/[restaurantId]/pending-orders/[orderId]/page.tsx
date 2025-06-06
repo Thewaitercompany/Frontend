@@ -5,9 +5,26 @@ import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import OrderDetails from "@/components/chef/OrderDetails";
 
+interface OrderItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+  special: string;
+  prepared: boolean;
+}
+
+interface Order {
+  id: string;
+  tableNumber: string;
+  time: string;
+  items: OrderItem[];
+}
+
 // Mock data for a specific order
-const getMockOrder = (orderId: string) => {
-  const mockOrders = {
+const getMockOrder = (orderId: string): Order | null => {
+  const mockOrders: Record<string, Order> = {
     "123456": {
       id: "123456",
       tableNumber: "01",
@@ -60,7 +77,7 @@ const getMockOrder = (orderId: string) => {
     },
   };
 
-  return mockOrders[orderId as keyof typeof mockOrders] || null;
+  return mockOrders[orderId] || null;
 };
 
 export default function OrderDetailPage() {
@@ -69,7 +86,7 @@ export default function OrderDetailPage() {
   const restaurantId = params.restaurantId as string;
   const orderId = params.orderId as string;
 
-  const [order, setOrder] = useState<any | null>(null);
+  const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -109,7 +126,7 @@ export default function OrderDetailPage() {
       // Update the local state
       setOrder({
         ...order,
-        items: order.items.map((item: any) =>
+        items: order.items.map((item) =>
           item.id === itemId ? { ...item, prepared: true } : item
         ),
       });
@@ -129,7 +146,7 @@ export default function OrderDetailPage() {
       // Update the local state
       setOrder({
         ...order,
-        items: order.items.map((item: any) => ({ ...item, prepared: true })),
+        items: order.items.map((item) => ({ ...item, prepared: true })),
       });
 
       // In a real application, you would make an API call

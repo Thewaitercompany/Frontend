@@ -21,7 +21,6 @@ export default function RestaurantLayout({
     <div className="flex flex-col min-h-screen bg-[#F1EEE6]">
       <WaiterNav restaurantId={restaurantId} restaurantName={restaurantName} />
       <main className="flex-1 p-4 pb-20">{children}</main>
-      <WaiterFooterNav restaurantId={restaurantId} />
     </div>
   );
-}
+} 

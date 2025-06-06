@@ -2,9 +2,8 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { X, ArrowLeft } from "lucide-react";
+import { ArrowLeft, X, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 interface OrderItem {
   id: string;
@@ -34,14 +33,8 @@ const ReceiveOrderFlow: React.FC<ReceiveOrderFlowProps> = ({
   onReject,
   onClose,
 }) => {
-  const [isConfirmingReject, setIsConfirmingReject] = useState(false);
-  const [showCustomerForm, setShowCustomerForm] = useState(false);
-  const [customerInfo, setCustomerInfo] = useState({
-    mobileNumber: "",
-    name: "",
-    numberOfPeople: "",
-  });
   const [loading, setLoading] = useState(false);
+  const [showConfirmReject, setShowConfirmReject] = useState(false);
 
   const handleAccept = async () => {
     setLoading(true);
@@ -58,176 +51,143 @@ const ReceiveOrderFlow: React.FC<ReceiveOrderFlowProps> = ({
       await onReject();
     } finally {
       setLoading(false);
-      setIsConfirmingReject(false);
+      setShowConfirmReject(false);
     }
   };
 
-  const handleCustomerFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // In a real app, you would validate and save customer info
-    // For now, we just hide the form and proceed with order acceptance
-    setShowCustomerForm(false);
-    handleAccept();
-  };
-
-  if (showCustomerForm) {
-    return (
-      <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-        <div className="bg-white w-[90%] max-w-md rounded-lg overflow-hidden">
-          <div className="p-4 border-b flex items-center">
-            <button onClick={() => setShowCustomerForm(false)} className="mr-3">
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-            <h2 className="font-medium">Enter Customer's Mobile Number</h2>
-          </div>
-
-          <form onSubmit={handleCustomerFormSubmit} className="p-4 space-y-4">
-            <div>
-              <Input
-                value={customerInfo.mobileNumber}
-                onChange={(e) =>
-                  setCustomerInfo({
-                    ...customerInfo,
-                    mobileNumber: e.target.value,
-                  })
-                }
-                placeholder="+91"
-                className="w-full"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-1 text-sm">Name</label>
-              <Input
-                value={customerInfo.name}
-                onChange={(e) =>
-                  setCustomerInfo({ ...customerInfo, name: e.target.value })
-                }
-                placeholder="Enter Customer's Name"
-                className="w-full"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-1 text-sm">Number of people</label>
-              <Input
-                value={customerInfo.numberOfPeople}
-                onChange={(e) =>
-                  setCustomerInfo({
-                    ...customerInfo,
-                    numberOfPeople: e.target.value,
-                  })
-                }
-                placeholder="Enter Number of people"
-                className="w-full"
-                type="number"
-              />
-            </div>
-
-            <Button type="submit" className="w-full bg-[#B39793] text-white">
-              Receive Order
-            </Button>
-          </form>
-        </div>
-      </div>
-    );
-  }
+  const totalAmount = order.items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white w-[90%] max-w-md rounded-lg shadow-lg overflow-hidden">
-        <div className="flex justify-between items-center p-4 border-b">
-          <div>
-            <div className="font-medium">Order No: {order.id}</div>
+    <div className="fixed inset-0 bg-[#F5F1EB] z-50">
+      {/* Header */}
+      <div className="bg-white p-4 shadow-sm flex items-center border-b">
+        <button onClick={onClose} className="mr-3" aria-label="Close">
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+        <div className="flex-1">
+          <h2 className="font-medium">Incoming Order</h2>
+        </div>
+        <button onClick={onClose} aria-label="Close">
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      {/* Order Details */}
+      <div className="flex-1 overflow-auto p-4">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          {/* Order Header */}
+          <div className="p-4 border-b">
+            <div className="flex justify-between items-center mb-2">
+              <div className="font-medium">Order No: {order.id}</div>
+              <div className="flex items-center gap-2">
+                <Clock className="h-3.5 w-3.5 text-gray-500" />
+                <span className="text-sm text-gray-500">Just now</span>
+              </div>
+            </div>
             <div className="text-sm text-gray-600">
               Table no. {order.tableNumber}
             </div>
           </div>
-          <button onClick={onClose} className="text-gray-500">
-            <X className="h-5 w-5" />
-          </button>
-        </div>
 
-        {isConfirmingReject ? (
-          <div className="p-4">
-            <h2 className="text-center font-medium mb-4">Cancel order?</h2>
-
+          {/* Order Items */}
+          <div className="p-4 space-y-3">
+            <h3 className="font-medium">Order Items</h3>
             {order.items.map((item) => (
-              <div key={item.id} className="flex items-center mb-3">
-                <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
+              <div
+                key={`${order.id}-${item.id}`}
+                className="flex items-center gap-3"
+              >
+                <div className="relative w-14 h-14 rounded-md overflow-hidden flex-shrink-0">
                   <Image
                     src={item.image || "/placeholder.svg"}
                     alt={item.name}
                     fill
                     className="object-cover"
-                    sizes="64px"
+                    sizes="56px"
                   />
                 </div>
-                <div className="ml-3 flex-1">
-                  <div className="font-medium">{item.name}</div>
-                  <div className="text-sm text-gray-600">
-                    ₹ {item.price} x{item.quantity}
-                  </div>
-                  {item.special && (
-                    <div className="text-xs italic text-gray-500">
-                      *{item.special}
+                <div className="flex-1">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="font-medium">{item.name}</div>
+                      <div className="text-sm text-gray-500">
+                        ₹ {item.price} x{item.quantity} = ₹{" "}
+                        {item.price * item.quantity}
+                      </div>
+                      {item.special && (
+                        <div className="text-sm text-amber-600 italic">
+                          *{item.special}
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
             ))}
-
-            <Button
-              onClick={handleReject}
-              className="w-full mt-4 bg-[#9D8480] text-white"
-              disabled={loading}
-            >
-              {loading ? "Processing..." : "Confirm"}
-            </Button>
           </div>
-        ) : (
-          <>
-            {order.items.map((item) => (
-              <div key={item.id} className="flex items-center p-4 border-b">
-                <div className="relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0">
-                  <Image
-                    src={item.image || "/placeholder.svg"}
-                    alt={item.name}
-                    fill
-                    className="object-cover"
-                    sizes="64px"
-                  />
-                </div>
-                <div className="ml-3 flex-1">
-                  <div className="font-medium">{item.name}</div>
-                  <div className="text-sm text-gray-600">
-                    ₹ {item.price} x{item.quantity}
-                  </div>
-                  {item.special && (
-                    <div className="text-xs italic text-gray-500">
-                      *{item.special}
-                    </div>
-                  )}
-                </div>
-                <X
-                  className="ml-auto h-5 w-5 text-red-500 cursor-pointer"
-                  onClick={() => setIsConfirmingReject(true)}
-                />
-              </div>
-            ))}
 
-            <div className="p-4">
+          {/* Order Total */}
+          <div className="p-4 border-t bg-gray-50">
+            <div className="flex justify-between items-center font-medium">
+              <span>Total Amount</span>
+              <span>₹ {totalAmount}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Confirm Reject Modal */}
+      {showConfirmReject && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-60">
+          <div className="bg-white rounded-lg p-6 mx-4 max-w-sm w-full">
+            <h3 className="font-medium mb-4">Reject Order?</h3>
+            <p className="text-sm text-gray-600 mb-6">
+              Are you sure you want to reject this order? This action cannot be
+              undone.
+            </p>
+            <div className="flex gap-3">
               <Button
-                onClick={() => setShowCustomerForm(true)}
-                className="w-full bg-[#9D8480] text-white"
+                onClick={() => setShowConfirmReject(false)}
+                variant="outline"
+                className="flex-1"
                 disabled={loading}
               >
-                {loading ? "Processing..." : "Accept Order"}
+                Cancel
+              </Button>
+              <Button
+                onClick={handleReject}
+                className="flex-1 bg-red-600 hover:bg-red-700"
+                disabled={loading}
+              >
+                {loading ? "Rejecting..." : "Reject"}
               </Button>
             </div>
-          </>
-        )}
+          </div>
+        </div>
+      )}
+
+      {/* Action Buttons */}
+      <div className="bg-white border-t p-4 space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <Button
+            onClick={() => setShowConfirmReject(true)}
+            variant="outline"
+            className="py-6 border-red-200 text-red-600 hover:bg-red-50"
+            disabled={loading}
+          >
+            Reject Order
+          </Button>
+          <Button
+            onClick={handleAccept}
+            className="py-6 bg-[#B39793] hover:bg-[#a08884]"
+            disabled={loading}
+          >
+            {loading ? "Accepting..." : "Accept Order"}
+          </Button>
+        </div>
       </div>
     </div>
   );

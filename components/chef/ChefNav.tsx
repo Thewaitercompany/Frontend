@@ -10,12 +10,12 @@ interface ChefNavProps {
   restaurantName?: string;
 }
 
-const ChefNav: React.FC<ChefNavProps> = ({ 
-  restaurantId, 
-  restaurantName = "Smart cafe" 
+const ChefNav: React.FC<ChefNavProps> = ({
+  restaurantId,
+  restaurantName = "Smart cafe",
 }) => {
   const pathname = usePathname();
-  
+
   // Get page title based on current path
   const getPageTitle = () => {
     if (pathname.includes("/dashboard")) {
@@ -33,7 +33,7 @@ const ChefNav: React.FC<ChefNavProps> = ({
         <div className="flex items-center">
           <div className="h-6 w-20 relative">
             <Image
-              src={logo}
+              src="/logo.png"
               alt="The Waiter Company"
               fill
               className="object-contain object-left"

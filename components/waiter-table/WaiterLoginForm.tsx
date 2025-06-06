@@ -3,11 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Phone, Mail, Lock } from "lucide-react";
+import { Mail, Lock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Cookies from "js-cookie";
-import logo from "/public/logo.png";
 
 export default function WaiterLoginForm() {
   const router = useRouter();
@@ -79,7 +78,7 @@ export default function WaiterLoginForm() {
         <div className="flex items-center">
           <div className="h-8 w-24 relative">
             <Image
-              src={logo}
+              src="/logo.png"
               alt="The Waiter Company"
               fill
               className="object-contain object-left"
