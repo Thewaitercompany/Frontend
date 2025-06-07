@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Cookies from "js-cookie";
 import Image from "next/image";
-import logo from "/public/logo.png";
 
 export default function LoginFormWrapper() {
   const router = useRouter();
@@ -77,7 +76,7 @@ export default function LoginFormWrapper() {
         <div className="w-full max-w-md bg-[#B39793] rounded-lg p-6 space-y-6">
           <div className="h-16 w-36 relative flex items-center justify-center mx-auto">
             <Image
-              src={logo || "/placeholder.svg"}
+              src="/logo.png"
               alt="logo"
               fill
               className="object-contain"
