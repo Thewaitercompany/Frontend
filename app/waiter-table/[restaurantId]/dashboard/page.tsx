@@ -1,5 +1,5 @@
 "use client";
-
+import { MdTableRestaurant, MdChair } from 'react-icons/md'; // Material Design Table icon
 import React, { useState, useEffect } from "react";
 import {
   ArrowLeft,
@@ -183,6 +183,29 @@ const mockPendingOrders = [
   },
 ];
 
+const TableChairIcon = (props) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {/* Table top */}
+    <rect x="4" y="6" width="16" height="4" rx="1" ry="1" />
+    {/* Table legs */}
+    <line x1="4" y1="10" x2="4" y2="18" />
+    <line x1="20" y1="10" x2="20" y2="18" />
+    {/* Chair seat */}
+    <rect x="8" y="14" width="6" height="4" rx="1" ry="1" />
+    {/* Chair back */}
+    <line x1="8" y1="14" x2="8" y2="18" />
+  </svg>
+);
+
+
 const mockMenuItems = [
   {
     id: "1",
@@ -250,25 +273,22 @@ const WaiterDashboard = () => {
             <div
               key={table.id}
               onClick={() => handleTableClick(table)}
-              className={`relative bg-white ${getStatusColor(
-                table.status,
-                table.capacity
-              )} 
-                p-2 rounded-lg shadow-sm flex flex-col items-center cursor-pointer 
+              className={`relative bg-white ${getStatusColor(table.status, table.capacity)} 
+                p-2 rounded-lg shadow-sm flex flex-col items-start cursor-pointer 
                 transition-transform active:scale-95 min-h-[100px] w-full`}
             >
-              {hasPendingOrder(table.id) && (
+              {/* {hasPendingOrder(table.id) && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs font-bold border border-white z-10">
                   !
                 </span>
-              )}
+              )} */}
 
-              <div className="text-center mb-1 font-bold text-gray-800 text-base">
+              <div className="mb-1 font-bold text-gray-800 text-base">
                 {table.number}
               </div>
 
               {table.runningBill ? (
-                <div className="text-center mb-1 flex-1 flex flex-col justify-center px-1">
+                <div className="text-center mb-1 flex-1 flex flex-col justify-center px-1 w-full">
                   <div className="text-[10px] text-gray-600 mb-1 leading-tight">
                     Running Bill
                   </div>
@@ -277,26 +297,30 @@ const WaiterDashboard = () => {
                   </div>
                 </div>
               ) : (
-                <div className="text-[10px] text-gray-500 mb-1 text-center flex-1 flex items-center justify-center px-1">
+                <div className="text-[10px] text-gray-500 mb-1 text-center flex-1 flex items-center justify-center px-1 w-full">
                   <span className="leading-tight">No active order</span>
                 </div>
               )}
 
-              <div className="flex items-center gap-1 mt-auto text-[10px] text-gray-600">
+              <div className="flex items-center gap-1 mt-auto text-[10px] text-gray-600 w-full justify-start">
                 <Users className="w-2.5 h-2.5" />
+                {/* <TableChairIcon className="w-6 h-6 text-gray-600" /> */}
+
                 <span>{table.capacity}</span>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="flex flex-wrap justify-center gap-4 mt-4 text-xs px-2">
+        <div className="flex justify-center gap-6 mt-4 text-xs px-2">
+
           <div className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-white border-2 border-orange-300 rounded-sm inline-block"></span>
+            <span className="w-3 h-3 bg-white border-2 border-orange-300 border-dotted rounded-sm inline-block"></span>
             <span className="text-gray-600 text-xs">
               Selected Seat Occupied
             </span>
           </div>
+
           <div className="flex items-center gap-1">
             <span className="w-3 h-3 bg-white border-2 border-yellow-400 rounded-sm inline-block"></span>
             <span className="text-gray-600 text-xs">Table Available</span>
@@ -810,23 +834,31 @@ const WaiterDashboard = () => {
     <div className="min-h-screen bg-[#F5F1EB] pb-24">
       {/* Navigation Tabs */}
       <div className="px-4 pt-4 pb-2 bg-[#F5F1EB]">
-        <div className="flex gap-2 w-full">
-          <button
-            className="flex-1 py-3 rounded-lg text-sm font-medium border bg-white text-gray-700 flex items-center justify-center gap-2"
-            onClick={handleReceiveOrder}
-          >
-            <img src="/ro.svg" alt="Pending Orders" className="h-4 w-4" />
-            Receive order
-          </button>
-          <button
-            className="flex-1 py-3 rounded-lg text-sm font-medium border bg-white text-gray-700 flex items-center justify-center gap-2 relative"
-            onClick={() => setCurrentView("pendingOrders")}
-          >
-            <img src="/po.svg" alt="Pending Orders" className="h-4 w-4" />
-            Pending orders ({pendingOrders.length})
-          </button>
-        </div>
-      </div>
+  <div className="flex gap-2 w-full">
+    <button
+      className="flex-1 py-3 rounded-lg text-sm font-medium border border-[#C69F59] bg-white text-gray-700 flex items-center justify-center gap-2"
+      onClick={handleReceiveOrder}
+    >
+      <img src="/ro.svg" alt="Receive Order" className="h-4 w-4" />
+      Receive order
+    </button>
+    <button
+      className="flex-1 py-3 rounded-lg text-sm font-medium border border-[#C69F59] bg-white text-gray-700 flex items-center justify-center gap-2 relative"
+      onClick={() => setCurrentView("pendingOrders")}
+    >
+      {pendingOrders.length > 0 && (
+        <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-600 rounded-full"></span>
+      )}
+
+      <img src="/po.svg" alt="Pending Orders" className="h-4 w-4" />
+      Pending orders{" "}
+      <span className={pendingOrders.length > 0 ? "text-red-500" : "text-gray-700"}>
+        ({pendingOrders.length})
+      </span>
+    </button>
+  </div>
+</div>
+
 
       {/* Table Grid */}
       <TableGrid />
