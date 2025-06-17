@@ -148,16 +148,6 @@ function formatDateTime(date) {
 const backgroundColor = "#F5EFE3";
 
 function DashboardPage() {
-  // Remove all scrollbars from body/html
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-      document.documentElement.style.overflow = "";
-    };
-  }, []);
-
   // Time state
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -251,10 +241,11 @@ function DashboardPage() {
   // Live unread count for bell
   const unreadCount = notifications.filter(n => n.unread).length;
 
-  // Notification block bezels (same as your NotificationPage.jsx)
-  const notificationBlockMarginTop = 130;
+  // Notification block bezels
+  const notificationBlockMarginTop = 120;
   const notificationBlockMarginBottom = 16;
-  const notificationButtonLeft = 94;
+  const notificationButtonLeft = 90;
+  const notificationButtonTop = 77;
   const notificationBlockPaddingBottom = 24;
   const fiveOfFiveBottom = 14;
 
@@ -273,8 +264,7 @@ function DashboardPage() {
         minHeight: "100vh",
         background: backgroundColor,
         fontFamily: "Calibri, Arial, sans-serif",
-        position: "relative",
-        overflow: "hidden"
+        position: "relative"
       }}
     >
       {/* Top bar: logo, bell, and time */}
@@ -284,7 +274,7 @@ function DashboardPage() {
           height: 54,
           background: backgroundColor,
           position: "fixed",
-          left: 0,
+          left: 25,
           top: 0,
           zIndex: 20,
           display: "flex",
@@ -292,7 +282,6 @@ function DashboardPage() {
           justifyContent: "space-between",
           paddingLeft: 36,
           paddingRight: 34,
-          borderBottom: "none"
         }}
       >
         {/* Company logo (dragged a little left and micro bit lower) */}
@@ -300,48 +289,35 @@ function DashboardPage() {
           style={{
             display: 'flex',
             alignItems: 'center',
-            transform: "translate(-14px, 5px)", // sidebar up by 1
-            minWidth: 280
+            transform: "translate(-45px, 15px)", // Move logo a bit left and micro bit more lower
           }}
         >
           <img
             src="/Screenshot 2025-06-07 171759.png"
             alt="Company Logo"
             style={{
-              height: 80,
+              height: 75,
               width: "auto",
               objectFit: "contain",
               background: backgroundColor,
               display: "block",
             }}
           />
-          <span style={{
-            fontFamily: "Georgia, serif",
-            fontWeight: 500,
-            fontSize: 32,
-            color: "#463716",
-            marginLeft: 16,
-            marginTop: 3,
-            letterSpacing: 0.4
-          }}>
-            <span style={{ fontWeight: 300, fontSize: 30, marginRight: 4, marginLeft:9000, position: "absolute" }}>×</span>
-          </span>
         </div>
         {/* Bell and Time display */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 26,
-            transform: "translateY(13px)",
-            marginRight: 20,
+            gap: 30,
+            transform: "translate(-24px, 7px)",
           }}
         >
           {/* Notification bell */}
           <div
             className="relative cursor-pointer"
             onClick={() => setShowNotificationPanel(v => !v)}
-            style={{ marginTop: 110, marginRight: 2, marginLeft:175, position: "absolute" }}
+            style={{ marginTop: 3, marginRight: 8 }}
           >
             <BellIcon unreadCount={unreadCount} />
           </div>
@@ -357,7 +333,6 @@ function DashboardPage() {
               userSelect: "none",
               letterSpacing: "0.03em",
               lineHeight: "1.1",
-              marginTop: 2
             }}
           >
             {formatDateTime(currentTime)}
@@ -377,7 +352,7 @@ function DashboardPage() {
               fontWeight: 400,
               letterSpacing: 0.1,
               fontFamily: 'Times New Roman, Times, serif',
-              top: 87,
+              top: 97,
               left: notificationButtonLeft,
               zIndex: 22,
               border: 'none',
@@ -402,8 +377,15 @@ function DashboardPage() {
           </button>
           {/* Notification Section Block */}
           <div
+            className={`
+              w-[calc(93vw-72px + 20px)] xl:w-[1400px]
+              flex flex-col
+              transition-opacity duration-300
+              opacity-100 pointer-events-auto
+              border border-[#ede6dd]
+            `}
             style={{
-              margin: `${notificationBlockMarginTop}px 0 ${notificationBlockMarginBottom}px 25px`,
+              margin: `140px 0 ${notificationBlockMarginBottom}px 25px`,
               background: '#fcfaf8',
               borderRadius: 18,
               position: "relative",
@@ -412,9 +394,8 @@ function DashboardPage() {
               boxShadow: '0 5px 25px 5px rgba(180,140,80,0.15)',
               left: "50%",
               transform: "translateX(-50%)",
-              width: "calc(93vw - 72px + 20px)",
-              maxWidth: 1400,
-              minWidth: 800 // ensure not too narrow on large screens
+              width: "calc(100vw - 100px)",
+              maxWidth: 1400
             }}
           >
             {/* Section Content */}
@@ -666,7 +647,6 @@ function DashboardPage() {
           justifyContent: "center",
           alignItems: "center",
           paddingTop: 54,
-          overflow: "hidden"
         }}
       >
         {/* Intentionally left empty as per your request */}
