@@ -71,7 +71,7 @@ const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ params }) => {
   }, [resolvedParams]); // Only run this effect when resolvedParams changes
 
   const handleCheckout = async () => {
-    if (!resolvedParams) return;
+    if (!resolvedParams) {return;}
 
     setLoading(true);
     setError(null);

@@ -6,9 +6,6 @@ const nextConfig = {
     loader: 'custom',
     loaderFile: './image-loader.js',
   },
-  experimental: {
-    esmExternals: 'loose',
-  },
   webpack: (config, { isServer }) => {
     // Exclude sharp from webpack bundling
     config.externals.push({

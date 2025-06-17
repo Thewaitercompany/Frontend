@@ -1,5 +1,5 @@
 "use client";
-import { MdTableRestaurant, MdChair } from 'react-icons/md'; // Material Design Table icon
+import { MdTableRestaurant, MdChair } from "react-icons/md"; // Material Design Table icon
 import React, { useState, useEffect } from "react";
 import {
   ArrowLeft,
@@ -12,6 +12,7 @@ import {
   Clock,
   Star,
 } from "lucide-react";
+import Image from "next/image";
 
 interface Table {
   id: string;
@@ -183,29 +184,6 @@ const mockPendingOrders = [
   },
 ];
 
-const TableChairIcon = (props) => (
-  <svg
-    {...props}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    {/* Table top */}
-    <rect x="4" y="6" width="16" height="4" rx="1" ry="1" />
-    {/* Table legs */}
-    <line x1="4" y1="10" x2="4" y2="18" />
-    <line x1="20" y1="10" x2="20" y2="18" />
-    {/* Chair seat */}
-    <rect x="8" y="14" width="6" height="4" rx="1" ry="1" />
-    {/* Chair back */}
-    <line x1="8" y1="14" x2="8" y2="18" />
-  </svg>
-);
-
-
 const mockMenuItems = [
   {
     id: "1",
@@ -273,7 +251,10 @@ const WaiterDashboard = () => {
             <div
               key={table.id}
               onClick={() => handleTableClick(table)}
-              className={`relative bg-white ${getStatusColor(table.status, table.capacity)} 
+              className={`relative bg-white ${getStatusColor(
+                table.status,
+                table.capacity
+              )} 
                 p-2 rounded-lg shadow-sm flex flex-col items-start cursor-pointer 
                 transition-transform active:scale-95 min-h-[100px] w-full`}
             >
@@ -313,7 +294,6 @@ const WaiterDashboard = () => {
         </div>
 
         <div className="flex justify-center gap-6 mt-4 text-xs px-2">
-
           <div className="flex items-center gap-1">
             <span className="w-3 h-3 bg-white border-2 border-orange-300 border-dotted rounded-sm inline-block"></span>
             <span className="text-gray-600 text-xs">
@@ -379,10 +359,12 @@ const WaiterDashboard = () => {
                     </div>
 
                     <div className="flex items-center gap-3">
-                      <img
+                      <Image
                         src={item.image}
                         alt={item.name}
-                        className="w-16 h-16 rounded-lg object-cover"
+                        width={40}
+                        height={40}
+                        className="w-10 h-10 rounded-full object-cover"
                       />
                       <div className="flex-1">
                         <div className="font-medium text-gray-800">
@@ -486,10 +468,12 @@ const WaiterDashboard = () => {
                   </div>
 
                   <div className="flex items-center gap-3 mb-3">
-                    <img
+                    <Image
                       src="/placeholder.svg"
                       alt="Rajma Chawal"
-                      className="w-12 h-12 rounded-lg object-cover"
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-full object-cover"
                     />
                     <div className="flex-1">
                       <div className="font-medium text-sm">Rajma Chawal</div>
@@ -504,10 +488,12 @@ const WaiterDashboard = () => {
                   </div>
 
                   <div className="flex items-center gap-3 mb-3">
-                    <img
+                    <Image
                       src="/placeholder.svg"
                       alt="Crispy Fries"
-                      className="w-12 h-12 rounded-lg object-cover"
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-full object-cover"
                     />
                     <div className="flex-1">
                       <div className="font-medium text-sm">Crispy Fries</div>
@@ -532,10 +518,12 @@ const WaiterDashboard = () => {
 
                   <div className="flex items-center gap-3 mb-3">
                     <span className="text-red-500 text-sm">!</span>
-                    <img
+                    <Image
                       src="/placeholder.svg"
                       alt="Chicken Nuggets"
-                      className="w-12 h-12 rounded-lg object-cover"
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-full object-cover"
                     />
                     <div className="flex-1">
                       <div className="font-medium text-sm">Chicken Nuggets</div>
@@ -551,10 +539,12 @@ const WaiterDashboard = () => {
 
                   <div className="flex items-center gap-3 mb-3">
                     <span className="text-red-500 text-sm">!</span>
-                    <img
+                    <Image
                       src="/placeholder.svg"
                       alt="Crispy Fries"
-                      className="w-12 h-12 rounded-lg object-cover"
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-full object-cover"
                     />
                     <div className="flex-1">
                       <div className="font-medium text-sm">Crispy Fries</div>
@@ -685,10 +675,12 @@ const WaiterDashboard = () => {
                 className="bg-white p-4 rounded-lg shadow-sm mb-4"
               >
                 <div className="flex items-center gap-3">
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.name}
-                    className="w-16 h-16 rounded-lg object-cover"
+                    width={40}
+                    height={40}
+                    className="w-10 h-10 rounded-full object-cover"
                   />
                   <div className="flex-1">
                     <div className="font-medium">{item.name}</div>
@@ -774,9 +766,11 @@ const WaiterDashboard = () => {
                   </button>
                 </div>
                 <div className="w-[135px] h-[125px] relative self-center ml-3">
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.name}
+                    width={135}
+                    height={125}
                     className="w-full h-full rounded-lg object-cover"
                   />
                 </div>
@@ -834,31 +828,33 @@ const WaiterDashboard = () => {
     <div className="min-h-screen bg-[#F5F1EB] pb-24">
       {/* Navigation Tabs */}
       <div className="px-4 pt-4 pb-2 bg-[#F5F1EB]">
-  <div className="flex gap-2 w-full">
-    <button
-      className="flex-1 py-3 rounded-lg text-sm font-medium border border-[#C69F59] bg-white text-gray-700 flex items-center justify-center gap-2"
-      onClick={handleReceiveOrder}
-    >
-      <img src="/ro.svg" alt="Receive Order" className="h-4 w-4" />
-      Receive order
-    </button>
-    <button
-      className="flex-1 py-3 rounded-lg text-sm font-medium border border-[#C69F59] bg-white text-gray-700 flex items-center justify-center gap-2 relative"
-      onClick={() => setCurrentView("pendingOrders")}
-    >
-      {pendingOrders.length > 0 && (
-        <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-600 rounded-full"></span>
-      )}
-
-      <img src="/po.svg" alt="Pending Orders" className="h-4 w-4" />
-      Pending orders{" "}
-      <span className={pendingOrders.length > 0 ? "text-red-500" : "text-gray-700"}>
-        ({pendingOrders.length})
-      </span>
-    </button>
-  </div>
-</div>
-
+        <div className="flex gap-2 w-full">
+          <button
+            className="flex-1 py-3 rounded-lg text-sm font-medium border border-[#C69F59] bg-white text-gray-700 flex items-center justify-center gap-2"
+            onClick={handleReceiveOrder}
+          >
+            <img src="/ro.svg" alt="Receive Order" className="h-4 w-4" />
+            Receive order
+          </button>
+          <button
+            className="flex-1 py-3 rounded-lg text-sm font-medium border border-[#C69F59] bg-white text-gray-700 flex items-center justify-center gap-2 relative"
+            onClick={() => setCurrentView("pendingOrders")}
+          >
+            {pendingOrders.length > 0 && (
+              <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-600 rounded-full"></span>
+            )}
+            <img src="/po.svg" alt="Pending Orders" className="h-4 w-4" />
+            Pending orders{" "}
+            <span
+              className={
+                pendingOrders.length > 0 ? "text-red-500" : "text-gray-700"
+              }
+            >
+              ({pendingOrders.length})
+            </span>
+          </button>
+        </div>
+      </div>
 
       {/* Table Grid */}
       <TableGrid />

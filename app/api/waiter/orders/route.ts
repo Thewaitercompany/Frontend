@@ -85,7 +85,6 @@ const mockOrders = [
 export async function GET(request: NextRequest) {
   // Get restaurant ID from query parameters
   const searchParams = request.nextUrl.searchParams;
-  const restaurantId = searchParams.get('restaurantId');
   const orderId = searchParams.get('orderId');
   const tableId = searchParams.get('tableId');
   const status = searchParams.get('status');

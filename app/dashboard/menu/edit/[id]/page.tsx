@@ -1,6 +1,6 @@
 "use client";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
 import Image from "next/image";
@@ -16,7 +16,11 @@ interface MenuItem {
   isVeg: boolean;
 }
 
-export default function AddMenuItem() {
+export default function EditMenuItem() {
+  const router = useRouter();
+  const params = useParams();
+  const id = params?.id as string;
+
   const [menuItem, setMenuItem] = useState<MenuItem>({
     image: null,
     name: "",
@@ -27,8 +31,10 @@ export default function AddMenuItem() {
     category: "Starters",
     isVeg: true,
   });
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showIngredientModal, setShowIngredientModal] = useState(false);
+
   // Static ingredient data for demo
   const allIngredients = [
     { name: "Potatoes", type: "Veg" },
@@ -49,6 +55,57 @@ export default function AddMenuItem() {
       unit: string;
     }[]
   >([]);
+
+  // Fetch dish data by ID
+  useEffect(() => {
+    async function fetchDish() {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `https://qr-server-tabb.onrender.com/menu/${id}`
+        );
+        if (!response.ok) throw new Error("Failed to fetch dish");
+        const data = await response.json();
+        setMenuItem({
+          image: data.image || null,
+          name: data.name || "",
+          description: data.description || "",
+          ingredients: data.ingredients || "",
+          cost: data.cost ? String(data.cost) : "",
+          price: data.price ? String(data.price) : "",
+          category: data.category || "Starters",
+          isVeg: data.isVeg !== undefined ? data.isVeg : true,
+        });
+        // Parse ingredients for modal
+        if (data.ingredients) {
+          const parsed = String(data.ingredients)
+            .split(",")
+            .map((s: string) => {
+              const match = s.match(/(.*)\s*\((\d+)(g|ml|pieces)\)/);
+              if (match) {
+                return {
+                  name: match[1].trim(),
+                  quantity: match[2],
+                  unit: match[3],
+                };
+              }
+              return null;
+            })
+            .filter(Boolean) as {
+            name: string;
+            quantity: string;
+            unit: string;
+          }[];
+          setSelectedIngredients(parsed);
+        }
+      } catch (e) {
+        alert("Failed to load dish.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (id) fetchDish();
+  }, [id]);
 
   // Filtered ingredient list
   const filteredIngredients = allIngredients.filter(
@@ -133,26 +190,20 @@ export default function AddMenuItem() {
     }
     setIsSubmitting(true);
     try {
-      const response = await fetch("https://qr-server-tabb.onrender.com/menu", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(menuItem),
-      });
+      const response = await fetch(
+        `https://qr-server-tabb.onrender.com/menu/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(menuItem),
+        }
+      );
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to save menu item.");
+        throw new Error(errorData.message || "Failed to update menu item.");
       }
-      alert("Menu item added successfully!");
-      setMenuItem({
-        image: null,
-        name: "",
-        description: "",
-        ingredients: "",
-        cost: "",
-        price: "",
-        category: "Starters",
-        isVeg: true,
-      });
+      alert("Menu item updated successfully!");
+      router.push("/dashboard/menu");
     } catch (error) {
       console.error("Error:", error);
       if (error instanceof Error) {
@@ -165,12 +216,20 @@ export default function AddMenuItem() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-0 font-serif">
       <header className="flex items-center gap-3 px-10 pt-6 pb-2 bg-[#f5f1eb]">
         <Link href="/dashboard/menu" className="flex items-center">
           <ArrowLeft className="w-4 h-4 mr-2" />
-          <span className="text-lg font-medium">Add New Dish</span>
+          <span className="text-lg font-medium">Edit Dish</span>
         </Link>
       </header>
       <main className="max-w-6xl mx-auto mt-8">
@@ -297,13 +356,14 @@ export default function AddMenuItem() {
               disabled={isSubmitting}
               style={{ minWidth: "240px" }}
             >
-              {isSubmitting ? "Saving..." : "Save New Dish"}
+              {isSubmitting ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </div>
+        {/* Ingredient Modal */}
         {showIngredientModal && (
           <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl p-8 w-[700px] max-w-full shadow-xl relative border border-[#e5c99a] font-serif">
+            <div className="bg-white rounded-xl p-8 w-[700px] max-w-full shadow-xl relative">
               <button
                 className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-xl"
                 onClick={() => setShowIngredientModal(false)}
@@ -312,13 +372,13 @@ export default function AddMenuItem() {
                 ×
               </button>
               <div className="text-lg font-semibold mb-4">
-                Add ingredients to the restaurant dish
+                Edit ingredients for the restaurant dish
               </div>
               <div className="flex gap-4 mb-4">
                 <select
                   value={ingredientType}
                   onChange={(e) => setIngredientType(e.target.value)}
-                  className="border border-[#e5c99a] rounded px-3 py-1 text-base bg-white focus:outline-none font-serif min-w-[180px]"
+                  className="border border-gray-300 rounded px-3 py-1 text-base bg-white focus:outline-none"
                   title="Type of Ingredient"
                 >
                   <option value="">Type of Ingredient</option>
@@ -332,25 +392,17 @@ export default function AddMenuItem() {
                   placeholder="Search"
                   value={ingredientFilter}
                   onChange={(e) => setIngredientFilter(e.target.value)}
-                  className="px-4 py-2 border border-[#e5c99a] rounded text-base focus:outline-none w-64 font-serif bg-white"
+                  className="px-4 py-2 border border-gray-300 rounded text-base focus:outline-none w-64"
                 />
               </div>
-              <div className="overflow-y-auto max-h-72 border border-[#e5c99a] rounded mb-4">
-                <table className="w-full text-sm font-serif">
+              <div className="overflow-y-auto max-h-72 border rounded mb-4">
+                <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-[#e5c99a] bg-[#f5f1eb]">
-                      <th className="py-2 px-2 text-left font-semibold border-b border-[#e5c99a] border-r border-[#e5c99a]">
-                        Select
-                      </th>
-                      <th className="py-2 px-2 text-left font-semibold border-b border-[#e5c99a] border-r border-[#e5c99a]">
-                        Ingredients
-                      </th>
-                      <th className="py-2 px-2 text-left font-semibold border-b border-[#e5c99a] border-r border-[#e5c99a]">
-                        Quantity
-                      </th>
-                      <th className="py-2 px-2 text-left font-semibold border-b border-[#e5c99a]">
-                        Unit
-                      </th>
+                    <tr className="border-b">
+                      <th className="py-2 px-2 text-left">Select</th>
+                      <th className="py-2 px-2 text-left">Ingredients</th>
+                      <th className="py-2 px-2 text-left">Quantity</th>
+                      <th className="py-2 px-2 text-left">Unit</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -359,47 +411,36 @@ export default function AddMenuItem() {
                         (sel) => sel.name === ing.name
                       );
                       return (
-                        <tr
-                          key={ing.name}
-                          className="border-b border-[#e5c99a] bg-white"
-                        >
-                          <td className="py-2 px-2 border-b border-[#e5c99a] border-r border-[#e5c99a] align-middle">
+                        <tr key={ing.name} className="border-b last:border-b-0">
+                          <td className="py-2 px-2">
                             <input
                               type="checkbox"
                               checked={!!selected}
                               onChange={() => handleIngredientCheck(ing.name)}
                               className="accent-[#C99E5A] w-5 h-5 rounded border-gray-300"
-                              title={`Select ${ing.name} ingredient`}
                             />
                           </td>
-                          <td className="py-2 px-2 border-b border-[#e5c99a] border-r border-[#e5c99a] align-middle">
-                            {ing.name}
+                          <td className="py-2 px-2">{ing.name}</td>
+                          <td className="py-2 px-2">
+                            <input
+                              type="number"
+                              min="0"
+                              placeholder="Quantity"
+                              aria-label="Ingredient quantity"
+                              title="Quantity"
+                              disabled={!selected}
+                              value={selected?.quantity || ""}
+                              onChange={(e) =>
+                                handleIngredientChange(
+                                  ing.name,
+                                  "quantity",
+                                  e.target.value
+                                )
+                              }
+                              className="w-20 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none"
+                            />
                           </td>
-                          <td className="py-2 px-2 border-b border-[#e5c99a] border-r border-[#e5c99a] align-middle">
-                            {selected ? (
-                              <input
-                                type="number"
-                                min="0"
-                                aria-label="Ingredient quantity"
-                                placeholder="Quantity"
-                                title="Quantity"
-                                value={selected.quantity}
-                                onChange={(e) =>
-                                  handleIngredientChange(
-                                    ing.name,
-                                    "quantity",
-                                    e.target.value
-                                  )
-                                }
-                                className="w-20 px-2 py-1 border border-[#e5c99a] rounded text-sm focus:outline-none font-serif bg-[#f5f1eb]"
-                              />
-                            ) : (
-                              <span className="text-gray-400 font-serif">
-                                Nil
-                              </span>
-                            )}
-                          </td>
-                          <td className="py-2 px-2 border-b border-[#e5c99a] align-middle">
+                          <td className="py-2 px-2">
                             <select
                               disabled={!selected}
                               value={selected?.unit || "grams"}
@@ -410,7 +451,7 @@ export default function AddMenuItem() {
                                   e.target.value
                                 )
                               }
-                              className="border border-[#e5c99a] rounded px-2 py-1 text-sm bg-[#f5f1eb] focus:outline-none font-serif"
+                              className="border border-gray-300 rounded px-2 py-1 text-sm bg-white focus:outline-none"
                               title="Unit"
                             >
                               <option value="grams">grams</option>
@@ -426,12 +467,11 @@ export default function AddMenuItem() {
               </div>
               <div className="flex justify-end">
                 <button
-                  className="px-10 py-3 bg-[#C99E5A] hover:bg-[#b88d49] text-white rounded-lg text-xl font-semibold font-serif shadow-none"
+                  className="px-6 py-2 bg-[#C99E5A] hover:bg-[#b88d49] text-white rounded-lg text-base font-semibold"
                   onClick={handleAddIngredients}
                   disabled={selectedIngredients.length === 0}
-                  style={{ minWidth: "200px" }}
                 >
-                  Add Ingredients
+                  Save Ingredients
                 </button>
               </div>
             </div>

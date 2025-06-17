@@ -79,7 +79,6 @@ const mockMenuItems = [
 export async function GET(request: NextRequest) {
   // Get restaurant ID from query parameters
   const searchParams = request.nextUrl.searchParams;
-  const restaurantId = searchParams.get('restaurantId');
   const category = searchParams.get('category');
   const isVeg = searchParams.get('isVeg');
 
