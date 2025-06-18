@@ -9,12 +9,10 @@ function DashboardPage() {
     return () => clearInterval(timer);
   }, []);
 
-  function formatDateTime(date: Date) {
+  function formatDateTime(date) {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const months = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let h = date.getHours();
     let m = date.getMinutes();
     let ampm = "AM";
@@ -73,23 +71,23 @@ function DashboardPage() {
           }}
         >
           <img
-                src="Screenshot 2025-06-07 171759.png"
-                alt="Company Logo"
-                style={{
-                  height: 75,
-                  width: "auto",
-                  objectFit: "contain",
-                  background: backgroundColor,
-                  display: "block",
-                }}
-              />
+            src="/Screenshot 2025-06-07 171759.png"
+            alt="Company Logo"
+            style={{
+              height: 75,
+              width: "auto",
+              objectFit: "contain",
+              background: backgroundColor,
+              display: "block",
+            }}
+          />
         </div>
         {/* Time display */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            transform: "translate(-23px, 7px)",
+            transform: "translate(-24px, 7px)",
           }}
         >
           <span
@@ -101,7 +99,7 @@ function DashboardPage() {
               minWidth: 180,
               textAlign: "right",
               userSelect: "none",
-              letterSpacing: "0.04em",
+              letterSpacing: "0.03em",
               lineHeight: "1.1",
             }}
           >
