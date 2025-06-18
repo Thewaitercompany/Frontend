@@ -59,7 +59,6 @@ const mockPendingOrders = [
 export async function GET(request: NextRequest) {
   // Get restaurant ID from query parameters
   const searchParams = request.nextUrl.searchParams;
-  const restaurantId = searchParams.get('restaurantId');
   const orderId = searchParams.get('orderId');
   const status = searchParams.get('status') || 'pending';
 

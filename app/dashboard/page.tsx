@@ -192,6 +192,7 @@ export default function DashboardPage() {
             </span>
           </div>
         </div>
+        
         {/* Central dashboard area */}
         <div
           style={{
@@ -207,6 +208,7 @@ export default function DashboardPage() {
         >
           {/* Intentionally left blank or add dashboard content here */}
         </div>
+        
         {/* Notification Panel Overlay */}
         {showNotifications && (
           <div style={{
@@ -235,14 +237,13 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
+      
       {/* Remove scroll on html/body */}
-      <style>
-        {`
-          html, body {
-            overflow: hidden !important;
-          }
-        `}
-      </style>
+      <style jsx>{`
+        :global(html), :global(body) {
+          overflow: hidden !important;
+        }
+      `}</style>
     </div>
   );
 }
