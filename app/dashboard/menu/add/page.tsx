@@ -303,7 +303,7 @@ export default function AddMenuItem() {
         </div>
         {showIngredientModal && (
           <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl p-8 w-[700px] max-w-full shadow-xl relative border border-[#e5c99a] font-serif">
+            <div className="bg-white rounded-2xl shadow-xl p-8 w-[700px] max-w-full border border-[#e5c99a] font-serif">
               <button
                 className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-xl"
                 onClick={() => setShowIngredientModal(false)}
@@ -368,7 +368,7 @@ export default function AddMenuItem() {
                               type="checkbox"
                               checked={!!selected}
                               onChange={() => handleIngredientCheck(ing.name)}
-                              className="accent-[#C99E5A] w-5 h-5 rounded border-gray-300"
+                              className="accent-[#C99E5A] w-5 h-5 rounded border-[#e5c99a]"
                               title={`Select ${ing.name} ingredient`}
                             />
                           </td>

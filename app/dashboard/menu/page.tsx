@@ -291,7 +291,7 @@ export default function RestaurantMenu() {
               >
                 ×
               </button>
-              <div className="mb-4 text-lg font-semibold text-center">
+              <div className="mb-4 text-lg font-semibold text-center font-serif">
                 You want to delete this dish?
               </div>
               <div className="w-32 h-24 rounded-lg overflow-hidden mb-3 border border-gray-200 bg-gray-50 flex items-center justify-center">
@@ -304,17 +304,17 @@ export default function RestaurantMenu() {
                     className="object-cover w-full h-full"
                   />
                 ) : (
-                  <span className="text-gray-400">No Image</span>
+                  <span className="text-gray-400 font-serif">No Image</span>
                 )}
               </div>
-              <div className="text-center font-medium text-lg mb-1">
+              <div className="text-center font-medium text-lg mb-1 font-serif">
                 {itemToDelete.name}
               </div>
-              <div className="text-center text-[#C99E5A] text-lg font-semibold mb-6">
+              <div className="text-center text-[#C99E5A] text-lg font-semibold mb-6 font-serif">
                 ₹{itemToDelete.price}
               </div>
               <button
-                className="w-full py-2 bg-[#C99E5A] hover:bg-[#b88d49] text-white rounded-lg text-base font-semibold"
+                className="w-full py-2 bg-[#C99E5A] hover:bg-[#b88d49] text-white rounded-lg text-base font-semibold font-serif"
                 onClick={confirmDeleteItem}
               >
                 Delete

@@ -343,7 +343,7 @@ export default function EditMenuItem() {
                   onChange={() =>
                     setMenuItem((prev) => ({ ...prev, isVeg: !prev.isVeg }))
                   }
-                  className="accent-[#C99E5A] w-5 h-5 rounded border-gray-300"
+                  className="accent-[#C99E5A] w-5 h-5 rounded border-[#e5c99a]"
                 />
                 <span className="text-base font-serif">Veg Only</span>
               </label>
@@ -363,7 +363,7 @@ export default function EditMenuItem() {
         {/* Ingredient Modal */}
         {showIngredientModal && (
           <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl p-8 w-[700px] max-w-full shadow-xl relative">
+            <div className="bg-white rounded-2xl shadow-xl p-8 w-[700px] max-w-full border border-[#e5c99a] font-serif">
               <button
                 className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-xl"
                 onClick={() => setShowIngredientModal(false)}
@@ -372,13 +372,13 @@ export default function EditMenuItem() {
                 ×
               </button>
               <div className="text-lg font-semibold mb-4">
-                Edit ingredients for the restaurant dish
+                Edit ingredients to the restaurant dish
               </div>
               <div className="flex gap-4 mb-4">
                 <select
                   value={ingredientType}
                   onChange={(e) => setIngredientType(e.target.value)}
-                  className="border border-gray-300 rounded px-3 py-1 text-base bg-white focus:outline-none"
+                  className="border border-[#e5c99a] rounded px-3 py-1 text-base bg-white focus:outline-none font-serif min-w-[180px]"
                   title="Type of Ingredient"
                 >
                   <option value="">Type of Ingredient</option>
@@ -392,17 +392,25 @@ export default function EditMenuItem() {
                   placeholder="Search"
                   value={ingredientFilter}
                   onChange={(e) => setIngredientFilter(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 rounded text-base focus:outline-none w-64"
+                  className="px-4 py-2 border border-[#e5c99a] rounded text-base focus:outline-none w-64 font-serif bg-white"
                 />
               </div>
-              <div className="overflow-y-auto max-h-72 border rounded mb-4">
-                <table className="w-full text-sm">
+              <div className="overflow-y-auto max-h-72 border border-[#e5c99a] rounded mb-4">
+                <table className="w-full text-sm font-serif">
                   <thead>
-                    <tr className="border-b">
-                      <th className="py-2 px-2 text-left">Select</th>
-                      <th className="py-2 px-2 text-left">Ingredients</th>
-                      <th className="py-2 px-2 text-left">Quantity</th>
-                      <th className="py-2 px-2 text-left">Unit</th>
+                    <tr className="border-b border-[#e5c99a] bg-[#f5f1eb]">
+                      <th className="py-2 px-2 text-left font-semibold border-b border-[#e5c99a] border-r border-[#e5c99a]">
+                        Select
+                      </th>
+                      <th className="py-2 px-2 text-left font-semibold border-b border-[#e5c99a] border-r border-[#e5c99a]">
+                        Ingredients
+                      </th>
+                      <th className="py-2 px-2 text-left font-semibold border-b border-[#e5c99a] border-r border-[#e5c99a]">
+                        Quantity
+                      </th>
+                      <th className="py-2 px-2 text-left font-semibold border-b border-[#e5c99a]">
+                        Unit
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -411,36 +419,47 @@ export default function EditMenuItem() {
                         (sel) => sel.name === ing.name
                       );
                       return (
-                        <tr key={ing.name} className="border-b last:border-b-0">
-                          <td className="py-2 px-2">
+                        <tr
+                          key={ing.name}
+                          className="border-b border-[#e5c99a] bg-white"
+                        >
+                          <td className="py-2 px-2 border-b border-[#e5c99a] border-r border-[#e5c99a] align-middle">
                             <input
                               type="checkbox"
                               checked={!!selected}
                               onChange={() => handleIngredientCheck(ing.name)}
-                              className="accent-[#C99E5A] w-5 h-5 rounded border-gray-300"
+                              className="accent-[#C99E5A] w-5 h-5 rounded border-[#e5c99a]"
+                              title={`Select ${ing.name} ingredient`}
                             />
                           </td>
-                          <td className="py-2 px-2">{ing.name}</td>
-                          <td className="py-2 px-2">
-                            <input
-                              type="number"
-                              min="0"
-                              placeholder="Quantity"
-                              aria-label="Ingredient quantity"
-                              title="Quantity"
-                              disabled={!selected}
-                              value={selected?.quantity || ""}
-                              onChange={(e) =>
-                                handleIngredientChange(
-                                  ing.name,
-                                  "quantity",
-                                  e.target.value
-                                )
-                              }
-                              className="w-20 px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none"
-                            />
+                          <td className="py-2 px-2 border-b border-[#e5c99a] border-r border-[#e5c99a] align-middle">
+                            {ing.name}
                           </td>
-                          <td className="py-2 px-2">
+                          <td className="py-2 px-2 border-b border-[#e5c99a] border-r border-[#e5c99a] align-middle">
+                            {selected ? (
+                              <input
+                                type="number"
+                                min="0"
+                                aria-label="Ingredient quantity"
+                                placeholder="Quantity"
+                                title="Quantity"
+                                value={selected.quantity}
+                                onChange={(e) =>
+                                  handleIngredientChange(
+                                    ing.name,
+                                    "quantity",
+                                    e.target.value
+                                  )
+                                }
+                                className="w-20 px-2 py-1 border border-[#e5c99a] rounded text-sm focus:outline-none font-serif bg-[#f5f1eb]"
+                              />
+                            ) : (
+                              <span className="text-gray-400 font-serif">
+                                Nil
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-2 px-2 border-b border-[#e5c99a] align-middle">
                             <select
                               disabled={!selected}
                               value={selected?.unit || "grams"}
@@ -451,7 +470,7 @@ export default function EditMenuItem() {
                                   e.target.value
                                 )
                               }
-                              className="border border-gray-300 rounded px-2 py-1 text-sm bg-white focus:outline-none"
+                              className="border border-[#e5c99a] rounded px-2 py-1 text-sm bg-[#f5f1eb] focus:outline-none font-serif"
                               title="Unit"
                             >
                               <option value="grams">grams</option>
@@ -467,11 +486,12 @@ export default function EditMenuItem() {
               </div>
               <div className="flex justify-end">
                 <button
-                  className="px-6 py-2 bg-[#C99E5A] hover:bg-[#b88d49] text-white rounded-lg text-base font-semibold"
+                  className="px-10 py-3 bg-[#C99E5A] hover:bg-[#b88d49] text-white rounded-lg text-xl font-semibold font-serif shadow-none"
                   onClick={handleAddIngredients}
                   disabled={selectedIngredients.length === 0}
+                  style={{ minWidth: "200px" }}
                 >
-                  Save Ingredients
+                  Edit Ingredients
                 </button>
               </div>
             </div>
