@@ -97,6 +97,23 @@ export default function PendingOrdersPage() {
     console.log(`Marked item ${itemId} in order ${orderId} as prepared`);
   };
 
+  const handleCancelItem = (orderId: string, itemId: string) => {
+    setPendingOrders((orders) =>
+      orders.map((order) => {
+        if (order.id === orderId) {
+          return {
+            ...order,
+            items: order.items.filter((item) => item.id !== itemId),
+          };
+        }
+        return order;
+      })
+    );
+
+    // In a real application, you would make an API call
+    console.log(`Cancelled item ${itemId} in order ${orderId}`);
+  };
+
   return (
     <div>
       <div className="mb-6">
@@ -111,6 +128,7 @@ export default function PendingOrdersPage() {
       <PendingOrdersList
         orders={pendingOrders}
         onMarkPrepared={handleMarkPrepared}
+        onCancelItem={handleCancelItem}
       />
     </div>
   );
