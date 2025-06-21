@@ -29,10 +29,25 @@ const SidebarIconsFigma = [
   ),
   // Dashboard
   (active: boolean) => (
-    <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none" key="sidebar-check">
-      <rect x="5.5" y="5.5" width="17" height="17" rx="4.1" stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} strokeWidth="1.8" />
-      <path d="M8.7 18.2 13 13l3.2 3.2 4.1-4.9" stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+   <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d_6393_5190)">
+<path d="M28.2703 6H17.7297C12.3561 6 8 10.3561 8 15.7297V26.2703C8 31.6439 12.3561 36 17.7297 36H28.2703C33.6439 36 38 31.6439 38 26.2703V15.7297C38 10.3561 33.6439 6 28.2703 6Z" stroke="#4D3E3B" stroke-width="2.5"/>
+<path d="M14.8926 25.8645L18.8656 20.578C19.1088 20.2525 19.4655 20.0301 19.8649 19.9551C20.2644 19.88 20.6774 19.9576 21.0223 20.1726L24.898 22.6213C25.2561 22.8493 25.6895 22.9278 26.1049 22.8399C26.5203 22.752 26.8846 22.5046 27.1196 22.151L31.1088 16.1348" stroke="#4D3E3B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<filter id="filter0_d_6393_5190" x="0.75" y="0.75" width="44.5" height="44.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="3"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_6393_5190"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_6393_5190" result="shape"/>
+</filter>
+</defs>
+</svg>
+
   ),
   // List of tables
   (active: boolean) => (

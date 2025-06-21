@@ -35,16 +35,20 @@ const CustomCalendar: React.FC<CalendarProps> = ({ leaveDates, salaryDates }) =>
   const renderHeader = () => {
     return (
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">{format(currentMonth, "MMMM yyyy")}</h2>
-        <div className="flex gap-2">
-          <button onClick={prevMonth} className="text-gray-500 text-xl">
-            &lt;
-          </button>
-          <button onClick={nextMonth} className="text-gray-500 text-xl">
-            &gt;
-          </button>
-        </div>
-      </div>
+  <h2 className="ml-[4%] text-[20px] font-bold font-aleo">
+    {format(currentMonth, "MMMM, yyyy")}
+  </h2>
+
+  <div className="flex gap-2 mr-[5%]">
+    <button onClick={prevMonth} className="text-gray-500 text-xl">
+      &lt;
+    </button>
+    <button onClick={nextMonth} className="text-gray-500 text-xl">
+      &gt;
+    </button>
+  </div>
+</div>
+
     );
   };
 
@@ -54,7 +58,7 @@ const CustomCalendar: React.FC<CalendarProps> = ({ leaveDates, salaryDates }) =>
     for (let i = 0; i < 7; i++) {
       days.push(
         <div key={i} className="text-center text-sm font-medium text-gray-600">
-          {format(addDays(startOfWeek(date), i), "EEE")}
+          {format(addDays(startOfWeek(date, { weekStartsOn: 1 }), i), "EEE")}
         </div>
       );
     }
@@ -64,8 +68,9 @@ const CustomCalendar: React.FC<CalendarProps> = ({ leaveDates, salaryDates }) =>
   const renderCells = () => {
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(monthStart);
-    const startDate = startOfWeek(monthStart);
-    const endDate = endOfWeek(monthEnd);
+    const startDate = startOfWeek(monthStart, { weekStartsOn: 1 });
+const endDate = endOfWeek(monthEnd, { weekStartsOn: 1 });
+
 
     const rows = [];
     let days = [];
@@ -85,7 +90,7 @@ const CustomCalendar: React.FC<CalendarProps> = ({ leaveDates, salaryDates }) =>
             onClick={() => {
               if (!isDisabled) setSelectedDate(day);
             }}
-            className={`relative w-12 h-12 mx-auto flex items-center justify-center rounded-full text-sm
+            className={`relative w-10 h-10 mx-auto flex items-center justify-center rounded-full text-sm
               ${isDisabled ? "text-gray-400" : "text-black"} 
               ${isSameDay(day, selectedDate || new Date()) ? "border border-black bg-transparent text-black" : ""}
               ${isToday && !isSameDay(day, selectedDate || new Date()) ? "border border-[#C99E5A] bg-transparent" : ""}
@@ -108,11 +113,11 @@ const CustomCalendar: React.FC<CalendarProps> = ({ leaveDates, salaryDates }) =>
   };
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-md w-[400px] mt-0">
+    <div className="bg-white rounded-xl p-4 shadow-md w-[420px] mt-0">
       {renderHeader()}
       {renderDays()}
       {renderCells()}
-      <div className="flex gap-4 mt-4 text-sm text-gray-600">
+      <div className="flex gap-4 mt-4 text-sm text-gray-600 ml-[5%]">
         <div className="flex items-center gap-1">
           <span className="w-3 h-3 bg-red-500 rounded-full" />
           <span>Leave Taken</span>

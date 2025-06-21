@@ -117,7 +117,7 @@ interface Order {
 
 
 
-export default function PendingOrders() {
+export default function CancelledOrders() {
   const [selectedCategory, setSelectedCategory] = useState("All Items");
   const { totalOrderCount, pendingOrderCount } = useOrders();
   const completedOrderCount = totalOrderCount - pendingOrderCount;
@@ -164,7 +164,7 @@ export default function PendingOrders() {
     price: 120,
     time: "09:00 AM",
     staffName: "Ramesh",
-    customerDetails: "Amit Shah, 9876543210",
+    customerDetails: "Amit Shah/ 9876543210",
     tableNo: "3",
     orderStatus: "Served",
     isVeg: true,
@@ -177,7 +177,7 @@ export default function PendingOrders() {
     price: 50,
     time: "09:15 AM",
     staffName: "Suresh",
-    customerDetails: "Nikita Mehta, 9988776655",
+    customerDetails: "Nikita Mehta/ 9988776655",
     tableNo: "4",
     orderStatus: "Preparing",
     isVeg: true,
@@ -190,7 +190,7 @@ export default function PendingOrders() {
     price: 160,
     time: "10:00 AM",
     staffName: "Anjali",
-    customerDetails: "Raj Patel, 9123456789",
+    customerDetails: "Raj Patel/ 9123456789",
     tableNo: "1",
     orderStatus: "Served",
     isVeg: true,
@@ -203,7 +203,7 @@ export default function PendingOrders() {
     price: 90,
     time: "10:30 AM",
     staffName: "Mahesh",
-    customerDetails: "Sneha Rao, 9012345678",
+    customerDetails: "Sneha Rao/ 9012345678",
     tableNo: "6",
     orderStatus: "Pending",
     isVeg: true,
@@ -216,7 +216,7 @@ export default function PendingOrders() {
     price: 120,
     time: "11:00 AM",
     staffName: "Kavita",
-    customerDetails: "Deepak Sharma, 9898989898",
+    customerDetails: "Deepak Sharma/ 9898989898",
     tableNo: "5",
     orderStatus: "Preparing",
     isVeg: false,
@@ -229,7 +229,7 @@ export default function PendingOrders() {
     price: 100,
     time: "11:45 AM",
     staffName: "Pooja",
-    customerDetails: "Meena Desai, 9765432100",
+    customerDetails: "Meena Desai/ 9765432100",
     tableNo: "7",
     orderStatus: "Served",
     isVeg: true,
@@ -242,7 +242,7 @@ export default function PendingOrders() {
     price: 140,
     time: "12:30 PM",
     staffName: "Rohit",
-    customerDetails: "Arjun Kapoor, 9543217890",
+    customerDetails: "Arjun Kapoor/ 9543217890",
     tableNo: "2",
     orderStatus: "Served",
     isVeg: true,
@@ -255,7 +255,7 @@ export default function PendingOrders() {
     price: 85,
     time: "01:00 PM",
     staffName: "Neha",
-    customerDetails: "Pallavi Joshi, 9001234567",
+    customerDetails: "Pallavi Joshi/ 9001234567",
     tableNo: "8",
     orderStatus: "Pending",
     isVeg: true,
@@ -291,7 +291,7 @@ export default function PendingOrders() {
     price: 120,
     time: "09:00 AM",
     staffName: "Ramesh",
-    customerDetails: "Amit Shah, 9876543210",
+    customerDetails: "Amit Shah/ 9876543210",
     tableNo: "3",
     orderStatus: "Served",
     isVeg: true,
@@ -304,7 +304,7 @@ export default function PendingOrders() {
     price: 50,
     time: "09:15 AM",
     staffName: "Suresh",
-    customerDetails: "Nikita Mehta, 9988776655",
+    customerDetails: "Nikita Mehta/ 9988776655",
     tableNo: "4",
     orderStatus: "Preparing",
     isVeg: true,
@@ -317,7 +317,7 @@ export default function PendingOrders() {
     price: 160,
     time: "10:00 AM",
     staffName: "Anjali",
-    customerDetails: "Raj Patel, 9123456789",
+    customerDetails: "Raj Patel/ 9123456789",
     tableNo: "1",
     orderStatus: "Served",
     isVeg: true,
@@ -330,7 +330,7 @@ export default function PendingOrders() {
     price: 90,
     time: "10:30 AM",
     staffName: "Mahesh",
-    customerDetails: "Sneha Rao, 9012345678",
+    customerDetails: "Sneha Rao/ 9012345678",
     tableNo: "6",
     orderStatus: "Pending",
     isVeg: true,
@@ -343,7 +343,7 @@ export default function PendingOrders() {
     price: 120,
     time: "11:00 AM",
     staffName: "Kavita",
-    customerDetails: "Deepak Sharma, 9898989898",
+    customerDetails: "Deepak Sharma/ 9898989898",
     tableNo: "5",
     orderStatus: "Preparing",
     isVeg: false,
@@ -356,7 +356,7 @@ export default function PendingOrders() {
     price: 100,
     time: "11:45 AM",
     staffName: "Pooja",
-    customerDetails: "Meena Desai, 9765432100",
+    customerDetails: "Meena Desai/ 9765432100",
     tableNo: "7",
     orderStatus: "Served",
     isVeg: true,
@@ -369,7 +369,7 @@ export default function PendingOrders() {
     price: 140,
     time: "12:30 PM",
     staffName: "Rohit",
-    customerDetails: "Arjun Kapoor, 9543217890",
+    customerDetails: "Arjun Kapoor/ 9543217890",
     tableNo: "2",
     orderStatus: "Served",
     isVeg: true,
@@ -382,7 +382,7 @@ export default function PendingOrders() {
     price: 85,
     time: "01:00 PM",
     staffName: "Neha",
-    customerDetails: "Pallavi Joshi, 9001234567",
+    customerDetails: "Pallavi Joshi/ 9001234567",
     tableNo: "8",
     orderStatus: "Pending",
     isVeg: true,
@@ -509,7 +509,7 @@ export default function PendingOrders() {
         />
       </svg>
     </button>
-              <h2 className="text-xl font-medium font-black">Pending Orders</h2>
+              <h2 className="text-xl font-medium font-black">Cancelled Orders</h2>
             </div>
             <div className="flex items-center gap-4">
               <label className="flex items-center gap-1 text-[#4b2e2e] text-xl font-extrabold">
@@ -593,40 +593,40 @@ export default function PendingOrders() {
   <thead className="text-[#4b2e2e] font-medium"> {/* changed font-large (invalid) to font-medium */}
     <tr className="border-b border-[#e0d5cc] bg-transparent">
       <th className="py-2 px-4">Order Id</th>
+      <th className="py-2 px-4">Image</th>
       <th className="py-2 px-4">Name</th>
       <th className="py-2 px-4">Quantity</th>
       <th className="py-2 px-4">Price</th>
       <th className="py-2 px-4">Time</th>
-      <th className="py-2 px-4">Staff Name</th>
       <th className="py-2 px-4">Customer Details</th>
       <th className="py-2 px-4">Table No.</th>
-      <th className="py-2 px-4">Order Status</th>
+      <th className="py-2 px-4">Reason</th>
     </tr>
   </thead>
   <tbody className="text-[#4b2e2e] font-medium"> {/* added font-medium to match header */}
     {filteredOrders.map((order, i) => (
     <tr key={i} className="border-b border-[#f5e9e2]">
         <td className="py-3 px-4">{order.id}</td>
+        <td className="py-3 px-4">
+            <div
+                className="overflow-hidden shadow"
+                style={{ borderRadius: '12px', width: '69px', height: '53px' }}
+                >
+                <img
+                    src="https://www.shutterstock.com/image-photo/paneer-tikka-kabab-red-sauce-260nw-423525136.jpg"
+                    alt="Paneer Tikka"
+                    className="w-full h-full object-cover"
+                />
+                </div>
+
+        </td>
         <td className="py-3 px-4">{order.name}</td>
         <td className="py-3 px-4">{order.quantity}</td>
         <td className="py-3 px-4">{order.price}</td>
         <td className="py-3 px-4">{order.time}</td>
-        <td className="py-3 px-4">{order.staffName}</td>
         <td className="py-3 px-4">{order.customerDetails}</td>
         <td className="py-3 px-4">{order.tableNo}</td>
-        <td
-          className={`py-3 px-4 font-medium ${
-            order.orderStatus === 'Served'
-              ? 'text-green-600'
-              : order.orderStatus === 'Preparing'
-              ? 'text-yellow-600'
-              : order.orderStatus === 'Pending'
-              ? 'text-red-600'
-              : ''
-          }`}
-        >
-          {order.orderStatus}
-        </td>
+        <td className="py-3 px-4">Reason to be listed here</td>
       </tr>
     ))}
   </tbody>
