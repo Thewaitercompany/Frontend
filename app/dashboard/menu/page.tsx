@@ -1,297 +1,694 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { useOrders } from "@/hooks/useOrders";
+import { ChevronLeft, Search, Bell } from 'lucide-react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-solid-svg-icons";
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import { useRouter } from 'next/navigation';
 
-export default function RestaurantMenu() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [vegOnly, setVegOnly] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>("");
-  const [items, setItems] = useState<
-    {
-      _id: string;
-      name: string;
-      description: string;
-      category: string;
-      price: number;
-      cost?: number;
-      image: string;
-      isVeg?: boolean;
-      ingredients?: string;
-    }[]
-  >([]);
-  const [categories, setCategories] = useState<string[]>([
+
+import {
+  Trash2,
+  PackageCheck,
+  Clock,
+  AlertTriangle,
+  Users,
+} from 'lucide-react';
+
+const SIDEBAR_ICON_SIZE = 40;
+const SIDEBAR_ICON_COLOR = "#F1EBE6";
+const SIDEBAR_ICON_GAP = 12;
+
+// Sidebar icons as custom SVGs (Figma-accurate for icon 4: open book with bookmark)
+const SidebarIconsFigma = [
+  // 1. User
+  () => (
+    <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="10" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8"/>
+      <circle cx="14" cy="10" r="4.2" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8"/>
+      <path d="M6.2 21c.1-3.2 3.3-5.2 7.8-5.2 4.5 0 7.7 2 7.8 5.2" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8" strokeLinecap="round"/>
+    </svg>
+  ),
+  // 2. Chart line
+  () => (
+    <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none">
+      <rect x="5.5" y="5.5" width="17" height="17" rx="4.1" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8"/>
+      <path d="M8.7 18.2 13 13l3.2 3.2 4.1-4.9" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  // 3. Table/stand with "legs" (curve/thigh connection to center line)
+  () => (
+    <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none">
+      <ellipse cx="14" cy="9.5" rx="7.3" ry="2.8" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8"/>
+      <path d="M14 12.2v7" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M14 17.8c-1.5 1.2-2.2 2.2-2.2 2.6" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.7" strokeLinecap="round"/>
+      <path d="M14 17.8c1.5 1.2 2.2 2.2 2.2 2.6" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.7" strokeLinecap="round"/>
+      <path d="M11.8 20.4v2.1" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.6" strokeLinecap="round"/>
+      <path d="M16.2 20.4v2.1" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.6" strokeLinecap="round"/>
+    </svg>
+  ),
+  // 4. Book with bookmark (Figma-accurate, open book with center line and bookmark tab)
+  () => (
+    <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none">
+      {/* Book body */}
+      <rect x="6.8" y="7.6" width="14.4" height="12.8" rx="2.2"
+        stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.7" />
+      {/* Bookmark tab */}
+      <path d="M14 7.6v6.1l2-1 2 1V7.6" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.5" strokeLinejoin="round" fill="none"/>
+      {/* Book center fold */}
+      <path d="M14 7.6v12.8" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.2" strokeLinecap="round"/>
+    </svg>
+  ),
+  // 5. Hex with bars
+  () => (
+    <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none">
+      <path d="M14 5.6 22 10.6v6.8l-8 5-8-5v-6.8L14 5.6Z" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8"/>
+      <rect x="11" y="13" width="2" height="4" rx="1" fill={SIDEBAR_ICON_COLOR}/>
+      <rect x="15" y="10" width="2" height="7" rx="1" fill={SIDEBAR_ICON_COLOR}/>
+    </svg>
+  ),
+  // 6. Clipboard with check
+  () => (
+    <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none">
+      <rect x="8.2" y="6.7" width="11.6" height="16.1" rx="2.2" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8"/>
+      <rect x="11" y="4.3" width="6" height="3.2" rx="1.6" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.5"/>
+      <path d="m11.5 15.5 2.5 2.5 4-5" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  ),
+  // 7. Analytics (Figma-accurate layered bar chart)
+  () => (
+    <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none">
+      {/* Main chart base */}
+      <rect x="5.5" y="5.5" width="17" height="17" rx="2.5" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.8"/>
+      {/* Bars on main chart */}
+      <rect x="9.5" y="10.5" width="2" height="8" fill={SIDEBAR_ICON_COLOR}/>
+      <rect x="12.5" y="13.5" width="2" height="5" fill={SIDEBAR_ICON_COLOR}/>
+      <rect x="15.5" y="11.5" width="2" height="7" fill={SIDEBAR_ICON_COLOR}/>
+      {/* Overlapping layer - smaller rectangle shifted */}
+      <rect x="7.5" y="7.5" width="13" height="13" rx="2" stroke={SIDEBAR_ICON_COLOR} strokeWidth="1.2" opacity="0.6"/>
+    </svg>
+  ),
+];
+
+// Sidebar icons vertical centering with equal bezels
+  const sidebarIconCount = SidebarIconsFigma.length;
+  const SIDEBAR_TOP_MARGIN = 160;
+  const SIDEBAR_BOTTOM_MARGIN = 160;
+  const barHeight = window.innerHeight - SIDEBAR_TOP_MARGIN - SIDEBAR_BOTTOM_MARGIN;
+  const iconsTotalHeight = sidebarIconCount * SIDEBAR_ICON_SIZE + (sidebarIconCount - 1) * SIDEBAR_ICON_GAP;
+  const equalBezelPadding = Math.max((barHeight - iconsTotalHeight) / 2, 0);
+
+interface Order {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+  time: string;
+  staffName: string;
+  customerDetails: string;
+  tableNo: string;
+  orderStatus: string;
+  isVeg?: boolean;
+  description: string;
+  cost: number;
+  category: string;
+}
+
+
+
+export default function FetchMenuItems() {
+  const [selectedCategory, setSelectedCategory] = useState("All Items");
+  const { totalOrderCount, pendingOrderCount } = useOrders();
+  const completedOrderCount = totalOrderCount - pendingOrderCount;
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [searchTerm, setSearchTerm] = useState(""); // <-- this is needed for search input
+  const [isVegOnly, setIsVegOnly] = useState(false);
+  const router = useRouter();
+
+
+
+  const categories = [
     "Starters",
-    "Main Course",
-    "Desserts",
     "Drinks",
-  ]);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState<null | (typeof items)[0]>(
-    null
-  );
+    "Desserts",
+    "Main Course",
+    "All Items",
+  ];
+
+  const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
-    async function fetchMenuItems() {
-      try {
-        const response = await fetch(
-          "https://qr-server-tabb.onrender.com/menu-all"
-        );
-        if (!response.ok) throw new Error("Failed to fetch menu items");
-        const data = await response.json();
-        setItems(data);
-        // Extract unique categories
-        const cats: string[] = Array.from(
-          new Set(data.map((item: any) => item.category))
-        );
-        setCategories(["All", ...cats]);
-      } catch (error) {
-        console.error("Error fetching menu items:", error);
-      }
-    }
-    fetchMenuItems();
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
+    setCurrentDate(now.toLocaleDateString("en-US", options));
   }, []);
 
-  const filteredItems = items.filter((item) => {
-    const matchesCategory =
-      selectedCategory === "All" || item.category === selectedCategory;
-    const matchesVeg = !vegOnly || item.isVeg;
-    const matchesSearch =
-      item.name.toLowerCase().includes(search.toLowerCase()) ||
-      item.description.toLowerCase().includes(search.toLowerCase());
-    return matchesCategory && matchesVeg && matchesSearch;
-  });
-
-  const openDeleteModal = (item: (typeof items)[0]) => {
-    setItemToDelete(item);
-    setDeleteModalOpen(true);
-  };
-
-  const closeDeleteModal = () => {
-    setDeleteModalOpen(false);
-    setItemToDelete(null);
-  };
-
-  const confirmDeleteItem = async () => {
-    if (!itemToDelete) return;
+  useEffect(() => {
+  async function fetchOrders() {
     try {
-      const response = await fetch(
-        `https://qr-server-tabb.onrender.com/delete-menu/${itemToDelete._id}`,
-        { method: "DELETE" }
+      const response = await fetch("https://qr-customer-sj9m.onrender.com/orders");
+      const data = await response.json();
+
+      if (!data || data.length === 0) {
+        const sampleOrders = [
+  {
+    id: "ORD101",
+    name: "Masala Dosa",
+    quantity: 2,
+    price: 120,
+    cost: 80,
+    description: "Crispy rice crepe stuffed with spicy potato filling.",
+    time: "09:00 AM",
+    staffName: "Ramesh",
+    customerDetails: "Amit Shah/ 9876543210",
+    tableNo: "3",
+    orderStatus: "Served",
+    isVeg: true,
+    category: "Main Course"
+  },
+  {
+    id: "ORD102",
+    name: "Lemon Soda",
+    quantity: 1,
+    price: 50,
+    cost: 20,
+    description: "Refreshing lemon soda with a hint of salt and cumin.",
+    time: "09:15 AM",
+    staffName: "Suresh",
+    customerDetails: "Nikita Mehta/ 9988776655",
+    tableNo: "4",
+    orderStatus: "Preparing",
+    isVeg: true,
+    category: "Drinks"
+  },
+  {
+    id: "ORD103",
+    name: "Veg Biryani",
+    quantity: 1,
+    price: 160,
+    cost: 110,
+    description: "Aromatic basmati rice cooked with mixed vegetables and spices.",
+    time: "10:00 AM",
+    staffName: "Anjali",
+    customerDetails: "Raj Patel/ 9123456789",
+    tableNo: "1",
+    orderStatus: "Served",
+    isVeg: true,
+    category: "Main Course"
+  },
+  {
+    id: "ORD104",
+    name: "Tomato Soup",
+    quantity: 2,
+    price: 90,
+    cost: 60,
+    description: "Rich and creamy tomato soup with croutons.",
+    time: "10:30 AM",
+    staffName: "Mahesh",
+    customerDetails: "Sneha Rao/ 9012345678",
+    tableNo: "6",
+    orderStatus: "Pending",
+    isVeg: true,
+    category: "Starters"
+  },
+  {
+    id: "ORD105",
+    name: "Butter Chicken",
+    quantity: 3,
+    price: 120,
+    cost: 90,
+    description: "Tender chicken in creamy tomato gravy with butter.",
+    time: "11:00 AM",
+    staffName: "Kavita",
+    customerDetails: "Deepak Sharma/ 9898989898",
+    tableNo: "5",
+    orderStatus: "Preparing",
+    isVeg: false,
+    category: "Main Course"
+  },
+  {
+    id: "ORD106",
+    name: "Chole Bhature",
+    quantity: 1,
+    price: 100,
+    cost: 70,
+    description: "Spicy chickpeas curry served with fried fluffy bread.",
+    time: "11:45 AM",
+    staffName: "Pooja",
+    customerDetails: "Meena Desai/ 9765432100",
+    tableNo: "7",
+    orderStatus: "Served",
+    isVeg: true,
+    category: "Main Course"
+  },
+  {
+    id: "ORD107",
+    name: "Ice Cream Sundae",
+    quantity: 2,
+    price: 140,
+    cost: 90,
+    description: "Vanilla and chocolate ice cream with syrup and nuts.",
+    time: "12:30 PM",
+    staffName: "Rohit",
+    customerDetails: "Arjun Kapoor/ 9543217890",
+    tableNo: "2",
+    orderStatus: "Served",
+    isVeg: true,
+    category: "Desserts"
+  },
+  {
+    id: "ORD108",
+    name: "Grilled Sandwich",
+    quantity: 1,
+    price: 85,
+    cost: 55,
+    description: "Grilled sandwich with fresh veggies and cheese.",
+    time: "01:00 PM",
+    staffName: "Neha",
+    customerDetails: "Pallavi Joshi/ 9001234567",
+    tableNo: "8",
+    orderStatus: "Pending",
+    isVeg: true,
+    category: "Main Course"
+  }
+];
+        setOrders(sampleOrders);
+        return;
+      }
+
+      const formattedOrders: Order[] = data.flatMap((order: any) =>
+        order.items?.map((item: any) => ({
+          id: item._id,
+          image: item.image || "/default.png",
+          name: item.name,
+          price: item.price,
+          date: new Date(order.createdAt).toLocaleDateString(),
+          time: new Date(order.createdAt).toLocaleTimeString(),
+          tableNo: order.tableNumber,
+          contactDetails: order.phoneNumber || "Unknown",
+          category: item.category || "Uncategorized",
+        })) || []
       );
-      if (!response.ok) throw new Error("Failed to delete item");
-      setItems((prev) => prev.filter((item) => item._id !== itemToDelete._id));
-      closeDeleteModal();
+      setOrders(formattedOrders);
     } catch (error) {
-      console.error("Error deleting item:", error);
-      alert("Failed to delete item. Please try again.");
+      console.error("Error fetching orders:", error);
+
+      const fallbackOrders = [
+  {
+    id: "ORD101",
+    name: "Masala Dosa",
+    quantity: 2,
+    price: 120,
+    cost: 80,
+    description: "Crispy rice crepe stuffed with spicy potato filling.",
+    time: "09:00 AM",
+    staffName: "Ramesh",
+    customerDetails: "Amit Shah/ 9876543210",
+    tableNo: "3",
+    orderStatus: "Served",
+    isVeg: true,
+    category: "Main Course"
+  },
+  {
+    id: "ORD102",
+    name: "Lemon Soda",
+    quantity: 1,
+    price: 50,
+    cost: 20,
+    description: "Refreshing lemon soda with a hint of salt and cumin.",
+    time: "09:15 AM",
+    staffName: "Suresh",
+    customerDetails: "Nikita Mehta/ 9988776655",
+    tableNo: "4",
+    orderStatus: "Preparing",
+    isVeg: true,
+    category: "Drinks"
+  },
+  {
+    id: "ORD103",
+    name: "Veg Biryani",
+    quantity: 1,
+    price: 160,
+    cost: 110,
+    description: "Aromatic basmati rice cooked with mixed vegetables and spices.",
+    time: "10:00 AM",
+    staffName: "Anjali",
+    customerDetails: "Raj Patel/ 9123456789",
+    tableNo: "1",
+    orderStatus: "Served",
+    isVeg: true,
+    category: "Main Course"
+  },
+  {
+    id: "ORD104",
+    name: "Tomato Soup",
+    quantity: 2,
+    price: 90,
+    cost: 60,
+    description: "Rich and creamy tomato soup with croutons.",
+    time: "10:30 AM",
+    staffName: "Mahesh",
+    customerDetails: "Sneha Rao/ 9012345678",
+    tableNo: "6",
+    orderStatus: "Pending",
+    isVeg: true,
+    category: "Starters"
+  },
+  {
+    id: "ORD105",
+    name: "Butter Chicken",
+    quantity: 3,
+    price: 120,
+    cost: 90,
+    description: "Tender chicken in creamy tomato gravy with butter.",
+    time: "11:00 AM",
+    staffName: "Kavita",
+    customerDetails: "Deepak Sharma/ 9898989898",
+    tableNo: "5",
+    orderStatus: "Preparing",
+    isVeg: false,
+    category: "Main Course"
+  },
+  {
+    id: "ORD106",
+    name: "Chole Bhature",
+    quantity: 1,
+    price: 100,
+    cost: 70,
+    description: "Spicy chickpeas curry served with fried fluffy bread.",
+    time: "11:45 AM",
+    staffName: "Pooja",
+    customerDetails: "Meena Desai/ 9765432100",
+    tableNo: "7",
+    orderStatus: "Served",
+    isVeg: true,
+    category: "Main Course"
+  },
+  {
+    id: "ORD107",
+    name: "Ice Cream Sundae",
+    quantity: 2,
+    price: 140,
+    cost: 90,
+    description: "Vanilla and chocolate ice cream with syrup and nuts.",
+    time: "12:30 PM",
+    staffName: "Rohit",
+    customerDetails: "Arjun Kapoor/ 9543217890",
+    tableNo: "2",
+    orderStatus: "Served",
+    isVeg: true,
+    category: "Desserts"
+  },
+  {
+    id: "ORD108",
+    name: "Grilled Sandwich",
+    quantity: 1,
+    price: 85,
+    cost: 55,
+    description: "Grilled sandwich with fresh veggies and cheese.",
+    time: "01:00 PM",
+    staffName: "Neha",
+    customerDetails: "Pallavi Joshi/ 9001234567",
+    tableNo: "8",
+    orderStatus: "Pending",
+    isVeg: true,
+    category: "Main Course"
+  }
+];
+      setOrders(fallbackOrders);
     }
-  };
+  }
+
+  fetchOrders();
+  const interval = setInterval(fetchOrders, 5000);
+  return () => clearInterval(interval);
+}, []);
+
+  const filteredOrders = orders.filter(order => {
+  const matchesCategory =
+    selectedCategory === "All Items" || order.category === selectedCategory;
+
+  const matchesSearch = order.name
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase());
+
+  const matchesVegOnly = !isVegOnly || order.isVeg;
+
+  return matchesCategory && matchesSearch && matchesVegOnly;
+});
+
+
 
   return (
-    <div className="min-h-screen bg-[#f5f1eb] p-6 font-serif">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">
-          Restaurant&apos;s Menu
-        </h1>
-        <div className="flex items-center gap-4">
-          <label className="flex items-center gap-2 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={vegOnly}
-              onChange={() => setVegOnly((v) => !v)}
-              className="accent-[#C99E5A] w-5 h-5 rounded border-gray-300"
+    <div className="min-h-screen bg-[#f5f1eb] font-['Calibri'] overflow-x-hidden">
+      {/* Header */}
+      <header className="fixed top-0 left-0 w-full h-[80px] bg-[#f5f1eb] px-6 flex items-center justify-between z-10">
+        <div className="flex items-center gap-3 text-xl font-bold">
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="The Waiter Company Logo"
+              width={50}
+              height={50}
+              className="h-10 w-auto"
             />
-            <span className="text-base">Veg Only</span>
-          </label>
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="border border-[#e5c99a] rounded px-3 py-2 text-base bg-white focus:outline-none min-w-[160px] font-serif"
-            title="Category Filter"
-            style={{ boxShadow: "none" }}
-          >
-            {categories.map((cat) => (
-              <option key={cat} value={cat} className="font-serif">
-                {cat === "All" ? "Category (All)" : cat}
-              </option>
-            ))}
-          </select>
-          <Link href="/dashboard/menu/add">
-            <button
-              className="ml-4 bg-white border border-[#e5c99a] hover:bg-[#f5f1eb] text-gray-600 rounded-md p-2 flex items-center justify-center"
-              aria-label="Add new dish"
-            >
-              <Plus className="w-5 h-5" />
-            </button>
           </Link>
+          <span className="text-xl text-gray-400">×</span>
+          <span className="text-xl font-serif">Smart Cafe</span>
+        </div>
+        <div className="text-right">
+          {/* <h2 className="text-md font-medium">Thu 13 Mar 04:20PM</h2> */}
+          <h2 className="text-xl font-extrabold">
+            {new Date().toLocaleString('en-US', {
+              weekday: 'short',
+              day: '2-digit',
+              month: 'short',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true
+            }).replace(',', '')}
+          </h2>
+        </div>
+      </header>
+
+
+            {/* Today's Overview */}
+      <div className="flex w-full min-h-screen bg-[#F4F0E8]">
+        {/* Sidebar - 10% */}
+
+      <div className="flex flex-col items-center"
+        style={{
+          width: 60,
+          background: "#b3878b",
+          borderTopRightRadius: 12,
+          borderBottomRightRadius: 12,
+          minHeight: barHeight,
+          marginTop: SIDEBAR_TOP_MARGIN,
+          marginBottom: SIDEBAR_BOTTOM_MARGIN,
+          position: 'fixed',
+          left: 0,
+          zIndex: 10,
+          // Adjusted boxShadow for the subtle shadow line
+          boxShadow: '2px 0 8px 0 rgba(180,140,80,0.2)', // Shadow to the right for the "line"
+          justifyContent: "flex-start",
+        }}
+      >
+        <div
+          className="flex flex-col items-center"
+          style={{
+            paddingTop: equalBezelPadding,
+            paddingBottom: equalBezelPadding,
+            gap: SIDEBAR_ICON_GAP,
+            height: '100%',
+            justifyContent: 'center',
+          }}
+        >
+          {SidebarIconsFigma.map((IconComp, idx) => (
+            <span key={idx} className="flex items-center justify-center" style={{
+              width: SIDEBAR_ICON_SIZE, height: SIDEBAR_ICON_SIZE
+            }}>
+              <IconComp />
+            </span>
+          ))}
         </div>
       </div>
 
-      <main>
-        <div className="flex items-center mb-4">
-          <div className="relative flex-grow">
-            <input
-              type="text"
-              placeholder="Search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full px-4 py-2 border border-[#e5c99a] rounded-md text-base focus:outline-none font-serif bg-white"
-              style={{ boxShadow: "none" }}
-            />
-          </div>
-        </div>
+        {/* Main Content */}
+        <div className="ml-[60px] w-full pt-[90px] px-6">
+          {/* Controls above box */}
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center gap-2 text-[#4b2e2e]">
+              <h2 className="font-[500] text-[25px]" style={{ fontFamily: 'Aleo, serif' }}>
+                Restaurant's Menu
+              </h2>
+            </div>
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-1 text-[#4b2e2e] text-xl font-extrabold">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4"
+                  checked={isVegOnly}
+                  onChange={(e) => setIsVegOnly(e.target.checked)}
+                />
+                Veg Only
+              </label>
 
-        <div className="bg-white rounded-xl p-0 overflow-x-auto border border-[#e5c99a]">
-          <table className="w-full min-w-[900px] border-separate border-spacing-0 font-serif">
-            <thead>
-              <tr className="border-b border-[#e5c99a]">
-                <th className="py-4 px-4 text-left font-semibold border-b border-[#e5c99a] bg-white">
-                  Image
-                </th>
-                <th className="py-4 px-4 text-left font-semibold border-b border-[#e5c99a] bg-white">
-                  Name
-                </th>
-                <th className="py-4 px-4 text-left font-semibold border-b border-[#e5c99a] bg-white">
-                  Description
-                </th>
-                <th className="py-4 px-4 text-left font-semibold border-b border-[#e5c99a] bg-white">
-                  Category
-                </th>
-                <th className="py-4 px-4 text-left font-semibold border-b border-[#e5c99a] bg-white">
-                  Veg/Non-Veg
-                </th>
-                <th className="py-4 px-4 text-left font-semibold border-b border-[#e5c99a] bg-white">
-                  Cost
-                </th>
-                <th className="py-4 px-4 text-left font-semibold border-b border-[#e5c99a] bg-white">
-                  Price
-                </th>
-                <th className="py-4 px-4 text-left font-semibold border-b border-[#e5c99a] bg-white">
-                  Edit
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredItems.length === 0 && (
-                <tr>
-                  <td
-                    colSpan={8}
-                    className="text-center py-8 text-gray-400 border-b border-[#e5c99a]"
-                  >
-                    No items found.
-                  </td>
-                </tr>
-              )}
-              {filteredItems.map((item, idx) => (
-                <tr
-                  key={item._id}
-                  className="transition"
-                  style={{ borderBottom: "1px solid #e5c99a" }}
-                >
-                  <td className="py-3 px-4 border-b border-[#e5c99a] align-middle">
-                    <div className="w-16 h-16 relative rounded-lg overflow-hidden border border-[#e5c99a] bg-gray-50">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 border-b border-[#e5c99a] font-medium align-middle">
-                    {item.name}
-                  </td>
-                  <td className="py-3 px-4 border-b border-[#e5c99a] max-w-xs align-middle">
-                    <span className="block truncate text-gray-700">
-                      {item.description}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 border-b border-[#e5c99a] align-middle">
-                    {item.category}
-                  </td>
-                  <td className="py-3 px-4 border-b border-[#e5c99a] align-middle">
-                    <span
-                      className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
-                        item.isVeg
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {item.isVeg ? "Veg" : "Non-Veg"}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 border-b border-[#e5c99a] align-middle">
-                    ₹{item.cost ?? "-"}
-                  </td>
-                  <td className="py-3 px-4 border-b border-[#e5c99a] align-middle">
-                    ₹{item.price}
-                  </td>
-                  <td className="py-3 px-4 border-b border-[#e5c99a] align-middle">
-                    <div className="flex gap-2">
-                      <Link href={`/dashboard/menu/edit/${item._id}`}>
-                        <button
-                          className="p-2 hover:bg-[#f5f1eb] rounded-full transition-colors"
-                          aria-label={`Edit ${item.name}`}
-                        >
-                          <Pencil className="w-4 h-4 text-gray-600" />
-                        </button>
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="text-right text-gray-500 text-sm mt-4 font-serif pr-2">
-          {filteredItems.length} of {items.length} items
-        </div>
-        {/* Delete Confirmation Modal */}
-        {deleteModalOpen && itemToDelete && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-            <div className="bg-white rounded-2xl shadow-xl p-8 w-[350px] max-w-full flex flex-col items-center relative">
-              <button
-                className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-xl"
-                onClick={closeDeleteModal}
-                aria-label="Close"
-              >
-                ×
-              </button>
-              <div className="mb-4 text-lg font-semibold text-center font-serif">
-                You want to delete this dish?
-              </div>
-              <div className="w-32 h-24 rounded-lg overflow-hidden mb-3 border border-gray-200 bg-gray-50 flex items-center justify-center">
-                {itemToDelete.image ? (
-                  <Image
-                    src={itemToDelete.image}
-                    alt={itemToDelete.name}
-                    width={128}
-                    height={96}
-                    className="object-cover w-full h-full"
-                  />
-                ) : (
-                  <span className="text-gray-400 font-serif">No Image</span>
-                )}
-              </div>
-              <div className="text-center font-medium text-lg mb-1 font-serif">
-                {itemToDelete.name}
-              </div>
-              <div className="text-center text-[#C99E5A] text-lg font-semibold mb-6 font-serif">
-                ₹{itemToDelete.price}
-              </div>
-              <button
-                className="w-full py-2 bg-[#C99E5A] hover:bg-[#b88d49] text-white rounded-lg text-base font-semibold font-serif"
-                onClick={confirmDeleteItem}
-              >
-                Delete
-              </button>
+              <select
+  value={selectedCategory}
+  onChange={(e) => setSelectedCategory(e.target.value)}
+  className="border border-[#b3978b] rounded px-2 py-1 text-xl font-extrabold bg-white text-sm text-[#8c6c6a] h-[36px] w-[160px]"
+>
+  {categories.map((cat, idx) => (
+    <option key={idx} value={cat}>
+      {cat}
+    </option>
+  ))}
+</select>
+
+              {/* <div className="relative">
+                <FontAwesomeIcon icon={faBell} className="text-black text-2xl h-[25px]" />
+                  <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center font-semibold">
+                    1
+                  </span>
+                </div>    */}
+                <div className="relative">
+  <FontAwesomeIcon
+    icon={faBell}
+    className="text-[#4D3E3B] text-2xl h-[25px]"
+  />
+
+  {/* Notification dot */}
+  <span
+    className="absolute bg-[#F55151] border border-white text-white text-[12px] leading-[14px] font-normal w-[16px] h-[16px] flex items-center justify-center rounded-full"
+    style={{
+      left: '96.41%',
+      top: '13.7%',
+      transform: 'translate(-50%, -50%)',
+      fontFamily: 'Aleo',
+    }}
+  >
+    1
+  </span>
+</div>
+
             </div>
           </div>
-        )}
-      </main>
+
+          {/* White Box */}
+          <div className="bg-white rounded-xl shadow p-4 w-full overflow-x-auto">
+            {/* Search + Today */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-[20%]">
+                <div className="flex items-center border border-[#b3978b] rounded-[6px] px-3 py-0.5 bg-white">
+                  <Search className="text-[#b3978b] w-6 h-6 mr-2" />
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full text-lg placeholder-[#b3978b] text-[#b3978b] bg-transparent focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div onClick={() => router.push('/dashboard/menu/add')} className="cursor-pointer">
+      <svg width="54" height="54" viewBox="0 0 54 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#filter0_d_3859_4182)">
+          <circle cx="27" cy="25" r="20.5" stroke="#B39793"/>
+          <path fillRule="evenodd" clipRule="evenodd" d="M28.8333 15.8333C28.8333 15.3471 28.6402 14.8808 28.2964 14.537C27.9525 14.1932 27.4862 14 27 14C26.5138 14 26.0475 14.1932 25.7036 14.537C25.3598 14.8808 25.1667 15.3471 25.1667 15.8333V23.1667H17.8333C17.3471 23.1667 16.8808 23.3598 16.537 23.7036C16.1932 24.0475 16 24.5138 16 25C16 25.4862 16.1932 25.9525 16.537 26.2964C16.8808 26.6402 17.3471 26.8333 17.8333 26.8333H25.1667V34.1667C25.1667 34.6529 25.3598 35.1192 25.7036 35.463C26.0475 35.8068 26.5138 36 27 36C27.4862 36 27.9525 35.8068 28.2964 35.463C28.6402 35.1192 28.8333 34.6529 28.8333 34.1667V26.8333H36.1667C36.6529 26.8333 37.1192 26.6402 37.463 26.2964C37.8068 25.9525 38 25.4862 38 25C38 24.5138 37.8068 24.0475 37.463 23.7036C37.1192 23.3598 36.6529 23.1667 36.1667 23.1667H28.8333V15.8333Z" fill="#B39793"/>
+        </g>
+        <defs>
+          <filter id="filter0_d_3859_4182" x="0" y="0" width="54" height="54" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+            <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+            <feOffset dy="2"/>
+            <feGaussianBlur stdDeviation="3"/>
+            <feComposite in2="hardAlpha" operator="out"/>
+            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0"/>
+            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3859_4182"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3859_4182" result="shape"/>
+          </filter>
+        </defs>
+      </svg>
+    </div>
+
+            </div>
+
+
+            {/* Table */}
+            <div className="overflow-x-auto rounded-md ">
+              <table className="min-w-full bg-white text-base text-center text-xl font-extrabold"> {/* increased from text-sm to text-base */}
+  <thead className="text-[#4b2e2e] font-medium"> {/* changed font-large (invalid) to font-medium */}
+    <tr className="border-b border-[#e0d5cc] bg-transparent">
+      
+      <th className="py-2 px-4">Image</th>
+      <th className="py-2 px-4">Name</th>
+      <th className="py-2 px-4">Description</th>
+      <th className="py-2 px-4">Category</th>
+      <th className="py-2 px-4">Veg/Non-Veg</th>
+      <th className="py-2 px-4">Cost</th>
+      <th className="py-2 px-4">Price</th>     
+      <th className="py-2 px-4">Edit</th>
+    </tr>
+  </thead>
+  <tbody className="text-[#4b2e2e] font-medium"> {/* added font-medium to match header */}
+    {filteredOrders.map((order, i) => (
+    <tr key={i} className="border-b border-[#f5e9e2]">
+        
+        <td className="py-3 px-4">
+            <div
+                className="overflow-hidden shadow"
+                style={{ borderRadius: '12px', width: '69px', height: '53px' }}
+                >
+                <img
+                    src="https://www.shutterstock.com/image-photo/paneer-tikka-kabab-red-sauce-260nw-423525136.jpg"
+                    alt="Paneer Tikka"
+                    className="w-full h-full object-cover"
+                />
+                </div>
+
+        </td>
+        <td className="py-3 px-4">{order.name}</td>
+        <td className="py-3 px-4">{order.description}</td>
+        <td className="py-3 px-4">{order.category}</td>
+        <td className="py-3 px-4">{order.isVeg ? "Veg" : "Non-Veg"}</td>
+
+        <td className="py-3 px-4">{order.cost}</td>
+        <td className="py-3 px-4">{order.price}</td>
+        <td className="py-3 px-4">
+          <div
+            className="cursor-pointer"
+            onClick={() => router.push(`/dashboard/menu/edit/${order.id}`)}
+          >
+            <svg width="25" height="27" viewBox="0 0 25 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22.8349 1.48119C22.4175 1.01163 21.9219 0.63912 21.3763 0.384967C20.8308 0.130815 20.246 0 19.6554 0C19.0649 0 18.4801 0.130815 17.9345 0.384967C17.389 0.63912 16.8933 1.01163 16.476 1.48119L2.97239 16.6582C2.3314 17.3798 1.87411 18.2812 1.64811 19.2687L0.155718 25.7969C0.118709 25.9593 0.120034 26.1298 0.159563 26.2914C0.199091 26.4531 0.275456 26.6004 0.381116 26.7188C0.486777 26.8371 0.618079 26.9225 0.762057 26.9664C0.906036 27.0103 1.05771 27.0112 1.20211 26.9691L7.00871 25.2937C7.88764 25.0405 8.68986 24.5265 9.33135 23.8053L22.8349 8.62821C23.2527 8.15909 23.5841 7.60203 23.8103 6.98886C24.0364 6.37569 24.1528 5.71845 24.1528 5.0547C24.1528 4.39095 24.0364 3.73371 23.8103 3.12054C23.5841 2.50738 23.2527 1.95031 22.8349 1.48119ZM17.6887 2.84427C18.2103 2.25803 18.9178 1.92868 19.6554 1.92868C20.3931 1.92868 21.1005 2.25803 21.6221 2.84427C22.1437 3.43051 22.4368 4.22563 22.4368 5.0547C22.4368 5.88377 22.1437 6.67889 21.6221 7.26513L20.2858 8.76702L16.3524 4.34617L17.6887 2.84427ZM15.1397 5.70925L19.0731 10.1301L8.11857 22.4422C7.694 22.919 7.16312 23.2586 6.58158 23.4254L2.17817 24.6979L3.31032 19.7488C3.45798 19.0948 3.76027 18.4979 4.18517 18.0213L15.1397 5.70925Z" fill="black"/>
+            </svg>
+          </div>
+        </td>
+        
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+            </div>
+          </div>
+
+          {/* Footer Count outside box */}
+          <div className="text-right text-black-500 mt-2 pr-2 text-md font-extrabold">
+            {filteredOrders.length} of {orders.length} items
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
