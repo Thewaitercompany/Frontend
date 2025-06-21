@@ -1,10 +1,9 @@
 "use client";
-import React, { useState, CSSProperties } from "react";
-import dynamic from "next/dynamic";
+import React, { useState } from "react";
+import ReportsAnalytics from "./ReportsAnalytics";
+import RestaurantProfile from "./RestaurantProfile";
 
-const ReportsAnalytics = dynamic(() => import("@/app/dashboard/reports/page"), { ssr: false });
-const RestaurantProfile = dynamic(() => import("@/app/dashboard/restaurantprofile/page"), { ssr: false });
-
+// Sidebar Icon Setup
 const SIDEBAR_ICON_SIZE = 43;
 const SIDEBAR_ICON_COLOR = "#F1EBE6";
 const SIDEBAR_ICON_ACTIVE_COLOR = "#4D3E3B";
@@ -13,10 +12,13 @@ const SIDEBAR_BG = "#B39793";
 const SIDEBAR_WIDTH_COLLAPSED = 65;
 const SIDEBAR_WIDTH_EXPANDED = 282;
 const SIDEBAR_HEIGHT = 480;
-const SIDEBAR_TOP_OFFSET = 150;
+const SIDEBAR_TOP_OFFSET = 151;
 const SIDEBAR_BORDER_RADIUS = "0 8px 8px 0";
 
-const SidebarIconsFigma: ((active: boolean) => JSX.Element)[] = [
+// The amount to shift all content pages (including ReportsAnalytics) to the left
+const CONTENT_LEFT_SHIFT = 66;
+
+const SidebarIconsFigma = [
   // Restaurant's Profile
   (active: boolean) => (
     <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none" key="sidebar-user">
@@ -25,14 +27,29 @@ const SidebarIconsFigma: ((active: boolean) => JSX.Element)[] = [
       <path d="M7 20c.5-4.2 4.1-4.5 7-4.5s6.5 1.3 7 3.5" stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   ),
-  // Dashboard (inactive, placeholder)
+  // Dashboard
   (active: boolean) => (
-    <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none" key="sidebar-check">
-      <rect x="5.5" y="5.5" width="17" height="17" rx="4.1" stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} strokeWidth="1.8" />
-      <path d="M8.7 18.2 13 13l3.2 3.2 4.1-4.9" stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
+   <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d_6393_5190)">
+<path d="M28.2703 6H17.7297C12.3561 6 8 10.3561 8 15.7297V26.2703C8 31.6439 12.3561 36 17.7297 36H28.2703C33.6439 36 38 31.6439 38 26.2703V15.7297C38 10.3561 33.6439 6 28.2703 6Z" stroke="#4D3E3B" stroke-width="2.5"/>
+<path d="M14.8926 25.8645L18.8656 20.578C19.1088 20.2525 19.4655 20.0301 19.8649 19.9551C20.2644 19.88 20.6774 19.9576 21.0223 20.1726L24.898 22.6213C25.2561 22.8493 25.6895 22.9278 26.1049 22.8399C26.5203 22.752 26.8846 22.5046 27.1196 22.151L31.1088 16.1348" stroke="#4D3E3B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<filter id="filter0_d_6393_5190" x="0.75" y="0.75" width="44.5" height="44.5" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="3"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_6393_5190"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_6393_5190" result="shape"/>
+</filter>
+</defs>
+</svg>
+
   ),
-  // List of tables (inactive, placeholder)
+  // List of tables
   (active: boolean) => (
     <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none" key="sidebar-ellipse">
       <ellipse cx="14" cy="9.5" rx="7.3" ry="2.8" stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} strokeWidth="1.8" />
@@ -43,7 +60,7 @@ const SidebarIconsFigma: ((active: boolean) => JSX.Element)[] = [
       <path d="M16.2 20.4v2.1" stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   ),
-  // Restaurant's Menu (inactive, placeholder)
+  // Restaurant's Menu
   (active: boolean) => (
     <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none" key="sidebar-book">
       <rect x="6.8" y="7.6" width="14.4" height="12.8" rx="2.2"
@@ -52,7 +69,7 @@ const SidebarIconsFigma: ((active: boolean) => JSX.Element)[] = [
       <path d="M14 7.6v12.8" stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} strokeWidth="1.2" strokeLinecap="round" />
     </svg>
   ),
-  // Inventory (inactive, placeholder)
+  // Inventory
   (active: boolean) => (
     <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none" key="sidebar-home">
       <path d="M14 5.6 22 10.6v6.8l-8 5-8-5v-6.8L14 5.6Z" stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} strokeWidth="1.8" />
@@ -60,7 +77,7 @@ const SidebarIconsFigma: ((active: boolean) => JSX.Element)[] = [
       <rect x="15" y="10" width="2" height="7" rx="1" fill={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} />
     </svg>
   ),
-  // Sales Overview (inactive, placeholder)
+  // Sales Overview
   (active: boolean) => (
     <svg width={SIDEBAR_ICON_SIZE} height={SIDEBAR_ICON_SIZE} viewBox="0 0 28 28" fill="none" key="sidebar-doc">
       <path d="M7 8.5v11.5c0 1.1.9 2 2 2h5.5" stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
@@ -91,7 +108,7 @@ const SIDEBAR_LABELS = [
   "Reports"
 ];
 
-export default function MySidebar() {
+export default function Sidebar() {
   const [activeSidebarIdx, setActiveSidebarIdx] = useState<number | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -101,18 +118,19 @@ export default function MySidebar() {
     (sidebarIconCount - 1) * SIDEBAR_ICON_GAP;
   const equalBezelPadding = Math.max((SIDEBAR_HEIGHT - iconsTotalHeight) / 2, 1);
 
-  // Only show content for Restaurant Profile and Reports
-  const RESTAURANT_PROFILE_IDX = 0;
+  // The last index for Reports & Analytics
   const REPORTS_ANALYTICS_IDX = SidebarIconsFigma.length - 1;
+  // The first index for Restaurant Profile
+  const RESTAURANT_PROFILE_IDX = 0;
 
-  // Clean content style, fixes: block is always left-aligned, full height, below top bar
-  const getContentStyle = (): CSSProperties => ({
-    marginLeft: SIDEBAR_WIDTH_COLLAPSED,
-    width: `calc(100vw - ${SIDEBAR_WIDTH_COLLAPSED}px)`,
+  // All content pages use the same position logic now
+  const getContentStyle = () => ({
+    marginLeft: SIDEBAR_WIDTH_COLLAPSED - CONTENT_LEFT_SHIFT,
+    width: `calc(100vw - 0px)`,
     height: "100vh",
-    position: "fixed",
-    top: 0,
-    left: SIDEBAR_WIDTH_COLLAPSED,
+    position: "fixed" as const,
+    top: 16,
+    left: SIDEBAR_WIDTH_COLLAPSED - CONTENT_LEFT_SHIFT,
     zIndex: 50,
     background: "transparent",
     overflow: "auto",
@@ -168,7 +186,7 @@ export default function MySidebar() {
                   width: isHovered ? SIDEBAR_WIDTH_EXPANDED - 16 : SIDEBAR_ICON_SIZE,
                   height: SIDEBAR_ICON_SIZE,
                   borderRadius: 8,
-                  background: isActive ? "rgba(255,255,255,0.14)" : "transparent",
+                  background: "transparent",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
@@ -224,7 +242,7 @@ export default function MySidebar() {
           <ReportsAnalytics />
         </div>
       )}
-      {/* No rendering for other tabs */}
+      {/* Add for other icons/pages if you add more */}
     </div>
   );
 }
