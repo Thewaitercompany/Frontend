@@ -2,6 +2,9 @@
 
 import React from "react";
 import Image from "next/image";
+import logo from "/public/logo.png";
+import table from "/public/table.png";
+import x from "/public/x.png";
 
 interface NavbarProps {
   tableId: string;
@@ -14,7 +17,7 @@ const Navbar: React.FC<NavbarProps> = ({ tableId }) => {
         <div className="flex items-center">
           <div className="h-6 w-20 relative">
             <Image
-              src="/logo.png"
+              src={logo || "/placeholder.svg"}
               alt="logo"
               fill
               className="object-contain object-left"
@@ -22,13 +25,17 @@ const Navbar: React.FC<NavbarProps> = ({ tableId }) => {
             />
           </div>
           <span className="text-gray-900 text-base flex items-center italic gap-1">
-            <Image src="/x.png" alt="x" className="w-2 h-2" />
+            <Image
+             src={x || "/placeholder.svg"} 
+             alt="x" 
+             className="w-2 h-2" 
+            />
             Smart cafe
           </span>
         </div>
         <div className="flex items-center gap-2">
           <Image
-            src="/table.png"
+            src={table || "/placeholder.svg"}
             alt="table"
             className="w-4 h-4"
             style={{
