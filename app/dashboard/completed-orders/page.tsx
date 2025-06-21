@@ -519,7 +519,7 @@ export default function TotalOrders() {
     </button>
 
 
-              <h2 className="text-xl font-medium font-black">Total Orders</h2>
+              <h2 className="text-xl font-medium font-black">Completed Orders</h2>
             </div>
             <div className="flex items-center gap-4">
               <label className="flex items-center gap-1 text-[#4b2e2e] text-xl font-extrabold">
@@ -601,7 +601,7 @@ export default function TotalOrders() {
                     <th className="py-2 px-4">Time</th>
                     <th className="py-2 px-4">Waiter Name</th>
                     <th className="py-2 px-4">Table No.</th>
-                    <th className="py-2 px-4">Order Status</th>
+                    <th className="py-2 px-4">Total Bill</th>
                   </tr>
                 </thead>
                 <tbody className="text-[#4b2e2e] font-medium">
@@ -616,7 +616,7 @@ export default function TotalOrders() {
                       <td className="py-3 px-4">{order.time}</td>
                       <td className="py-3 px-4">Mr Waiter</td>
                       <td className="py-3 px-4">{order.tableNo}</td>
-                      <td className="py-3 px-4 text-green-600">{order.orderStatus}</td>
+                      <td className="py-3 px-4">{(order.price * 1.1).toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -785,14 +785,14 @@ export default function TotalOrders() {
 
     <div className="border-t border-[#C99E5A] my-2 w-full" />
 
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center font-semibold">
       <span className="text-[18px]">Total Bill</span>
       <span className="text-[16px]">₹{(selectedOrder.price * 1.1).toFixed(2)}</span>
     </div>
   </div>
 
   {/* Center: Order Info (Wider) */}
-  <div className="flex-[2] text-black font-['Aleo'] space-y-1 text-[18px] leading-[22px]">
+  <div className="flex-[2] font-['Aleo'] space-y-1 text-[18px] leading-[22px]">
   <div className="flex gap-1 whitespace-nowrap">
     <span className="font-light">Order Method:</span>
     <span className="font-normal font-semibold">Dine-in</span>
@@ -908,7 +908,7 @@ export default function TotalOrders() {
       <div className="border-t border-[#C99E5A] my-2"></div>
 
       {/* Calculations in Columns */}
-      <div className="grid grid-cols-3 text-sm text-semibold mb-2">
+      <div className="grid grid-cols-3 text-sm text-black mb-2">
         <span className="font-medium">Total</span>
         <span></span>
         <span className="text-right">₹{selectedOrder.price}</span>
