@@ -13,56 +13,9 @@ import {
   AlertTriangle,
   Users,
 } from "lucide-react";
+import { useRouter } from "next/navigation"; // Import useRouter
 
-// Bell icon (with red badge)
-const BellIcon: React.FC<{ unreadCount: number }> = ({ unreadCount }) => (
-  <svg
-    width={36}
-    height={33}
-    viewBox="0 0 36 33"
-    fill="none"
-    style={{ position: "relative", display: "block" }}
-    aria-label="Notifications"
-  >
-    <ellipse cx="18" cy="5" rx="5.5" ry="3.2" fill="#3A2102" />
-    <path
-      d="M28 18V13C28 8.477 23.523 4 18 4C12.477 4 8 8.477 8 13V18L5 23V24.5H31V23L28 18Z"
-      stroke="#3A2102"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      fill="#3A2102"
-    />
-    <circle cx="18" cy="29" r="2.7" fill="#3A2102" />
-    {unreadCount > 0 && (
-      <g>
-        <circle
-          cx="30.5"
-          cy="7.5"
-          r="7"
-          fill="#d82c2c"
-          stroke="#fff"
-          strokeWidth="2"
-        />
-        <text
-          x="30.5"
-          y="7.5"
-          textAnchor="middle"
-          alignmentBaseline="middle"
-          dominantBaseline="middle"
-          fontFamily="Calibri, Arial, sans-serif"
-          fontWeight="bold"
-          fontSize="12"
-          fill="#fff"
-          style={{ fontVariantNumeric: "tabular-nums" }}
-        >
-          {unreadCount}
-        </text>
-      </g>
-    )}
-  </svg>
-);
-
+// NotificationArrow (unchanged, as it's a presentational SVG)
 const NotificationArrow: React.FC = () => (
   <svg
     width="36"
@@ -82,6 +35,7 @@ const NotificationArrow: React.FC = () => (
   </svg>
 );
 
+// ExternalIcon (unchanged, as it's a presentational SVG)
 const ExternalIcon: React.FC = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-label="External link">
     <path
@@ -175,10 +129,9 @@ const filterOptions = [
   { label: "ThisMonth", value: "ThisMonth" },
 ];
 
-const NotificationPage: React.FC = () => {
+const NotificationsPage: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [showNotificationPanel, setShowNotificationPanel] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>("all");
   const [showFilterDropdown, setShowFilterDropdown] = useState<boolean>(false);
   const [selectedNotifications, setSelectedNotifications] = useState<number[]>([]);
@@ -187,8 +140,8 @@ const NotificationPage: React.FC = () => {
   const [dropdownTimeout, setDropdownTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   const filterButtonRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter(); // Initialize useRouter
 
-  // Clean up dropdownTimeout on unmount to avoid memory leaks
   useEffect(() => {
     return () => {
       if (dropdownTimeout) clearTimeout(dropdownTimeout);
@@ -287,8 +240,6 @@ const NotificationPage: React.FC = () => {
       n.text.toLowerCase().includes(searchTerm.toLowerCase()) && filterByDate(n)
   );
 
-  const unreadCount = notifications.filter((n) => n.unread).length;
-
   const notificationBlockMarginBottom = 16;
   const notificationButtonLeft = 90;
   const notificationBlockPaddingBottom = 24;
@@ -305,535 +256,478 @@ const NotificationPage: React.FC = () => {
         position: "relative",
       }}
     >
-      {/* Top right: bell */}
-      <div
+      {/* <Notifications button */}
+      <button
         style={{
-          position: "fixed",
-          top: 70,
-          right: 40,
-          zIndex: 30,
+          color: "#3A2102",
+          background: "transparent",
+          fontWeight: 400,
+          letterSpacing: 0.1,
+          fontFamily: "Times New Roman, Times, serif",
+          top: 97,
+          left: notificationButtonLeft,
+          zIndex: 22,
+          border: "none",
+          padding: 0,
+          fontSize: 26,
+          outline: "none",
+          borderRadius: 8,
+          position: "absolute",
+          transition: "top 0.2s",
           display: "flex",
           alignItems: "center",
-          gap: 17,
+          gap: 0,
+          cursor: "pointer",
+        }}
+        onClick={() => router.back()} // Go back to the previous page/dashboard
+        aria-label="Close notifications"
+      >
+        <NotificationArrow />
+        <span
+          style={{
+            fontFamily: "Times New Roman, Times, serif",
+            color: "#3A2102",
+            fontWeight: 400,
+            paddingLeft: 2,
+          }}
+        >
+          Notifications
+        </span>
+      </button>
+
+      {/* Notification Section Block */}
+      <div
+        style={{
+          margin: `140px 0 ${notificationBlockMarginBottom}px 25px`,
+          background: "#fcfaf8",
+          borderRadius: 18,
+          position: "relative",
+          overflow: "hidden",
+          paddingBottom: notificationBlockPaddingBottom,
+          boxShadow: "0 5px 25px 5px rgba(180,140,80,0.15)",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "calc(100vw - 100px)",
+          maxWidth: 1400,
+          border: "1px solid #ede6dd",
+          display: "flex",
+          flexDirection: "column",
+          opacity: 1,
+          pointerEvents: "auto",
         }}
       >
-        <div
-          onClick={() => setShowNotificationPanel((v) => !v)}
-          style={{ marginTop: 3, cursor: "pointer", position: "relative" }}
-          aria-label="Open notifications"
-        >
-          <BellIcon unreadCount={unreadCount} />
-        </div>
-      </div>
-
-      {/* <Notifications button */}
-      {showNotificationPanel && (
-        <button
-          style={{
-            color: "#3A2102",
-            background: "transparent",
-            fontWeight: 400,
-            letterSpacing: 0.1,
-            fontFamily: "Times New Roman, Times, serif",
-            top: 97,
-            left: notificationButtonLeft,
-            zIndex: 22,
-            border: "none",
-            padding: 0,
-            fontSize: 26,
-            outline: "none",
-            borderRadius: 8,
-            position: "absolute",
-            transition: "top 0.2s",
-            display: "flex",
-            alignItems: "center",
-            gap: 0,
-            cursor: "pointer",
-          }}
-          onClick={() => setShowNotificationPanel(false)}
-          aria-label="Close notifications"
-        >
-          <NotificationArrow />
-          <span
+        {/* Section Content */}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {/* Section 1: Search and Filter */}
+          <div
             style={{
-              fontFamily: "Times New Roman, Times, serif",
-              color: "#3A2102",
-              fontWeight: 400,
-              paddingLeft: 2,
+              boxShadow: "0 5px 12px -2px rgba(180, 140, 80, 0.3)",
+              borderBottom: "none",
+              position: "relative",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingBottom: "0.75rem",
+              gap: "1rem",
+              flexWrap: "wrap",
+              paddingLeft: "1.75rem",
+              paddingRight: "1.75rem",
+              paddingTop: "1.5rem",
             }}
           >
-            Notifications
-          </span>
-        </button>
-      )}
-      {/* Notification Section Block */}
-      {showNotificationPanel && (
-        <div
-          style={{
-            margin: `140px 0 ${notificationBlockMarginBottom}px 25px`,
-            background: "#fcfaf8",
-            borderRadius: 18,
-            position: "relative",
-            overflow: "hidden",
-            paddingBottom: notificationBlockPaddingBottom,
-            boxShadow: "0 5px 25px 5px rgba(180,140,80,0.15)",
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: "calc(100vw - 100px)",
-            maxWidth: 1400,
-            border: "1px solid #ede6dd",
-            display: "flex",
-            flexDirection: "column",
-            opacity: 1,
-            pointerEvents: "auto",
-          }}
-        >
-          {/* Section Content */}
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            {/* Section 1: Search and Filter */}
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchTerm(e.target.value)
+              }
+              style={{
+                fontFamily: "Calibri, Arial, sans-serif",
+                background: "#fcfaf8",
+                fontSize: "1rem",
+                padding: "0.5rem 1rem",
+                borderRadius: "0.375rem",
+                border: "1px solid #7B3F00",
+                width: 230,
+                color: "#7B3F00",
+              }}
+              aria-label="Search notifications"
+            />
             <div
               style={{
-                boxShadow: "0 5px 12px -2px rgba(180, 140, 80, 0.3)",
-                borderBottom: "none",
                 position: "relative",
+                overflow: "visible",
                 display: "flex",
-                justifyContent: "space-between",
                 alignItems: "center",
-                paddingBottom: "0.75rem",
-                gap: "1rem",
-                flexWrap: "wrap",
-                paddingLeft: "1.75rem",
-                paddingRight: "1.75rem",
-                paddingTop: "1.5rem",
+                gap: "0.75rem",
+                marginLeft: "auto",
               }}
             >
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setSearchTerm(e.target.value)
-                }
+              <div
+                ref={filterButtonRef}
+                onClick={() => setShowFilterDropdown((prev) => !prev)}
                 style={{
                   fontFamily: "Calibri, Arial, sans-serif",
-                  background: "#fcfaf8",
-                  fontSize: "1rem",
-                  padding: "0.5rem 1rem",
-                  borderRadius: "0.375rem",
-                  border: "1px solid #7B3F00",
-                  width: 230,
-                  color: "#7B3F00",
-                }}
-                aria-label="Search notifications"
-              />
-              <div
-                style={{
                   position: "relative",
-                  overflow: "visible",
+                  zIndex: 99,
                   display: "flex",
                   alignItems: "center",
-                  gap: "0.75rem",
-                  marginLeft: "auto",
+                  border: "1px solid #7B3F00",
+                  borderRadius: "0.375rem",
+                  padding: "0.5rem 1rem",
+                  background: "#fcfaf8",
+                  color: "#7B3F00",
+                  cursor: "pointer",
+                  fontSize: "1rem",
+                }}
+                aria-label="Open filter options"
+              >
+                Search by Filter <span style={{ marginLeft: 4 }}>▾</span>
+                {showFilterDropdown && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: 0,
+                      minWidth: "100%",
+                      background: "#fff",
+                      border: "1.5px solid #7B3F00",
+                      boxShadow: "0 2px 16px 2px #e2d5c0",
+                      zIndex: 2000,
+                      borderRadius: 6,
+                      marginTop: 4,
+                    }}
+                  >
+                    {filterOptions.map((opt) => (
+                      <div
+                        key={opt.value}
+                        style={{
+                          padding: "0.5rem 1rem",
+                          cursor: "pointer",
+                          fontFamily: "Calibri, Arial, sans-serif",
+                          fontSize: "1rem",
+                          color: "#7B3F00",
+                        }}
+                        onClick={() => {
+                          setFilter(opt.value);
+                          setShowFilterDropdown(false);
+                        }}
+                      >
+                        {opt.label}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  border: "1px solid #7B3F00",
+                  borderRadius: "0.375rem",
+                  padding: "0.5rem 1rem",
+                  background: "#fcfaf8",
+                  color: "#7B3F00",
+                  fontFamily: "Calibri, Arial, sans-serif",
+                  fontSize: "1rem",
                 }}
               >
-                <div
-                  ref={filterButtonRef}
-                  onClick={() => setShowFilterDropdown((prev) => !prev)}
-                  style={{
-                    fontFamily: "Calibri, Arial, sans-serif",
-                    position: "relative",
-                    zIndex: 99,
-                    display: "flex",
-                    alignItems: "center",
-                    border: "1px solid #7B3F00",
-                    borderRadius: "0.375rem",
-                    padding: "0.5rem 1rem",
-                    background: "#fcfaf8",
-                    color: "#7B3F00",
-                    cursor: "pointer",
-                    fontSize: "1rem",
-                  }}
-                  aria-label="Open filter options"
-                >
-                  Search by Filter <span style={{ marginLeft: 4 }}>▾</span>
-                  {showFilterDropdown && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "100%",
-                        left: 0,
-                        minWidth: "100%",
-                        background: "#fff",
-                        border: "1.5px solid #7B3F00",
-                        boxShadow: "0 2px 16px 2px #e2d5c0",
-                        zIndex: 2000,
-                        borderRadius: 6,
-                        marginTop: 4,
-                      }}
-                    >
-                      {filterOptions.map((opt) => (
-                        <div
-                          key={opt.value}
-                          style={{
-                            padding: "0.5rem 1rem",
-                            cursor: "pointer",
-                            fontFamily: "Calibri, Arial, sans-serif",
-                            fontSize: "1rem",
-                            color: "#7B3F00",
-                          }}
-                          onClick={() => {
-                            setFilter(opt.value);
-                            setShowFilterDropdown(false);
-                          }}
-                        >
-                          {opt.label}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    border: "1px solid #7B3F00",
-                    borderRadius: "0.375rem",
-                    padding: "0.5rem 1rem",
-                    background: "#fcfaf8",
-                    color: "#7B3F00",
-                    fontFamily: "Calibri, Arial, sans-serif",
-                    fontSize: "1rem",
-                  }}
-                >
-                  <Clock size={18} style={{ marginRight: 8 }} />
-                  {filterOptions.find((opt) => opt.value === filter)?.label ||
-                    "All"}
-                </div>
+                <Clock size={18} style={{ marginRight: 8 }} />
+                {filterOptions.find((opt) => opt.value === filter)?.label ||
+                  "All"}
               </div>
             </div>
+          </div>
 
-            {/* Section 2: Tabs and Actions */}
+          {/* Section 2: Tabs and Actions */}
+          <div
+            style={{
+              boxShadow: "inset 0 -1.5px 0 0 #e1d3c2",
+              borderBottom: "none",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingBottom: "0.5rem",
+              paddingTop: "0.25rem",
+              paddingLeft: "1.75rem",
+              paddingRight: "1.75rem",
+            }}
+          >
             <div
               style={{
-                boxShadow: "inset 0 -1.5px 0 0 #e1d3c2",
-                borderBottom: "none",
                 display: "flex",
-                justifyContent: "space-between",
                 alignItems: "center",
-                paddingBottom: "0.5rem",
-                paddingTop: "0.25rem",
-                paddingLeft: "1.75rem",
-                paddingRight: "1.75rem",
+                gap: "2rem",
+                fontWeight: 600,
+                color: "#7B3F00",
               }}
             >
-              <div
+              <span
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "2rem",
-                  fontWeight: 600,
-                  color: "#7B3F00",
+                  color: "#000",
+                  fontFamily: "Calibri, Arial, sans-serif",
+                  fontSize: "1.38rem",
                 }}
               >
-                <span
-                  style={{
-                    color: "#000",
-                    fontFamily: "Calibri, Arial, sans-serif",
-                    fontSize: "1.38rem",
-                  }}
-                >
-                  All{" "}
-                  <span style={{ color: "#ef4444" }}>
-                    ({notifications.length})
-                  </span>
+                All{" "}
+                <span style={{ color: "#ef4444" }}>
+                  ({notifications.length})
                 </span>
-                <span
-                  style={{
-                    color: "#6b7280",
-                    fontFamily: "Calibri, Arial, sans-serif",
-                    fontSize: "1.13rem",
-                  }}
-                >
-                  Unread({notifications.filter((n) => n.unread).length})
-                </span>
+              </span>
+              <span
+                style={{
+                  color: "#6b7280",
+                  fontFamily: "Calibri, Arial, sans-serif",
+                  fontSize: "1.13rem",
+                }}
+              >
+                Unread({notifications.filter((n) => n.unread).length})
+              </span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "2rem",
+              }}
+            >
+              <button
+                style={{
+                  fontFamily: "Calibri, Arial, sans-serif",
+                  fontSize: "1rem",
+                  color: "#4b5563",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
+                onClick={markAllAsRead}
+                aria-label="Mark all as read"
+              >
+                Mark all as read
+              </button>
+              <button
+                style={{
+                  padding: "0.75rem",
+                  borderRadius: "100vw",
+                  border: "1px solid",
+                  borderColor:
+                    selectedNotifications.length > 0 ? "#7B3F00" : "#e1d3c2",
+                  boxShadow: "0 1px 2px 0 #e1d3c2",
+                  color:
+                    selectedNotifications.length > 0 ? "#fff" : "#bfa99a",
+                  background:
+                    selectedNotifications.length > 0 ? "#7B3F00" : "#f7f4ef",
+                  cursor:
+                    selectedNotifications.length > 0 ? "pointer" : "not-allowed",
+                  opacity: selectedNotifications.length > 0 ? 1 : 0.5,
+                  transition: "all 0.3s",
+                }}
+                onClick={deleteSelected}
+                disabled={selectedNotifications.length === 0}
+                title={
+                  selectedNotifications.length === 0
+                    ? "Select notification(s) to delete"
+                    : "Delete selected"
+                }
+                aria-label="Delete selected notifications"
+              >
+                <Trash2 size={22} />
+              </button>
+            </div>
+          </div>
+
+          {/* Section 3: Notifications List (Scrollable) */}
+          <div
+            style={{
+              overflowY: "auto",
+              paddingBottom: 0,
+              minHeight: 0,
+              maxHeight: 500,
+            }}
+          >
+            {filteredNotifications.length === 0 && (
+              <div
+                style={{
+                  textAlign: "center",
+                  color: "#9ca3af",
+                  fontSize: "1.125rem",
+                  padding: "2.5rem 0",
+                  fontFamily: "Calibri, Arial, sans-serif",
+                }}
+              >
+                No notifications found.
               </div>
+            )}
+            {filteredNotifications.map((n) => (
               <div
+                key={n.id}
+                onClick={(e) =>
+                  handleNotificationClick(n.id, n.unread, n.text, e)
+                }
+                onDoubleClick={(e) =>
+                  handleNotificationDoubleClick(n.id, n.unread, n.text, e)
+                }
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "2rem",
+                  justifyContent: "space-between",
+                  padding: "0.75rem",
+                  transition: "background 0.2s",
+                  cursor: "pointer",
+                  position: "relative",
+                  minHeight: 60,
+                  background:
+                    selectedNotifications.includes(n.id) && selectionMode
+                      ? "#f9ede3"
+                      : n.unread
+                      ? "#F7F2EB"
+                      : "#fcfaf8",
+                  borderBottom: "1.7px solid #e1d3c2",
+                  boxSizing: "border-box",
                 }}
+                aria-label={`Notification: ${n.text}`}
               >
+                <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
+                  <div style={{ color: "#7B3F00", display: "flex", alignItems: "center" }}>
+                    {n.icon}
+                  </div>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: "16.5px",
+                        color: "#473326",
+                        fontWeight: 400,
+                        fontFamily: "Calibri, Arial, sans-serif",
+                      }}
+                    >
+                      {n.text}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "15px",
+                        color: "#473326",
+                        fontWeight: 400,
+                        marginTop: 4,
+                        fontFamily: "Calibri, Arial, sans-serif",
+                      }}
+                    >
+                      {n.time}
+                    </div>
+                  </div>
+                </div>
                 <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    alert(
+                      `Navigating to external link for notification: ${n.text}`
+                    );
+                  }}
+                  title="View details"
+                  aria-label={`View details for ${n.text}`}
                   style={{
-                    fontFamily: "Calibri, Arial, sans-serif",
-                    fontSize: "1rem",
-                    color: "#4b5563",
+                    marginRight: 16,
+                    marginLeft: 8,
+                    height: "100%",
+                    alignItems: "center",
+                    display: "flex",
                     background: "transparent",
                     border: "none",
                     cursor: "pointer",
-                    textDecoration: "underline",
-                  }}
-                  onClick={markAllAsRead}
-                  aria-label="Mark all as read"
-                >
-                  Mark all as read
-                </button>
-                <button
-                  style={{
-                    padding: "0.75rem",
+                    outline: "none",
                     borderRadius: "100vw",
-                    border: "1px solid",
-                    borderColor:
-                      selectedNotifications.length > 0
-                        ? "#7B3F00"
-                        : "#e1d3c2",
-                    boxShadow: "0 1px 2px 0 #e1d3c2",
-                    color:
-                      selectedNotifications.length > 0
-                        ? "#fff"
-                        : "#bfa99a",
-                    background:
-                      selectedNotifications.length > 0
-                        ? "#7B3F00"
-                        : "#f7f4ef",
-                    cursor:
-                      selectedNotifications.length > 0
-                        ? "pointer"
-                        : "not-allowed",
-                    opacity: selectedNotifications.length > 0 ? 1 : 0.5,
-                    transition: "all 0.3s",
+                    padding: "0.5rem",
+                    transition: "background 0.15s",
                   }}
-                  onClick={deleteSelected}
-                  disabled={selectedNotifications.length === 0}
-                  title={
-                    selectedNotifications.length === 0
-                      ? "Select notification(s) to delete"
-                      : "Delete selected"
-                  }
-                  aria-label="Delete selected notifications"
                 >
-                  <Trash2 size={22} />
+                  <ExternalIcon />
                 </button>
-              </div>
-            </div>
-
-            {/* Section 3: Notifications List (Scrollable) */}
-            <div
-              style={{
-                overflowY: "auto",
-                paddingBottom: 0,
-                minHeight: 0,
-                maxHeight: 500,
-              }}
-            >
-              {filteredNotifications.length === 0 && (
-                <div
-                  style={{
-                    textAlign: "center",
-                    color: "#9ca3af",
-                    fontSize: "1.125rem",
-                    padding: "2.5rem 0",
-                    fontFamily: "Calibri, Arial, sans-serif",
-                  }}
-                >
-                  No notifications found.
-                </div>
-              )}
-              {filteredNotifications.map((n) => (
-                <div
-                  key={n.id}
-                  onClick={(e) =>
-                    handleNotificationClick(n.id, n.unread, n.text, e)
-                  }
-                  onDoubleClick={(e) =>
-                    handleNotificationDoubleClick(n.id, n.unread, n.text, e)
-                  }
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "0.75rem",
-                    transition: "background 0.2s",
-                    cursor: "pointer",
-                    position: "relative",
-                    minHeight: 60,
-                    background:
-                      selectedNotifications.includes(n.id) && selectionMode
-                        ? "#f9ede3"
-                        : n.unread
-                        ? "#F7F2EB"
-                        : "#fcfaf8",
-                    borderBottom: "1.7px solid #e1d3c2",
-                    boxSizing: "border-box",
-                  }}
-                  aria-label={`Notification: ${n.text}`}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
-                    <div style={{ color: "#7B3F00", display: "flex", alignItems: "center" }}>
-                      {n.icon}
-                    </div>
-                    <div>
-                      <div
-                        style={{
-                          fontSize: "16.5px",
-                          color: "#473326",
-                          fontWeight: 400,
-                          fontFamily: "Calibri, Arial, sans-serif",
-                        }}
-                      >
-                        {n.text}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: "15px",
-                          color: "#473326",
-                          fontWeight: 400,
-                          marginTop: 4,
-                          fontFamily: "Calibri, Arial, sans-serif",
-                        }}
-                      >
-                        {n.time}
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      alert(
-                        `Navigating to external link for notification: ${n.text}`
-                      );
-                    }}
-                    title="View details"
-                    aria-label={`View details for ${n.text}`}
+                {activeDropdown === n.id && (
+                  <div
                     style={{
-                      marginRight: 16,
-                      marginLeft: 8,
-                      height: "100%",
-                      alignItems: "center",
-                      display: "flex",
-                      background: "transparent",
-                      border: "none",
-                      cursor: "pointer",
-                      outline: "none",
-                      borderRadius: "100vw",
-                      padding: "0.5rem",
-                      transition: "background 0.15s",
+                      position: "absolute",
+                      left: 80,
+                      top: "100%",
+                      marginTop: 8,
+                      minWidth: 280,
+                      background: "#fff",
+                      border: "1px solid #d7cabe",
+                      borderRadius: 12,
+                      boxShadow: "0 4px 18px 0 rgba(180,140,80,0.12)",
+                      padding: "18px 22px",
+                      color: "#473326",
+                      fontSize: 16,
+                      fontFamily: "Calibri, Arial, sans-serif",
+                      zIndex: 99,
+                      animation: "fadeIn 0.15s",
                     }}
+                    aria-live="polite"
                   >
-                    <ExternalIcon />
-                  </button>
-                  {activeDropdown === n.id && (
+                    <span style={{ fontWeight: 600, color: "#7B3F00" }}>
+                      Here is the message:
+                    </span>
                     <div
                       style={{
-                        position: "absolute",
-                        left: 80,
-                        top: "100%",
-                        marginTop: 8,
-                        minWidth: 280,
-                        background: "#fff",
-                        border: "1px solid #d7cabe",
-                        borderRadius: 12,
-                        boxShadow: "0 4px 18px 0 rgba(180,140,80,0.12)",
-                        padding: "18px 22px",
-                        color: "#473326",
-                        fontSize: 16,
-                        fontFamily: "Calibri, Arial, sans-serif",
-                        zIndex: 99,
-                        animation: "fadeIn 0.15s",
+                        fontWeight: 400,
+                        marginTop: 5,
+                        color: "#3d3126",
                       }}
-                      aria-live="polite"
                     >
-                      <span style={{ fontWeight: 600, color: "#7B3F00" }}>
-                        Here is the message:
-                      </span>
-                      <div
-                        style={{
-                          fontWeight: 400,
-                          marginTop: 5,
-                          color: "#3d3126",
-                        }}
-                      >
-                        {n.text}
-                      </div>
+                      {n.text}
                     </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            {selectionMode && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: 5,
-                  right: 40,
-                  zIndex: 100,
-                  background: "#fff9ed",
-                  border: "1px solid #e1d3c2",
-                  borderRadius: 8,
-                  padding: "8px 16px",
-                  fontSize: 15,
-                  color: "#7B3F00",
-                  boxShadow: "0 2px 8px 0 rgba(180,140,80,0.07)",
-                  cursor: "pointer",
-                }}
-                onClick={exitSelectionMode}
-                title="Exit selection mode"
-                aria-label="Exit selection mode"
-              >
-                Exit selection mode
+                  </div>
+                )}
               </div>
-            )}
+            ))}
           </div>
+          {selectionMode && (
+            <div
+              style={{
+                position: "absolute",
+                top: 5,
+                right: 40,
+                zIndex: 100,
+                background: "#fff9ed",
+                border: "1px solid #e1d3c2",
+                borderRadius: 8,
+                padding: "8px 16px",
+                fontSize: 15,
+                color: "#7B3F00",
+                boxShadow: "0 2px 8px 0 rgba(180,140,80,0.07)",
+                cursor: "pointer",
+              }}
+              onClick={exitSelectionMode}
+              title="Exit selection mode"
+              aria-label="Exit selection mode"
+            >
+              Exit selection mode
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Bottom right: X of Y items */}
-      {showNotificationPanel && (
-        <div
-          style={{
-            position: "fixed",
-            right: 52,
-            bottom: fiveOfFiveBottom,
-            fontFamily: "Calibri, Arial, sans-serif",
-            fontSize: 13,
-            color: "#000000",
-            fontWeight: 400,
-            textAlign: "right",
-            zIndex: 99,
-            background: "transparent",
-            letterSpacing: "0.03em",
-            pointerEvents: "none",
-          }}
-        >
-          {filteredNotifications.length} of {notifications.length} items
-        </div>
-      )}
-
-      {/* Dashboard Empty Message */}
-      {!showNotificationPanel && (
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            fontSize: 32,
-            color: "#bfa99a",
-            fontWeight: 600,
-            letterSpacing: 1.2,
-            textAlign: "center",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {/* Just leave the bell */}
-        </div>
-      )}
+      <div
+        style={{
+          position: "fixed",
+          right: 52,
+          bottom: fiveOfFiveBottom,
+          fontFamily: "Calibri, Arial, sans-serif",
+          fontSize: 13,
+          color: "#000000",
+          fontWeight: 400,
+          textAlign: "right",
+          zIndex: 99,
+          background: "transparent",
+          letterSpacing: "0.03em",
+          pointerEvents: "none",
+        }}
+      >
+        {filteredNotifications.length} of {notifications.length} items
+      </div>
     </div>
   );
 };
 
-export default NotificationPage;
+export default NotificationsPage;
