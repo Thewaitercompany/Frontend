@@ -310,26 +310,6 @@ export default function InventoryPage() {
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-6">
-      {/* Header */}
-      <header className="flex justify-between items-center px-10 pt-6 pb-2 bg-[#f5f1eb]">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/logo.png"
-            alt="The Waiter Company Logo"
-            width={90}
-            height={40}
-            className="h-10 w-auto"
-          />
-          <span className="text-2xl text-gray-700 font-medium ml-2">
-            Smart Cafe
-          </span>
-        </div>
-        <div className="text-right">
-          <div className="text-base text-gray-700 font-medium">
-            Thu 13 Mar 04:20PM
-          </div>
-        </div>
-      </header>
       {/* Tabs */}
       <div className="flex gap-8 border-b border-[#e5e0d8] mb-4">
         {TABS.map((tab, idx) => (

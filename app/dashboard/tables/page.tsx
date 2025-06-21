@@ -174,27 +174,7 @@ export default function TableDetails() {
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-0 font-serif">
-      {/* Header */}
-      <header className="flex justify-between items-center px-10 pt-6 pb-2 bg-[#f5f1eb]">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/logo.png"
-            alt="The Waiter Company Logo"
-            width={90}
-            height={40}
-            className="h-10 w-auto"
-          />
-          <span className="text-2xl text-gray-700 font-medium ml-2">
-            Smart Cafe
-          </span>
-        </div>
-        <div className="text-right">
-          <div className="text-base text-gray-700 font-medium">
-            Thu 13 Mar 04:20PM
-          </div>
-        </div>
-      </header>
-      <main className="max-w-6xl mx-auto mt-6">
+      <main className="max-w-6xl mx-auto mt-6 px-10">
         <h2 className="text-xl font-semibold mb-4">Table Details</h2>
         {/* Legend */}
         <div className="flex items-center gap-8 mb-4 bg-white rounded-xl px-6 py-3 border border-[#e5c99a]">

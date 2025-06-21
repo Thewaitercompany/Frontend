@@ -22,7 +22,6 @@ export default function RestaurantMenu() {
       ingredients?: string;
     }[]
   >([]);
-  const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<string[]>([
     "Starters",
     "Main Course",
@@ -50,8 +49,6 @@ export default function RestaurantMenu() {
         setCategories(["All", ...cats]);
       } catch (error) {
         console.error("Error fetching menu items:", error);
-      } finally {
-        setLoading(false);
       }
     }
     fetchMenuItems();
@@ -93,74 +90,60 @@ export default function RestaurantMenu() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex justify-center items-center">
-        Loading...
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-[#f5f1eb] p-0 font-serif">
-      {/* Header */}
-      <header className="flex justify-between items-center px-10 pt-6 pb-2 bg-[#f5f1eb]">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/logo.png"
-            alt="The Waiter Company Logo"
-            width={90}
-            height={40}
-            className="h-10 w-auto"
-          />
-          <span className="text-2xl text-gray-700 font-medium ml-2">
-            Smart Cafe
-          </span>
-        </div>
-        <div className="text-right">
-          <div className="text-base text-gray-700 font-medium">
-            Thu 13 Mar 04:20PM
-          </div>
-        </div>
-      </header>
-      <main className="max-w-6xl mx-auto mt-6">
-        <div className="flex justify-between items-center mb-2">
-          <h2 className="text-xl font-semibold">Restaurant&apos;s Menu</h2>
-          <div className="flex items-center gap-4">
-            <label className="flex items-center gap-2 cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={vegOnly}
-                onChange={() => setVegOnly((v) => !v)}
-                className="accent-[#C99E5A] w-5 h-5 rounded border-gray-300"
-              />
-              <span className="text-base">Veg Only</span>
-            </label>
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="border border-[#e5c99a] rounded px-3 py-1 text-base bg-white focus:outline-none min-w-[160px] font-serif"
-              title="Category Filter"
-              style={{ boxShadow: "none" }}
-            >
-              {categories.map((cat) => (
-                <option key={cat} value={cat} className="font-serif">
-                  {cat === "All" ? "Category (All)" : cat}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-80 px-4 py-2 border border-[#e5c99a] rounded text-base focus:outline-none font-serif bg-white"
+    <div className="min-h-screen bg-[#f5f1eb] p-6 font-serif">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold text-gray-800">
+          Restaurant&apos;s Menu
+        </h1>
+        <div className="flex items-center gap-4">
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={vegOnly}
+              onChange={() => setVegOnly((v) => !v)}
+              className="accent-[#C99E5A] w-5 h-5 rounded border-gray-300"
+            />
+            <span className="text-base">Veg Only</span>
+          </label>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="border border-[#e5c99a] rounded px-3 py-2 text-base bg-white focus:outline-none min-w-[160px] font-serif"
+            title="Category Filter"
             style={{ boxShadow: "none" }}
-          />
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat} className="font-serif">
+                {cat === "All" ? "Category (All)" : cat}
+              </option>
+            ))}
+          </select>
+          <Link href="/dashboard/menu/add">
+            <button
+              className="ml-4 bg-white border border-[#e5c99a] hover:bg-[#f5f1eb] text-gray-600 rounded-md p-2 flex items-center justify-center"
+              aria-label="Add new dish"
+            >
+              <Plus className="w-5 h-5" />
+            </button>
+          </Link>
         </div>
+      </div>
+
+      <main>
+        <div className="flex items-center mb-4">
+          <div className="relative flex-grow">
+            <input
+              type="text"
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full px-4 py-2 border border-[#e5c99a] rounded-md text-base focus:outline-none font-serif bg-white"
+              style={{ boxShadow: "none" }}
+            />
+          </div>
+        </div>
+
         <div className="bg-white rounded-xl p-0 overflow-x-auto border border-[#e5c99a]">
           <table className="w-full min-w-[900px] border-separate border-spacing-0 font-serif">
             <thead>
@@ -253,16 +236,9 @@ export default function RestaurantMenu() {
                           className="p-2 hover:bg-[#f5f1eb] rounded-full transition-colors"
                           aria-label={`Edit ${item.name}`}
                         >
-                          <Pencil className="w-4 h-4 text-[#C99E5A]" />
+                          <Pencil className="w-4 h-4 text-gray-600" />
                         </button>
                       </Link>
-                      <button
-                        onClick={() => openDeleteModal(item)}
-                        className="p-2 hover:bg-[#f5f1eb] rounded-full transition-colors"
-                        aria-label={`Delete ${item.name}`}
-                      >
-                        <Trash2 className="w-4 h-4 text-red-500" />
-                      </button>
                     </div>
                   </td>
                 </tr>
@@ -270,15 +246,8 @@ export default function RestaurantMenu() {
             </tbody>
           </table>
         </div>
-        {/* Add Button */}
-        <Link href="/dashboard/menu/add">
-          <button className="fixed bottom-10 right-10 bg-[#C99E5A] hover:bg-[#b88d49] text-white rounded-lg px-6 py-3 text-lg font-semibold flex items-center gap-2 z-50 shadow-none font-serif">
-            <Plus className="w-5 h-5" />
-            <span>Add Dish</span>
-          </button>
-        </Link>
-        <div className="text-right text-[#b88d49] text-base mt-4 font-serif pr-2">
-          5 of 50 items
+        <div className="text-right text-gray-500 text-sm mt-4 font-serif pr-2">
+          {filteredItems.length} of {items.length} items
         </div>
         {/* Delete Confirmation Modal */}
         {deleteModalOpen && itemToDelete && (

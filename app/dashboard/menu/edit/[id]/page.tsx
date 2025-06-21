@@ -226,13 +226,7 @@ export default function EditMenuItem() {
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-0 font-serif">
-      <header className="flex items-center gap-3 px-10 pt-6 pb-2 bg-[#f5f1eb]">
-        <Link href="/dashboard/menu" className="flex items-center">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          <span className="text-lg font-medium">Edit Dish</span>
-        </Link>
-      </header>
-      <main className="max-w-6xl mx-auto mt-8">
+      <main className="max-w-6xl mx-auto mt-8 px-10">
         <div className="bg-white rounded-3xl p-8 shadow-none border border-[#e5c99a]">
           <div className="grid grid-cols-8 gap-6 items-center border-b border-[#e5c99a] pb-2 mb-6">
             <div className="col-span-1 flex flex-col items-center">
