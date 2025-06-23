@@ -270,6 +270,45 @@ const NotificationsPage: React.FC = () => {
         position: "relative",
       }}
     >
+      {/* <Notifications button */}
+      <button
+        style={{
+          color: "#3A2102",
+          background: "transparent",
+          fontWeight: 400,
+          letterSpacing: 0.1,
+          fontFamily: "Times New Roman, Times, serif",
+          top: 97,
+          left: notificationButtonLeft,
+          zIndex: 22,
+          border: "none",
+          padding: 0,
+          fontSize: 26,
+          outline: "none",
+          borderRadius: 8,
+          position: "absolute",
+          transition: "top 0.2s",
+          display: "flex",
+          alignItems: "center",
+          gap: 0,
+          cursor: "pointer",
+        }}
+        onClick={() => router.back()} // Go back to the previous page/dashboard
+        aria-label="Close notifications"
+      >
+        <NotificationArrow />
+        <span
+          style={{
+            fontFamily: "Times New Roman, Times, serif",
+            color: "#3A2102",
+            fontWeight: 400,
+            paddingLeft: 2,
+          }}
+        >
+          Notifications
+        </span>
+      </button>
+
       {/* Notification Section Block */}
       <div
         style={{
