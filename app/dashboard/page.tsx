@@ -775,20 +775,7 @@ export default function DashboardPage() {
 
           {/* Right Section - 30% */}
           <div className="w-[30%] space-y-6">
-            <div className="relative mr-[3%]">
-              <div className="flex justify-end">
-                <FontAwesomeIcon
-                  icon={faBell}
-                  className="text-black text-2xl h-[25px] cursor-pointer"
-                  onClick={() => setShowNotifications((v) => !v)}
-                />
-              </div>
-
-              <span className="absolute -top-1 -right-1 bg-red-600 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center font-semibold">
-                {unreadNotificationsCount}
-              </span>
-            </div>
-
+            
             {/* Calendar */}
             <div className="relative h-[400px]">
               {" "}
