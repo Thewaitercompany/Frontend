@@ -1,13 +1,6 @@
 "use client";
-import React, { useState} from "react";
-import {
-  ArrowLeft,
-  Search,
-  X,
-  Users,
-  Clock,
-  Star,
-} from "lucide-react";
+import React, { useState } from "react";
+import { ArrowLeft, Search, X, Users, Clock, Star } from "lucide-react";
 import Image from "next/image";
 
 interface Table {
@@ -260,7 +253,7 @@ const WaiterDashboard = () => {
                 </span>
               )} */}
 
-              <div className="mb-1 font-bold text-gray-800 text-base">
+              <div className="mb-1 font-bold text-black text-base">
                 {table.number}
               </div>
 
@@ -269,7 +262,7 @@ const WaiterDashboard = () => {
                   <div className="text-[10px] text-gray-600 mb-1 leading-tight">
                     Running Bill
                   </div>
-                  <div className="text-xs font-bold text-gray-800">
+                  <div className="text-xs font-bold text-black">
                     ₹ {table.runningBill}
                   </div>
                 </div>
@@ -339,7 +332,7 @@ const WaiterDashboard = () => {
                     className="bg-white rounded-lg p-4 mb-3 shadow-sm"
                   >
                     <div className="flex justify-between items-center mb-3">
-                      <div className="text-sm font-medium text-gray-800">
+                      <div className="text-sm font-medium text-black">
                         Order No.: {order.id}
                       </div>
                       <div className="flex items-center gap-4 text-xs text-gray-500">
@@ -363,7 +356,7 @@ const WaiterDashboard = () => {
                         className="w-10 h-10 rounded-full object-cover"
                       />
                       <div className="flex-1">
-                        <div className="font-medium text-gray-800">
+                        <div className="font-medium text-black">
                           {item.name}
                         </div>
                         <div className="text-sm text-gray-600 mt-1">

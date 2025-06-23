@@ -69,17 +69,17 @@ export default function StockStatusTab() {
       <div className="flex flex-wrap gap-2 mb-4 items-center">
         <div className="flex-1 flex items-center gap-2">
           <span className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-800 h-5 w-5" />
             <Input
               placeholder="Search"
-              className="pl-10 w-64"
+              className="pl-10 w-64 text-black placeholder:text-gray-800"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </span>
         </div>
         <Select value={filter} onValueChange={setFilter}>
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-40 text-gray-800">
             <SelectValue placeholder="Search by Filter" />
           </SelectTrigger>
           <SelectContent>
@@ -90,7 +90,7 @@ export default function StockStatusTab() {
           </SelectContent>
         </Select>
         <Select value={type} onValueChange={setType}>
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-40 text-gray-800">
             <SelectValue placeholder="Type of Ingredient" />
           </SelectTrigger>
           <SelectContent>
@@ -104,14 +104,16 @@ export default function StockStatusTab() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Status</TableHead>
-              <TableHead>Image</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Cost</TableHead>
-              <TableHead>Total Unit</TableHead>
-              <TableHead>Total Cost</TableHead>
-              <TableHead>Per Day Consumption</TableHead>
-              <TableHead>Expiry Date</TableHead>
+              <TableHead className="text-gray-800">Status</TableHead>
+              <TableHead className="text-gray-800">Image</TableHead>
+              <TableHead className="text-gray-800">Name</TableHead>
+              <TableHead className="text-gray-800">Cost</TableHead>
+              <TableHead className="text-gray-800">Total Unit</TableHead>
+              <TableHead className="text-gray-800">Total Cost</TableHead>
+              <TableHead className="text-gray-800">
+                Per Day Consumption
+              </TableHead>
+              <TableHead className="text-gray-800">Expiry Date</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -150,18 +152,24 @@ export default function StockStatusTab() {
                     className="w-10 h-10 rounded object-cover"
                   />
                 </TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.cost}</TableCell>
-                <TableCell>{item.totalUnit}</TableCell>
-                <TableCell>{item.totalCost}</TableCell>
-                <TableCell>{item.perDay}</TableCell>
-                <TableCell>{item.expiry}</TableCell>
+                <TableCell className="text-gray-800 font-medium">
+                  {item.name}
+                </TableCell>
+                <TableCell className="text-gray-800">{item.cost}</TableCell>
+                <TableCell className="text-gray-800">
+                  {item.totalUnit}
+                </TableCell>
+                <TableCell className="text-gray-800">
+                  {item.totalCost}
+                </TableCell>
+                <TableCell className="text-gray-800">{item.perDay}</TableCell>
+                <TableCell className="text-gray-800">{item.expiry}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
-      <div className="flex gap-6 mt-4 text-sm">
+      <div className="flex gap-6 mt-4 text-sm text-gray-800">
         <div className="flex items-center gap-1">
           <span className="inline-block w-4 h-4 rounded-full border border-red-300 text-red-500 flex items-center justify-center text-xs">
             !
@@ -180,7 +188,7 @@ export default function StockStatusTab() {
           </span>{" "}
           Sufficient stock
         </div>
-        <div className="ml-auto text-xs text-gray-500">4 of 300 items</div>
+        <div className="ml-auto text-xs text-gray-800">4 of 300 items</div>
       </div>
     </div>
   );

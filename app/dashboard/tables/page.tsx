@@ -174,7 +174,7 @@ export default function TableDetails() {
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-4 font-serif">
       <main className="max-w-6xl mx-auto mt-6 px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+        <h2 className="text-2xl font-semibold mb-6 text-black">
           Table Details
         </h2>
 
@@ -225,7 +225,7 @@ export default function TableDetails() {
               onClick={() => handleTableClick(table)}
             >
               <div className="flex justify-between items-center mb-3">
-                <span className="text-2xl font-bold text-gray-800">
+                <span className="text-2xl font-bold text-black">
                   {table.id}
                 </span>
                 <span className="flex items-center gap-1 text-lg text-gray-600">
@@ -268,9 +268,7 @@ export default function TableDetails() {
                 ×
               </button>
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-gray-800">
-                  Table Summary
-                </h3>
+                <h3 className="text-2xl font-bold text-black">Table Summary</h3>
                 <div className="flex items-center gap-4 text-lg text-gray-600">
                   <FaChair className="text-[#C99E5A]" /> Table{" "}
                   {selectedTable.id}
@@ -288,7 +286,7 @@ export default function TableDetails() {
                       className="border border-[#e5c99a] rounded-xl p-4 flex justify-between items-center bg-gray-50"
                     >
                       <div>
-                        <div className="mb-2 text-base font-semibold text-gray-800">
+                        <div className="mb-2 text-base font-semibold text-black">
                           Order Id.: {entry.orderId}
                         </div>
                         <div className="text-base font-semibold text-gray-700">
@@ -322,7 +320,7 @@ export default function TableDetails() {
                         key={order.orderNo}
                         className="border border-[#e5c99a] rounded-xl p-4 bg-gray-50"
                       >
-                        <div className="mb-3 text-lg font-semibold text-gray-800">
+                        <div className="mb-3 text-lg font-semibold text-black">
                           Order No.: {order.orderNo}
                         </div>
                         {order.items.map((item, iidx) => (
@@ -340,7 +338,7 @@ export default function TableDetails() {
                               />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="font-semibold text-lg text-gray-800">
+                              <div className="font-semibold text-lg text-black">
                                 {item.name}
                               </div>
                               <div className="text-base text-gray-600">
@@ -398,17 +396,17 @@ export default function TableDetails() {
                     <div className="space-y-2">
                       <div className="flex justify-between w-40 text-base">
                         <span className="text-gray-600">Total</span>
-                        <span className="font-semibold text-gray-800">
+                        <span className="font-semibold text-black">
                           ₹{BILL_SUMMARY.total}
                         </span>
                       </div>
                       <div className="flex justify-between w-40 text-base">
                         <span className="text-gray-600">GST 10%</span>
-                        <span className="font-semibold text-gray-800">
+                        <span className="font-semibold text-black">
                           ₹{BILL_SUMMARY.gst}
                         </span>
                       </div>
-                      <div className="flex justify-between w-40 text-lg font-bold text-gray-800 border-t pt-2">
+                      <div className="flex justify-between w-40 text-lg font-bold text-black border-t pt-2">
                         <span>Total Bill</span>
                         <span>₹{BILL_SUMMARY.totalBill}</span>
                       </div>
@@ -416,25 +414,25 @@ export default function TableDetails() {
                     <div className="flex-1 space-y-2">
                       <div className="text-base">
                         <span className="text-gray-600">Order Method: </span>
-                        <span className="font-semibold text-gray-800">
+                        <span className="font-semibold text-black">
                           {BILL_SUMMARY.orderMethod}
                         </span>
                       </div>
                       <div className="text-base">
                         <span className="text-gray-600">Payment Method: </span>
-                        <span className="font-semibold text-gray-800">
+                        <span className="font-semibold text-black">
                           {BILL_SUMMARY.paymentMethod}
                         </span>
                       </div>
                       <div className="text-base">
                         <span className="text-gray-600">Served By: </span>
-                        <span className="font-semibold text-gray-800">
+                        <span className="font-semibold text-black">
                           {BILL_SUMMARY.servedBy}
                         </span>
                       </div>
                       <div className="text-base">
                         <span className="text-gray-600">Served To: </span>
-                        <span className="font-semibold text-gray-800">
+                        <span className="font-semibold text-black">
                           {BILL_SUMMARY.servedTo}
                         </span>
                       </div>
@@ -472,7 +470,7 @@ export default function TableDetails() {
                 ×
               </button>
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-800">Bill</h3>
+                <h3 className="text-xl font-bold text-black">Bill</h3>
                 <div className="flex items-center gap-3">
                   <button
                     className="text-[#C99E5A] hover:text-[#b88d4a] p-2"
@@ -489,13 +487,13 @@ export default function TableDetails() {
                 </div>
               </div>
 
-              <div className="mb-4 font-semibold text-base text-gray-800">
+              <div className="mb-4 font-semibold text-base text-black">
                 Order Summary
               </div>
               <div className="space-y-3 mb-4">
                 {DUMMY_ORDERS.map((order, _idx) => (
                   <div key={order.orderNo} className="border-b pb-3">
-                    <div className="font-semibold text-gray-800 mb-2">
+                    <div className="font-semibold text-black mb-2">
                       Order Number: {order.orderNo}
                     </div>
                     {order.items.map((item, idx) => (
@@ -522,17 +520,17 @@ export default function TableDetails() {
               <div className="space-y-2 border-t pt-4">
                 <div className="flex justify-between text-base">
                   <span className="text-gray-600">Total</span>
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-black">
                     ₹{BILL_SUMMARY.total}
                   </span>
                 </div>
                 <div className="flex justify-between text-base">
                   <span className="text-gray-600">GST</span>
-                  <span className="font-semibold text-gray-800">
+                  <span className="font-semibold text-black">
                     ₹{BILL_SUMMARY.gst}
                   </span>
                 </div>
-                <div className="flex justify-between text-lg font-bold text-gray-800 border-t pt-2">
+                <div className="flex justify-between text-lg font-bold text-black border-t pt-2">
                   <span>Total Bill</span>
                   <span>₹{BILL_SUMMARY.totalBill}</span>
                 </div>

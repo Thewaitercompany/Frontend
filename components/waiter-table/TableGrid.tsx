@@ -90,7 +90,7 @@ const TableGrid: React.FC<TableGridProps> = ({
             )}
 
             {/* Table Number */}
-            <div className="text-center mb-1 font-bold text-gray-800 text-base">
+            <div className="text-center mb-1 font-bold text-black text-base">
               {table.number}
             </div>
 
@@ -100,7 +100,7 @@ const TableGrid: React.FC<TableGridProps> = ({
                 <div className="text-[10px] text-gray-600 mb-1 leading-tight">
                   Running Bill
                 </div>
-                <div className="text-xs font-bold text-gray-800">
+                <div className="text-xs font-bold text-black">
                   ₹ {table.runningBill}
                 </div>
               </div>

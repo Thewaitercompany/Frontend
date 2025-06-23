@@ -169,7 +169,6 @@
 
 // export default OrderCard;
 
-
 "use client";
 
 import React, { useState } from "react";
@@ -254,13 +253,16 @@ const OrderCard: React.FC<OrderCardProps> = ({
       </div>
 
       <div className="text-sm text-gray-500 mb-4">
-        <span className="font-medium text-gray-700">Table no:</span> {tableNumber}
+        <span className="font-medium text-gray-700">Table no:</span>{" "}
+        {tableNumber}
       </div>
 
       {/* Confirm Reject Modal */}
       {confirmReject && (
         <div className="p-3 bg-[#f0eaea] rounded-md border mb-3">
-          <p className="text-center mb-2 text-sm font-medium text-red-600">Cancel order?</p>
+          <p className="text-center mb-2 text-sm font-medium text-red-600">
+            Cancel order?
+          </p>
           <div className="flex justify-center gap-3">
             <Button
               onClick={() => setConfirmReject(false)}
@@ -288,7 +290,6 @@ const OrderCard: React.FC<OrderCardProps> = ({
         <div>Name</div>
         <div>Qty</div>
         <div>Special</div>
-        
       </div>
       {/* <div></div> */}
 
@@ -316,7 +317,7 @@ const OrderCard: React.FC<OrderCardProps> = ({
           </div>
 
           {/* Name */}
-          <div className="truncate text-gray-800">{item.name}</div>
+          <div className="truncate text-black">{item.name}</div>
 
           {/* Quantity */}
           <div>{item.quantity}</div>
@@ -338,7 +339,6 @@ const OrderCard: React.FC<OrderCardProps> = ({
           </div>
         </div>
       ))}
-
 
       {showActions && (
         <div className="pt-4">
