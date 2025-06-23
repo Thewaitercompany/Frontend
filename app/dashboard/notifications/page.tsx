@@ -37,7 +37,13 @@ const NotificationArrow: React.FC = () => (
 
 // ExternalIcon (unchanged, as it's a presentational SVG)
 const ExternalIcon: React.FC = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-label="External link">
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-label="External link"
+  >
     <path
       d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
       stroke="#2d1101"
@@ -134,10 +140,14 @@ const NotificationsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filter, setFilter] = useState<string>("all");
   const [showFilterDropdown, setShowFilterDropdown] = useState<boolean>(false);
-  const [selectedNotifications, setSelectedNotifications] = useState<number[]>([]);
+  const [selectedNotifications, setSelectedNotifications] = useState<number[]>(
+    []
+  );
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const [selectionMode, setSelectionMode] = useState<boolean>(false);
-  const [dropdownTimeout, setDropdownTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
+  const [dropdownTimeout, setDropdownTimeout] = useState<ReturnType<
+    typeof setTimeout
+  > | null>(null);
 
   const filterButtonRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter(); // Initialize useRouter
@@ -187,7 +197,9 @@ const NotificationsPage: React.FC = () => {
     );
     if (dropdownTimeout) clearTimeout(dropdownTimeout);
     setDropdownTimeout(
-      setTimeout(() => setActiveDropdown(null), 2000) as ReturnType<typeof setTimeout>
+      setTimeout(() => setActiveDropdown(null), 2000) as ReturnType<
+        typeof setTimeout
+      >
     );
   };
 
@@ -221,7 +233,9 @@ const NotificationsPage: React.FC = () => {
       case "ThisWeek":
         const startOfWeek = new Date(now);
         startOfWeek.setDate(
-          now.getDay() === 0 ? now.getDate() - 6 : now.getDate() - (now.getDay() - 1)
+          now.getDay() === 0
+            ? now.getDate() - 6
+            : now.getDate() - (now.getDay() - 1)
         );
         startOfWeek.setHours(0, 0, 0, 0);
         return notificationDate.getTime() >= startOfWeek.getTime();
@@ -515,12 +529,13 @@ const NotificationsPage: React.FC = () => {
                   borderColor:
                     selectedNotifications.length > 0 ? "#7B3F00" : "#e1d3c2",
                   boxShadow: "0 1px 2px 0 #e1d3c2",
-                  color:
-                    selectedNotifications.length > 0 ? "#fff" : "#bfa99a",
+                  color: selectedNotifications.length > 0 ? "#fff" : "#bfa99a",
                   background:
                     selectedNotifications.length > 0 ? "#7B3F00" : "#f7f4ef",
                   cursor:
-                    selectedNotifications.length > 0 ? "pointer" : "not-allowed",
+                    selectedNotifications.length > 0
+                      ? "pointer"
+                      : "not-allowed",
                   opacity: selectedNotifications.length > 0 ? 1 : 0.5,
                   transition: "all 0.3s",
                 }}
@@ -589,8 +604,20 @@ const NotificationsPage: React.FC = () => {
                 }}
                 aria-label={`Notification: ${n.text}`}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
-                  <div style={{ color: "#7B3F00", display: "flex", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1.25rem",
+                  }}
+                >
+                  <div
+                    style={{
+                      color: "#7B3F00",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
                     {n.icon}
                   </div>
                   <div>

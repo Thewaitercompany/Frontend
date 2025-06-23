@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import PendingOrdersList from "@/components/chef/PendingOrdersList";
 
 // Mock data for pending orders

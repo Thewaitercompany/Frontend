@@ -4,19 +4,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useOrders } from "@/hooks/useOrders";
-import { ChevronLeft, Search, Bell } from "lucide-react";
+import { Search } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useRouter } from "next/navigation";
 
-import {
-  Trash2,
-  PackageCheck,
-  Clock,
-  AlertTriangle,
-  Users,
-} from "lucide-react";
+import { Clock } from "lucide-react";
 
 interface Order {
   id: string;
@@ -29,6 +23,22 @@ interface Order {
   tableNo: string;
   orderStatus: string;
   isVeg?: boolean;
+  category?: string;
+}
+
+interface ApiOrderItem {
+  _id: string;
+  name: string;
+  price: number;
+  category?: string;
+  image?: string;
+}
+
+interface ApiOrder {
+  items?: ApiOrderItem[];
+  createdAt: string;
+  tableNumber: string;
+  phoneNumber?: string;
 }
 
 export default function CancelledOrders() {
@@ -181,8 +191,8 @@ export default function CancelledOrders() {
         }
 
         const formattedOrders: Order[] = data.flatMap(
-          (order: any) =>
-            order.items?.map((item: any) => ({
+          (order: ApiOrder) =>
+            order.items?.map((item: ApiOrderItem) => ({
               id: item._id,
               image: item.image || "/default.png",
               name: item.name,
@@ -328,42 +338,10 @@ export default function CancelledOrders() {
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] font-['Calibri'] overflow-x-hidden">
-      {/* Header */}
-      <header className="fixed top-0 left-0 w-full h-[80px] bg-[#f5f1eb] px-6 flex items-center justify-between z-10">
-        <div className="flex items-center gap-3 text-xl font-bold">
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="The Waiter Company Logo"
-              width={50}
-              height={50}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <span className="text-xl text-gray-400">×</span>
-          <span className="text-xl font-serif">Smart Cafe</span>
-        </div>
-        <div className="text-right">
-          {/* <h2 className="text-md font-medium">Thu 13 Mar 04:20PM</h2> */}
-          <h2 className="text-xl font-extrabold">
-            {new Date()
-              .toLocaleString("en-US", {
-                weekday: "short",
-                day: "2-digit",
-                month: "short",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })
-              .replace(",", "")}
-          </h2>
-        </div>
-      </header>
-
       {/* Today's Overview */}
       <div className="flex w-full min-h-screen bg-[#F4F0E8]">
         {/* Main Content */}
-        <div className="ml-[60px] w-full pt-[90px] px-6">
+        <div className="ml-[60px] w-full px-6">
           {/* Controls above box */}
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-2 text-[#4b2e2e]">

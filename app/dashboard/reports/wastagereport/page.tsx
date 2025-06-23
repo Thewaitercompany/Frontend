@@ -74,10 +74,7 @@ export default function WastageReportPage() {
 
   // Filtered data logic (search only for demo)
   const filteredData = DUMMY_DATA.filter((row) =>
-    Object.values(row)
-      .join(" ")
-      .toLowerCase()
-      .includes(search.toLowerCase())
+    Object.values(row).join(" ").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -135,12 +132,16 @@ export default function WastageReportPage() {
         >
           &#60;
         </span>
-        <span style={{
-          fontFamily: "Georgia, Times New Roman, serif",
-          color: mainTextColor,
-          fontWeight: 700,
-          fontSize: 28
-        }}>Wastage Report</span>
+        <span
+          style={{
+            fontFamily: "Georgia, Times New Roman, serif",
+            color: mainTextColor,
+            fontWeight: 700,
+            fontSize: 28,
+          }}
+        >
+          Wastage Report
+        </span>
       </button>
 
       {/* Main Block */}
@@ -178,7 +179,7 @@ export default function WastageReportPage() {
             paddingBottom: "0.71rem",
             background: white,
             minHeight: 64,
-            gap: "1.1rem"
+            gap: "1.1rem",
           }}
         >
           {/* Search */}
@@ -198,10 +199,11 @@ export default function WastageReportPage() {
               color: "#a08e85",
               height: inputHeight,
               boxSizing: "border-box",
-              backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M9.5 17C13.0899 17 16 14.0899 16 10.5C16 6.91015 13.0899 4 9.5 4C5.91015 4 3 6.91015 3 10.5C3 14.0899 5.91015 17 9.5 17Z\' stroke=\'%23bba9a2\' stroke-width=\'1.2\'/%3E%3Cpath d=\'M17 17L15 15\' stroke=\'%23bba9a2\' stroke-width=\'1.2\' stroke-linecap=\'round\'/%3E%3C/svg%3E")',
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.5 17C13.0899 17 16 14.0899 16 10.5C16 6.91015 13.0899 4 9.5 4C5.91015 4 3 6.91015 3 10.5C3 14.0899 5.91015 17 9.5 17Z' stroke='%23bba9a2' stroke-width='1.2'/%3E%3Cpath d='M17 17L15 15' stroke='%23bba9a2' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E\")",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "10px center",
-              paddingLeft: "2.1rem"
+              paddingLeft: "2.1rem",
             }}
             aria-label="Search wastage report"
           />
@@ -233,17 +235,22 @@ export default function WastageReportPage() {
                 onClick={() => setShowFilterDropdown((v) => !v)}
               >
                 <span>
-                  {FILTER_OPTIONS.find((f) => f.value === filter)?.label || "Today"}
+                  {FILTER_OPTIONS.find((f) => f.value === filter)?.label ||
+                    "Today"}
                 </span>
-                <span style={{
-                  marginLeft: 10,
-                  fontSize: 19,
-                  color: "#BFA14A",
-                  fontWeight: 700,
-                  position: "relative",
-                  top: 1,
-                  userSelect: "none"
-                }}>▼</span>
+                <span
+                  style={{
+                    marginLeft: 10,
+                    fontSize: 19,
+                    color: "#BFA14A",
+                    fontWeight: 700,
+                    position: "relative",
+                    top: 1,
+                    userSelect: "none",
+                  }}
+                >
+                  ▼
+                </span>
               </button>
               {showFilterDropdown && (
                 <div
@@ -259,7 +266,7 @@ export default function WastageReportPage() {
                     borderRadius: 8,
                     marginTop: 5,
                     fontFamily: "Calibri, Arial, sans-serif",
-                    fontSize: 17
+                    fontSize: 17,
                   }}
                   role="listbox"
                 >
@@ -270,7 +277,8 @@ export default function WastageReportPage() {
                         padding: "0.7rem 1.1rem",
                         cursor: "pointer",
                         color: mainTextColor,
-                        background: filter === opt.value ? "#f3e6d9" : "transparent",
+                        background:
+                          filter === opt.value ? "#f3e6d9" : "transparent",
                         fontWeight: filter === opt.value ? 700 : 500,
                         borderRadius: 8,
                         transition: "background 0.13s",
@@ -310,8 +318,20 @@ export default function WastageReportPage() {
               title="Share"
               type="button"
             >
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ display: "block" }}>
-                <path d="M3 11L19 4L12 21L10 13L3 11Z" stroke="#BFA14A" strokeWidth="2" strokeLinejoin="round" fill="none"/>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                style={{ display: "block" }}
+              >
+                <path
+                  d="M3 11L19 4L12 21L10 13L3 11Z"
+                  stroke="#BFA14A"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
               </svg>
             </button>
             {/* Download */}
@@ -334,8 +354,20 @@ export default function WastageReportPage() {
               title="Download"
               type="button"
             >
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ display: "block" }}>
-                <path d="M11 4V16M11 16L6 11M11 16L16 11M4 18H18" stroke="#BFA14A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                style={{ display: "block" }}
+              >
+                <path
+                  d="M11 4V16M11 16L6 11M11 16L16 11M4 18H18"
+                  stroke="#BFA14A"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
           </div>
@@ -350,7 +382,7 @@ export default function WastageReportPage() {
             marginBottom: 0,
             border: "none",
             pointerEvents: "none",
-            flexShrink: 0
+            flexShrink: 0,
           }}
         />
         {/* Table */}
@@ -366,112 +398,164 @@ export default function WastageReportPage() {
             paddingBottom: 0,
           }}
         >
-          <table style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            fontFamily: "Calibri, Arial, sans-serif",
-            fontSize: 20,
-            color: mainTextColor,
-            background: "#fff",
-          }}>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontFamily: "Calibri, Arial, sans-serif",
+              fontSize: 20,
+              color: mainTextColor,
+              background: "#fff",
+            }}
+          >
             <thead>
-              <tr style={{
-                background: "#fff",
-                color: mainTextColor,
-                fontWeight: 700,
-                fontSize: 20,
-                borderBottom: `2px solid ${tableBorderColor}`,
-                letterSpacing: 0.04,
-              }}>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
-                  fontSize: 20,
+              <tr
+                style={{
+                  background: "#fff",
+                  color: mainTextColor,
                   fontWeight: 700,
-                  minWidth: 100,
-                  verticalAlign: "middle"
-                }}>Image</th>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
                   fontSize: 20,
-                  fontWeight: 700,
-                  minWidth: 150,
-                  verticalAlign: "middle"
-                }}>Ingredient</th>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
-                  fontSize: 20,
-                  fontWeight: 700,
-                  minWidth: 120,
-                  verticalAlign: "middle"
-                }}>Quantity</th>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
-                  fontSize: 20,
-                  fontWeight: 700,
-                  minWidth: 150,
-                  verticalAlign: "middle"
-                }}>Category</th>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
-                  fontSize: 20,
-                  fontWeight: 700,
-                  minWidth: 140,
-                  verticalAlign: "middle"
-                }}>Date/time</th>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
-                  fontSize: 20,
-                  fontWeight: 700,
-                  minWidth: 90,
-                  verticalAlign: "middle"
-                }}>Cost</th>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
-                  fontSize: 20,
-                  fontWeight: 700,
-                  minWidth: 120,
-                  verticalAlign: "middle"
-                }}>Reason</th>
+                  borderBottom: `2px solid ${tableBorderColor}`,
+                  letterSpacing: 0.04,
+                }}
+              >
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 100,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Image
+                </th>
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 150,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Ingredient
+                </th>
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 120,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Quantity
+                </th>
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 150,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Category
+                </th>
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 140,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Date/time
+                </th>
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 90,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Cost
+                </th>
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 120,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Reason
+                </th>
               </tr>
             </thead>
             <tbody>
               {filteredData.length === 0 && (
                 <tr>
-                  <td colSpan={7} style={{ textAlign: "center", color: "#bbb", padding: "38px 0", fontSize: 20 }}>No records found.</td>
+                  <td
+                    colSpan={7}
+                    style={{
+                      textAlign: "center",
+                      color: "#bbb",
+                      padding: "38px 0",
+                      fontSize: 20,
+                    }}
+                  >
+                    No records found.
+                  </td>
                 </tr>
               )}
               {filteredData.map((row, idx) => (
-                <tr key={idx} style={{
-                  borderBottom: idx === filteredData.length - 1 ? "none" : `2px solid ${tableBorderColor}`,
-                  fontWeight: 500,
-                  background: "#fff",
-                  height: "78px"
-                }}>
-                  <td style={{
-                    padding: "10px 4px",
-                    border: "none",
-                    textAlign: "center",
-                    verticalAlign: "middle"
-                  }}>
-                    <div style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center"
-                    }}>
+                <tr
+                  key={idx}
+                  style={{
+                    borderBottom:
+                      idx === filteredData.length - 1
+                        ? "none"
+                        : `2px solid ${tableBorderColor}`,
+                    fontWeight: 500,
+                    background: "#fff",
+                    height: "78px",
+                  }}
+                >
+                  <td
+                    style={{
+                      padding: "10px 4px",
+                      border: "none",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
                       <img
                         src={row.image}
                         alt={row.ingredient}
@@ -482,27 +566,75 @@ export default function WastageReportPage() {
                           borderRadius: 8,
                           boxShadow: "0 1px 6px 0 #d6cfc4",
                           border: "1.5px solid #ede6dd",
-                          background: "#fff"
+                          background: "#fff",
                         }}
                       />
                     </div>
                   </td>
-                  <td style={{ padding: "10px 4px", border: "none", color: mainTextColor, textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      padding: "10px 4px",
+                      border: "none",
+                      color: mainTextColor,
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.ingredient}
                   </td>
-                  <td style={{ padding: "10px 4px", border: "none", color: mainTextColor, textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      padding: "10px 4px",
+                      border: "none",
+                      color: mainTextColor,
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.quantity}
                   </td>
-                  <td style={{ padding: "10px 4px", border: "none", color: mainTextColor, textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      padding: "10px 4px",
+                      border: "none",
+                      color: mainTextColor,
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.category}
                   </td>
-                  <td style={{ padding: "10px 4px", border: "none", color: mainTextColor, textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      padding: "10px 4px",
+                      border: "none",
+                      color: mainTextColor,
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.datetime}
                   </td>
-                  <td style={{ padding: "10px 4px", border: "none", color: mainTextColor, textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      padding: "10px 4px",
+                      border: "none",
+                      color: mainTextColor,
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.cost}
                   </td>
-                  <td style={{ padding: "10px 4px", border: "none", color: mainTextColor, textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      padding: "10px 4px",
+                      border: "none",
+                      color: mainTextColor,
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.reason}
                   </td>
                 </tr>
@@ -522,7 +654,7 @@ export default function WastageReportPage() {
             flexShrink: 0,
             flexGrow: 0,
             alignSelf: "flex-end",
-            zIndex: 2
+            zIndex: 2,
           }}
         />
       </div>
@@ -539,7 +671,7 @@ export default function WastageReportPage() {
           letterSpacing: "0.02em",
           background: "transparent",
           zIndex: 99,
-          textAlign: "right"
+          textAlign: "right",
         }}
       >
         {filteredData.length === 0

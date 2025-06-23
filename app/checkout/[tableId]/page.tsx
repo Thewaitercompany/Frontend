@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import {AlignCenter, Star } from 'lucide-react';
-import Navbar from '@/components/Navbar';
-import { useRouter } from 'next/navigation';
+import React from "react";
+import { Star } from "lucide-react";
+import Navbar from "@/components/Navbar";
+import { useRouter } from "next/navigation";
 
 interface CheckoutPageParams {
   tableId: string;
@@ -26,19 +26,21 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ params }) => {
   const { tableId } = resolvedParams;
 
   const [items, setItems] = React.useState<CartItem[]>([]);
-  const [totalAmount, setTotalAmount] = React.useState<string>('0.00');
-  const [gst, setGst] = React.useState<string>('0.00');
-  const [totalPayable, setTotalPayable] = React.useState<string>('0.00');
-  const [review, setReview] = React.useState('');
+  const [totalAmount, setTotalAmount] = React.useState<string>("0.00");
+  const [gst, setGst] = React.useState<string>("0.00");
+  const [_totalPayable, setTotalPayable] = React.useState<string>("0.00");
+  const [review, setReview] = React.useState("");
   const [rating, setRating] = React.useState(0);
   const [hoveredRating, setHoveredRating] = React.useState(0);
 
   React.useEffect(() => {
     const fetchCheckoutSummary = async () => {
       try {
-        const response = await fetch(`https://qr-customer-sj9m.onrender.com/cart/checkout-summary/${tableId}`);
+        const response = await fetch(
+          `https://qr-customer-sj9m.onrender.com/cart/checkout-summary/${tableId}`
+        );
         if (!response.ok) {
-          throw new Error('Failed to fetch checkout summary');
+          throw new Error("Failed to fetch checkout summary");
         }
 
         const data = await response.json();
@@ -48,7 +50,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ params }) => {
         setGst(data.orderSummary.gst);
         setTotalPayable(data.orderSummary.totalPayable);
       } catch (error) {
-        console.error('Error fetching checkout summary:', error);
+        console.error("Error fetching checkout summary:", error);
       }
     };
 
@@ -59,8 +61,8 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ params }) => {
 
   const handleSubmitReview = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Review submitted:', { review, rating });
-    setReview('');
+    console.log("Review submitted:", { review, rating });
+    setReview("");
     setRating(0);
   };
 
@@ -98,7 +100,9 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ params }) => {
               <div className="text-right font-serif text-sm">Amount</div>
 
               <div className="font-serif">GST</div>
-              <div className="text-center font-serif"><span>10%</span></div>
+              <div className="text-center font-serif">
+                <span>10%</span>
+              </div>
               <div className="text-right font-serif">₹ {gst}</div>
             </div>
 
