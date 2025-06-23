@@ -10,7 +10,7 @@ const TABS = [
   "Stock Status",
   "Stock Management",
   "Purchase Management",
-  "",
+  "Inhouse Operations",
   "Wastage",
 ];
 

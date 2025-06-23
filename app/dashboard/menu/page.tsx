@@ -508,7 +508,7 @@ export default function FetchMenuItems() {
 
             {/* Table */}
             <div className="overflow-x-auto rounded-md ">
-              <table className="min-w-full bg-white text-base text-center text-xl font-extrabold">
+              <table className="min-w-full bg-white text-center text-xl">
                 {" "}
                 {/* increased from text-sm to text-base */}
                 <thead className="text-[#4b2e2e] font-medium">
