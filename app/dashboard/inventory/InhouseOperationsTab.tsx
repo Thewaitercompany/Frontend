@@ -145,6 +145,7 @@ export default function InhouseOperationsTab() {
                   <div className="flex flex-col items-center">
                     <div className="relative">
                       <input
+                        aria-label="Veg Only"
                         type="checkbox"
                         id="veg-toggle"
                         className="sr-only"
