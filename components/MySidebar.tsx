@@ -65,8 +65,8 @@ const SidebarIconsFigma = [
           d="M14.8926 25.8645L18.8656 20.578C19.1088 20.2525 19.4655 20.0301 19.8649 19.9551C20.2644 19.88 20.6774 19.9576 21.0223 20.1726L24.898 22.6213C25.2561 22.8493 25.6895 22.9278 26.1049 22.8399C26.5203 22.752 26.8846 22.5046 27.1196 22.151L31.1088 16.1348"
           stroke="#4D3E3B"
           strokeWidth="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </g>
       <defs>
@@ -77,9 +77,9 @@ const SidebarIconsFigma = [
           width="44.5"
           height="44.5"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"

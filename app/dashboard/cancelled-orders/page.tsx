@@ -363,11 +363,12 @@ export default function CancelledOrders() {
       {/* Today's Overview */}
       <div className="flex w-full min-h-screen bg-[#F4F0E8]">
         {/* Main Content */}
-        <div className="w-full pt-[90px] px-6">
+        <div className="ml-[60px] w-full pt-[90px] px-6">
           {/* Controls above box */}
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-2 text-[#4b2e2e]">
               <button
+                title="Back to Dashboard"
                 onClick={() => router.push("/dashboard")}
                 className="w-[25px] h-[25px]"
               >
@@ -403,6 +404,7 @@ export default function CancelledOrders() {
               </label>
 
               <select
+                title="Select Category"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="border border-[#b3978b] rounded px-2 py-1 text-xl font-extrabold bg-white text-sm text-[#8c6c6a] h-[36px] w-[160px]"
