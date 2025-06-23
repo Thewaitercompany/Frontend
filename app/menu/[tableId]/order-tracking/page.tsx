@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
-import OrderStatus from '@/components/OrderStatus';
 import Navbar from '@/components/Navbar';
 import { Circle } from "lucide-react";
 

@@ -4,19 +4,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useOrders } from "@/hooks/useOrders";
-import { ChevronLeft, Search, Bell } from "lucide-react";
+import { Search } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useRouter } from "next/navigation";
 
-import {
-  Trash2,
-  PackageCheck,
-  Clock,
-  AlertTriangle,
-  Users,
-} from "lucide-react";
+import { Clock } from "lucide-react";
 
 interface Order {
   id: string;
@@ -29,6 +23,22 @@ interface Order {
   tableNo: string;
   orderStatus: string;
   isVeg?: boolean;
+  category?: string;
+}
+
+interface ApiOrderItem {
+  _id: string;
+  name: string;
+  price: number;
+  category?: string;
+  image?: string;
+}
+
+interface ApiOrder {
+  items?: ApiOrderItem[];
+  createdAt: string;
+  tableNumber: string;
+  phoneNumber?: string;
 }
 
 export default function CancelledOrders() {
@@ -181,8 +191,8 @@ export default function CancelledOrders() {
         }
 
         const formattedOrders: Order[] = data.flatMap(
-          (order: any) =>
-            order.items?.map((item: any) => ({
+          (order: ApiOrder) =>
+            order.items?.map((item: ApiOrderItem) => ({
               id: item._id,
               image: item.image || "/default.png",
               name: item.name,

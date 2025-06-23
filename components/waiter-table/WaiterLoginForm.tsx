@@ -65,8 +65,10 @@ export default function WaiterLoginForm() {
 
       // Redirect to dashboard with the restaurant ID
       router.push(`/waiter-table/${mockRestaurantId}/dashboard`);
-    } catch (error: any) {
-      setError(error.message || "Invalid login credentials");
+    } catch (error: unknown) {
+      setError(
+        error instanceof Error ? error.message : "Invalid login credentials"
+      );
     } finally {
       setIsLoading(false);
     }

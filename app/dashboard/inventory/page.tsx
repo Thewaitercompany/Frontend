@@ -1,37 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-} from "@/components/ui/table";
-import { Search } from "lucide-react";
-import Image from "next/image";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  ReferenceLine,
-} from "recharts";
 import StockStatusTab from "./StockStatusTab";
 import StockManagementTab from "./StockManagementTab";
-import PurchaseManagementTab from "./PurchaseManagementTab";
 
 const TABS = [
   "Stock Status",
@@ -330,7 +300,11 @@ export default function InventoryPage() {
       {/* Tab Content */}
       {activeTab === 0 && <StockStatusTab />}
       {activeTab === 1 && <StockManagementTab />}
-      {activeTab === 2 && <PurchaseManagementTab />}
+      {activeTab === 2 && (
+        <div className="bg-white rounded-lg shadow p-6 text-center text-gray-400 text-lg">
+           (Coming soon)
+        </div>
+      )}
       {activeTab === 3 && (
         <div className="bg-white rounded-lg shadow p-6 text-center text-gray-400 text-lg">
           Inhouse Operations (Coming soon)

@@ -10,13 +10,7 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useRouter } from "next/navigation";
 
-import {
-  Trash2,
-  PackageCheck,
-  Clock,
-  AlertTriangle,
-  Users,
-} from "lucide-react";
+import { Clock } from "lucide-react";
 
 interface Order {
   id: string;

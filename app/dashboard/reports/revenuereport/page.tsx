@@ -179,7 +179,8 @@ export default function RevenueReportPage() {
           />
           {/* Filter Button (dropdown) */}
           <div style={{ position: "relative" }}>
-            <button
+            <button 
+              title="Filter"
               style={{
                 fontFamily: "Calibri, Arial, sans-serif",
                 fontSize: 18,
@@ -237,7 +238,9 @@ export default function RevenueReportPage() {
                 role="listbox"
               >
                 {FILTER_OPTIONS.map((opt) => (
-                  <div
+                  <div 
+                    aria-label={opt.label}
+                    title={opt.label}
                     key={opt.value}
                     style={{
                       padding: "0.7rem 1.1rem",

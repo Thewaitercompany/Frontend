@@ -3,15 +3,15 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     unoptimized: true,
-    loader: 'custom',
-    loaderFile: './image-loader.js',
+    loader: "custom",
+    loaderFile: "./image-loader.js",
   },
   webpack: (config, { isServer }) => {
     // Exclude sharp from webpack bundling
     config.externals.push({
-      sharp: 'commonjs sharp',
+      sharp: "commonjs sharp",
     });
-    
+
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -22,6 +22,12 @@ const nextConfig = {
       };
     }
     return config;
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 

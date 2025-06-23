@@ -21,27 +21,10 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
-  LineChart,
-  Line,
+  Cell
 } from "recharts";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import {
-  Trash2,
-  PackageCheck,
-  Clock,
-  AlertTriangle,
-  Users,
-} from "lucide-react";
 
 // Bell icon from Nitanshu fix
 const BellIcon: React.FC<{ unreadCount?: number }> = ({ unreadCount = 0 }) => (
@@ -180,36 +163,14 @@ const pieData = [
 
 const total = pieData.reduce((sum, item) => sum + item.value, 0);
 
-const leaveDates = ["2025-06-05", "2025-06-12"];
-const salaryDates = ["2025-06-07"];
-
-const COLORS = ["#6B8AF4", "#FF7F6B", "#96D160", "#FFB572", "#FF8FD2"];
-
-const LOGO_HEIGHT = 88;
 const backgroundColor = "#F5EFE3";
 
 export default function DashboardPage() {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notificationPageKey, setNotificationPageKey] = useState(0);
   const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(3);
 
-  const [_customerData, setCustomerData] = useState([]);
-  const [_orderDivisionData, setOrderDivisionData] = useState([]);
-  const [_footstepData, setFootstepData] = useState([]);
-  const [_leaveDates, setLeaveDates] = useState([]);
-  const [_salaryDates, setSalaryDates] = useState([]);
-  const [_COLORS, setColors] = useState([]);
-  const [_currentDate, setCurrentDate] = useState(new Date());
-  const [_selectedPeriod, setSelectedPeriod] = useState("week");
-  const [_totalOrderCount, setTotalOrderCount] = useState(0);
-  const [_pendingOrderCount, setPendingOrderCount] = useState(0);
   const router = useRouter();
-
-
-  const _handleMonthChange = (month: keyof typeof monthlyData) => {
-    // Implementation here
-  };
 
   const { totalOrderCount, pendingOrderCount } = useOrders();
 

@@ -51,7 +51,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
-  const [unreadNotificationsCount, setUnreadNotificationsCount] = useState(3);
+  const [unreadNotificationsCount, _setUnreadNotificationsCount] = useState(3);
   const pathname = usePathname();
 
   useEffect(() => {

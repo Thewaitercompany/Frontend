@@ -4,28 +4,22 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useOrders } from "@/hooks/useOrders";
-import { ChevronLeft, Search, Bell } from "lucide-react";
+import { Search } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useRouter } from "next/navigation";
 
-import {
-  Trash2,
-  PackageCheck,
-  Clock,
-  AlertTriangle,
-  Users,
-} from "lucide-react";
+import { Clock } from "lucide-react";
 
 interface Order {
-  id: number;
+  id: string;
   image: string;
   name: string;
   price: number;
   date: string;
   time: string;
-  tableNo: number;
+  tableNo: string;
   contactDetails: string;
   category: string;
   isVeg?: boolean;
@@ -406,7 +400,7 @@ export default function TotalOrders() {
                 Veg Only
               </label>
 
-              <select 
+              <select
                 title="Select Category"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}

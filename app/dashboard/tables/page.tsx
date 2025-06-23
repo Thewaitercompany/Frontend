@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { Search } from "lucide-react";
 import { FaChair, FaUtensils, FaPrint, FaDownload } from "react-icons/fa";
@@ -318,7 +317,7 @@ export default function TableDetails() {
                 <>
                   {/* Orders */}
                   <div className="space-y-4 mb-6">
-                    {DUMMY_ORDERS.map((order, idx) => (
+                    {DUMMY_ORDERS.map((order, _idx) => (
                       <div
                         key={order.orderNo}
                         className="border border-[#e5c99a] rounded-xl p-4 bg-gray-50"
@@ -494,7 +493,7 @@ export default function TableDetails() {
                 Order Summary
               </div>
               <div className="space-y-3 mb-4">
-                {DUMMY_ORDERS.map((order) => (
+                {DUMMY_ORDERS.map((order, _idx) => (
                   <div key={order.orderNo} className="border-b pb-3">
                     <div className="font-semibold text-gray-800 mb-2">
                       Order Number: {order.orderNo}

@@ -1,14 +1,10 @@
 "use client";
-import { MdTableRestaurant, MdChair } from "react-icons/md"; // Material Design Table icon
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import {
   ArrowLeft,
   Search,
-  ClipboardList,
   X,
-  Bell,
   Users,
-  Phone,
   Clock,
   Star,
 } from "lucide-react";

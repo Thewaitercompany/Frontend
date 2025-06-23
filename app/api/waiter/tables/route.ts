@@ -18,7 +18,7 @@ const mockTables = [
 
 export async function GET(request: NextRequest) {
   // Get restaurant ID from query parameters
-  const searchParams = request.nextUrl.searchParams;
+  const _searchParams = request.nextUrl.searchParams;
 
   // In a real application, you would fetch tables from a database based on restaurantId
   // For now, return mock data
