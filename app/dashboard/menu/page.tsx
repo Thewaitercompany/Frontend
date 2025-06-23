@@ -362,42 +362,10 @@ export default function FetchMenuItems() {
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] font-['Calibri'] overflow-x-hidden">
-      {/* Header */}
-      <header className="fixed top-0 left-0 w-full h-[80px] bg-[#f5f1eb] px-6 flex items-center justify-between z-10">
-        <div className="flex items-center gap-3 text-xl font-bold">
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="The Waiter Company Logo"
-              width={50}
-              height={50}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <span className="text-xl text-gray-400">×</span>
-          <span className="text-xl font-serif">Smart Cafe</span>
-        </div>
-        <div className="text-right">
-          {/* <h2 className="text-md font-medium">Thu 13 Mar 04:20PM</h2> */}
-          <h2 className="text-xl font-extrabold">
-            {new Date()
-              .toLocaleString("en-US", {
-                weekday: "short",
-                day: "2-digit",
-                month: "short",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })
-              .replace(",", "")}
-          </h2>
-        </div>
-      </header>
-
       {/* Today's Overview */}
       <div className="flex w-full min-h-screen bg-[#F4F0E8]">
         {/* Main Content */}
-        <div className="ml-[60px] w-full pt-[90px] px-6">
+        <div className="ml-[60px] w-full px-6">
           {/* Controls above box */}
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-2 text-[#4b2e2e]">
@@ -420,6 +388,7 @@ export default function FetchMenuItems() {
               </label>
 
               <select
+                title="Filter by category"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="border border-[#b3978b] rounded px-2 py-1 text-xl font-extrabold bg-white text-sm text-[#8c6c6a] h-[36px] w-[160px]"
@@ -492,8 +461,8 @@ export default function FetchMenuItems() {
                     <path
                       fillRule="evenodd"
                       clipRule="evenodd"
-                      d="M28.8333 15.8333C28.8333 15.3471 28.6402 14.8808 28.2964 14.537C27.9525 14.1932 27.4862 14 27 14C26.5138 14 26.0475 14.1932 25.7036 14.537C25.3598 14.8808 25.1667 15.3471 25.1667 15.8333V23.1667H17.8333C17.3471 23.1667 16.8808 23.3598 16.537 23.7036C16.1932 24.0475 16 24.5138 16 25C16 25.4862 16.1932 25.9525 16.537 26.2964C16.8808 26.6402 17.3471 26.8333 17.8333 26.8333H25.1667V34.1667C25.1667 34.6529 25.3598 35.1192 25.7036 35.463C26.0475 35.8068 26.5138 36 27 36C27.4862 36 27.9525 35.8068 28.2964 35.463C28.6402 35.1192 28.8333 34.6529 28.8333 34.1667V26.8333H36.1667C36.6529 26.8333 37.1192 26.6402 37.463 26.2964C37.8068 25.9525 38 25.4862 38 25C38 24.5138 37.8068 24.0475 37.463 23.7036C37.1192 23.3598 36.6529 23.1667 36.1667 23.1667H28.8333V15.8333Z"
-                      fill="#B39793"
+                      d="M28.8333 15.8333C28.8333 15.3471 28.6402 14.8808 28.2964 14.537C27.9525 14.1932 27.4862 14 27 14C26.5138 14 26.0475 14.1932 25.7036 14.537C25.3598 14.8808 25.1667 15.3471 25.1667 15.8333V23.1667H17.8333C17.3471 23.1667 16.8808 23.3598 16.537 23.7036C16.1932 24.0475 16 24.5138 16 25C16 25.4862 16.1932 25.9525 16.537 26.2964C16.8808 26.6402 17.3471 26.8333 17.8333 26.8333H25.1667V34.1667C25.1667 34.6529 25.3598 35.1192 25.7036 35.463C26.0475 35.8068 26.5138 36 27 36C27.4862 36 27.9525 35.8068 28.2964 35.463C28.6402 35.1192 28.8333 34.6529 28.8333 34.1667V26.8333H36.1667C36.6529 26.8333 37.1192 26.6402 37.463 26.2964C37.8068 25.9525 38 25.4862 38 25C38 24.5138 37.8068 24.0475 37.463 23.7036C37.1192 23.3598 36.6529 23.1667 36.1667 23.1667H28.8333V15.8333ZM17.6887 2.84427C18.2103 2.25803 18.9178 1.92868 19.6554 1.92868C20.3931 1.92868 21.1005 2.25803 21.6221 2.84427C22.1437 3.43051 22.4368 4.22563 22.4368 5.0547C22.4368 5.88377 22.1437 6.67889 21.6221 7.26513L20.2858 8.76702L16.3524 4.34617L17.6887 2.84427ZM15.1397 5.70925L19.0731 10.1301L8.11857 22.4422C7.694 22.919 7.16312 23.2586 6.58158 23.4254L2.17817 24.6979L3.31032 19.7488C3.45798 19.0948 3.76027 18.4979 4.18517 18.0213L15.1397 5.70925Z"
+                      fill="black"
                     />
                   </g>
                   <defs>

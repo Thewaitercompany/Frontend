@@ -221,37 +221,7 @@ export default function EditMenuItem() {
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-0 font-serif">
-      <header className="fixed top-0 left-0 w-full h-[80px] bg-[#f5f1eb] px-6 flex items-center justify-between z-10">
-        <div className="flex items-center gap-3 text-xl font-bold">
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="The Waiter Company Logo"
-              width={50}
-              height={50}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <span className="text-xl text-gray-400">×</span>
-          <span className="text-xl font-serif">Smart Cafe</span>
-        </div>
-        <div className="text-right">
-          {/* <h2 className="text-md font-medium">Thu 13 Mar 04:20PM</h2> */}
-          <h2 className="text-xl font-extrabold">
-            {new Date()
-              .toLocaleString("en-US", {
-                weekday: "short",
-                day: "2-digit",
-                month: "short",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })
-              .replace(",", "")}
-          </h2>
-        </div>
-      </header>
-      <main className="mx-auto mt-8 w-[1400px] ml-[6%]">
+      <main className="mx-auto w-[1400px] ml-[6%]">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2 text-[#4b2e2e]">
             <button
@@ -753,7 +723,7 @@ export default function EditMenuItem() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
             <div className="bg-white rounded-2xl shadow-xl p-8 w-[350px] max-w-full flex flex-col items-center relative">
               <div className="flex items-center gap-2">
-                <button 
+                <button
                   title="Close"
                   onClick={closeDeleteModal}
                   className="w-[12px] h-[22px] flex-shrink-0"

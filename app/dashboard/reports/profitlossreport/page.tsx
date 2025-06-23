@@ -10,7 +10,13 @@ const DUMMY_DATA = [
     totalExpenses: "₹12,000",
     returns: "+₹8,000",
     change: { value: "+1%", up: true },
-    feedback: <>Miscellaneous<br /><span style={{ color: "#d34e35" }}>was much higher.</span></>
+    feedback: (
+      <>
+        Miscellaneous
+        <br />
+        <span style={{ color: "#d34e35" }}>was much higher.</span>
+      </>
+    ),
   },
   {
     time: "09am-10am",
@@ -18,7 +24,7 @@ const DUMMY_DATA = [
     totalExpenses: "₹12,000",
     returns: "+₹8,000",
     change: { value: "0%", up: false },
-    feedback: "None"
+    feedback: "None",
   },
 ];
 
@@ -30,7 +36,10 @@ const FILTER_OPTIONS = [
   { label: "All", value: "all" },
 ];
 
-function filterData(data: typeof DUMMY_DATA, filter: string): typeof DUMMY_DATA {
+function filterData(
+  data: typeof DUMMY_DATA,
+  filter: string
+): typeof DUMMY_DATA {
   // For demonstration, no actual filtering
   return data;
 }
@@ -49,7 +58,10 @@ export default function ProfitLossReportPage() {
           : typeof val === "object" && val !== null && "value" in val
           ? (val as any).value
           : ""
-        ).toString().toLowerCase().includes(search.toLowerCase())
+        )
+          .toString()
+          .toLowerCase()
+          .includes(search.toLowerCase())
       )
     ),
     filter
@@ -129,12 +141,16 @@ export default function ProfitLossReportPage() {
         >
           &#60;
         </span>
-        <span style={{
-          fontFamily: "Georgia, Times New Roman, serif",
-          color: mainTextColor,
-          fontWeight: 700,
-          fontSize: 30
-        }}>Profit/Loss Report</span>
+        <span
+          style={{
+            fontFamily: "Georgia, Times New Roman, serif",
+            color: mainTextColor,
+            fontWeight: 700,
+            fontSize: 30,
+          }}
+        >
+          Profit/Loss Report
+        </span>
       </button>
 
       {/* Sole Message/Table Block */}
@@ -194,15 +210,23 @@ export default function ProfitLossReportPage() {
               marginRight: 12,
               height: inputHeight,
               boxSizing: "border-box",
-              backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M9.5 17C13.0899 17 16 14.0899 16 10.5C16 6.91015 13.0899 4 9.5 4C5.91015 4 3 6.91015 3 10.5C3 14.0899 5.91015 17 9.5 17Z\' stroke=\'%23bba9a2\' stroke-width=\'1.2\'/%3E%3Cpath d=\'M17 17L15 15\' stroke=\'%23bba9a2\' stroke-width=\'1.2\' stroke-linecap=\'round\'/%3E%3C/svg%3E")',
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.5 17C13.0899 17 16 14.0899 16 10.5C16 6.91015 13.0899 4 9.5 4C5.91015 4 3 6.91015 3 10.5C3 14.0899 5.91015 17 9.5 17Z' stroke='%23bba9a2' stroke-width='1.2'/%3E%3Cpath d='M17 17L15 15' stroke='%23bba9a2' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E\")",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "10px center",
-              paddingLeft: "2.1rem"
+              paddingLeft: "2.1rem",
             }}
             aria-label="Search profit/loss report"
           />
           {/* Filter Button (dropdown) - RIGHT ALIGNED */}
-          <div style={{ marginLeft: "auto", position: "relative", display: "flex", alignItems: "center" }}>
+          <div
+            style={{
+              marginLeft: "auto",
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <button
               style={{
                 fontFamily: "Calibri, Arial, sans-serif",
@@ -230,17 +254,22 @@ export default function ProfitLossReportPage() {
               onClick={() => setShowFilterDropdown((v) => !v)}
             >
               <span>
-                {FILTER_OPTIONS.find((f) => f.value === filter)?.label || "Today"}
+                {FILTER_OPTIONS.find((f) => f.value === filter)?.label ||
+                  "Today"}
               </span>
-              <span style={{
-                marginLeft: 10,
-                fontSize: 19,
-                color: "#BFA14A",
-                fontWeight: 700,
-                position: "relative",
-                top: 1,
-                userSelect: "none"
-              }}>▼</span>
+              <span
+                style={{
+                  marginLeft: 10,
+                  fontSize: 19,
+                  color: "#BFA14A",
+                  fontWeight: 700,
+                  position: "relative",
+                  top: 1,
+                  userSelect: "none",
+                }}
+              >
+                ▼
+              </span>
             </button>
             {showFilterDropdown && (
               <div
@@ -256,7 +285,7 @@ export default function ProfitLossReportPage() {
                   borderRadius: 8,
                   marginTop: 5,
                   fontFamily: "Calibri, Arial, sans-serif",
-                  fontSize: 17
+                  fontSize: 17,
                 }}
                 role="listbox"
               >
@@ -267,7 +296,8 @@ export default function ProfitLossReportPage() {
                       padding: "0.7rem 1.1rem",
                       cursor: "pointer",
                       color: mainTextColor,
-                      background: filter === opt.value ? "#f3e6d9" : "transparent",
+                      background:
+                        filter === opt.value ? "#f3e6d9" : "transparent",
                       fontWeight: filter === opt.value ? 700 : 500,
                       borderRadius: 8,
                       transition: "background 0.13s",
@@ -286,7 +316,14 @@ export default function ProfitLossReportPage() {
               </div>
             )}
             {/* Share and Download buttons (right-aligned) */}
-            <div style={{ marginLeft: 10, display: "flex", alignItems: "center", gap: 0 }}>
+            <div
+              style={{
+                marginLeft: 10,
+                display: "flex",
+                alignItems: "center",
+                gap: 0,
+              }}
+            >
               {/* Share */}
               <button
                 style={{
@@ -309,8 +346,20 @@ export default function ProfitLossReportPage() {
                 type="button"
               >
                 {/* Paper plane icon */}
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ display: "block" }}>
-                  <path d="M3 11L19 4L12 21L10 13L3 11Z" stroke="#BFA14A" strokeWidth="2" strokeLinejoin="round" fill="none"/>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  fill="none"
+                  style={{ display: "block" }}
+                >
+                  <path
+                    d="M3 11L19 4L12 21L10 13L3 11Z"
+                    stroke="#BFA14A"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
+                    fill="none"
+                  />
                 </svg>
               </button>
               {/* Download */}
@@ -334,8 +383,20 @@ export default function ProfitLossReportPage() {
                 type="button"
               >
                 {/* Download icon */}
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ display: "block" }}>
-                  <path d="M11 4V16M11 16L6 11M11 16L16 11M4 18H18" stroke="#BFA14A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  fill="none"
+                  style={{ display: "block" }}
+                >
+                  <path
+                    d="M11 4V16M11 16L6 11M11 16L16 11M4 18H18"
+                    stroke="#BFA14A"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </button>
             </div>
@@ -366,94 +427,195 @@ export default function ProfitLossReportPage() {
             paddingBottom: 0,
           }}
         >
-          <table style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            fontFamily: "Calibri, Arial, sans-serif",
-            fontSize: 19,
-            color: mainTextColor,
-            background: "#fff",
-          }}>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontFamily: "Calibri, Arial, sans-serif",
+              fontSize: 19,
+              color: mainTextColor,
+              background: "#fff",
+            }}
+          >
             <thead>
-              <tr style={{
-                background: "#fff",
-                color: mainTextColor,
-                fontWeight: 700,
-                fontSize: 20,
-                borderBottom: `2px solid ${tableBorderColor}`,
-                letterSpacing: 0.04,
-              }}>
-                <th style={{
-                  padding: "14px 16px", // <-- INCREASED from 10px to 16px for more left space
-                  textAlign: "left",
-                  border: "none",
-                  fontSize: 19,
+              <tr
+                style={{
+                  background: "#fff",
+                  color: mainTextColor,
                   fontWeight: 700,
-                  minWidth: 110
-                }}>Time</th>
-                <th style={{
-                  padding: "14px 10px",
-                  textAlign: "left",
-                  border: "none",
-                  fontSize: 19,
-                  fontWeight: 700,
-                  minWidth: 140
-                }}>Total Revenue</th>
-                <th style={{
-                  padding: "14px 10px",
-                  textAlign: "left",
-                  border: "none",
-                  fontSize: 19,
-                  fontWeight: 700,
-                  minWidth: 140
-                }}>Total Expenses</th>
-                <th style={{
-                  padding: "14px 10px",
-                  textAlign: "left",
-                  border: "none",
-                  fontSize: 19,
-                  fontWeight: 700,
-                  minWidth: 110
-                }}>Returns</th>
-                <th style={{
-                  padding: "14px 10px",
-                  textAlign: "left",
-                  border: "none",
-                  fontSize: 19,
-                  fontWeight: 700,
-                  minWidth: 120
-                }}>Change in %</th>
-                <th style={{
-                  padding: "14px 10px",
-                  textAlign: "left",
-                  border: "none",
-                  fontSize: 19,
-                  fontWeight: 700,
-                  minWidth: 180
-                }}>Feedback</th>
+                  fontSize: 20,
+                  borderBottom: `2px solid ${tableBorderColor}`,
+                  letterSpacing: 0.04,
+                }}
+              >
+                <th
+                  style={{
+                    padding: "14px 16px", // <-- INCREASED from 10px to 16px for more left space
+                    textAlign: "left",
+                    border: "none",
+                    fontSize: 19,
+                    fontWeight: 700,
+                    minWidth: 110,
+                  }}
+                >
+                  Time
+                </th>
+                <th
+                  style={{
+                    padding: "14px 10px",
+                    textAlign: "left",
+                    border: "none",
+                    fontSize: 19,
+                    fontWeight: 700,
+                    minWidth: 140,
+                  }}
+                >
+                  Total Revenue
+                </th>
+                <th
+                  style={{
+                    padding: "14px 10px",
+                    textAlign: "left",
+                    border: "none",
+                    fontSize: 19,
+                    fontWeight: 700,
+                    minWidth: 140,
+                  }}
+                >
+                  Total Expenses
+                </th>
+                <th
+                  style={{
+                    padding: "14px 10px",
+                    textAlign: "left",
+                    border: "none",
+                    fontSize: 19,
+                    fontWeight: 700,
+                    minWidth: 110,
+                  }}
+                >
+                  Returns
+                </th>
+                <th
+                  style={{
+                    padding: "14px 10px",
+                    textAlign: "left",
+                    border: "none",
+                    fontSize: 19,
+                    fontWeight: 700,
+                    minWidth: 120,
+                  }}
+                >
+                  Change in %
+                </th>
+                <th
+                  style={{
+                    padding: "14px 10px",
+                    textAlign: "left",
+                    border: "none",
+                    fontSize: 19,
+                    fontWeight: 700,
+                    minWidth: 180,
+                  }}
+                >
+                  Feedback
+                </th>
               </tr>
             </thead>
             <tbody>
               {filteredData.length === 0 && (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: "center", color: "#bbb", padding: "38px 0" }}>No records found.</td>
+                  <td
+                    colSpan={6}
+                    style={{
+                      textAlign: "center",
+                      color: "#bbb",
+                      padding: "38px 0",
+                    }}
+                  >
+                    No records found.
+                  </td>
                 </tr>
               )}
               {filteredData.map((row, idx) => (
-                <tr key={idx} style={{
-                  borderBottom: idx === filteredData.length - 1 ? "none" : `2px solid ${tableBorderColor}`,
-                  fontWeight: 500,
-                  background: "#fff",
-                }}>
-                  <td style={{ padding: "18px 16px", border: "none", color: mainTextColor }}>{row.time}</td>
-                  <td style={{ padding: "18px 10px", border: "none", color: mainTextColor }}>{row.totalRevenue}</td>
-                  <td style={{ padding: "18px 10px", border: "none", color: mainTextColor }}>{row.totalExpenses}</td>
-                  <td style={{ padding: "18px 10px", border: "none", color: mainTextColor }}>{row.returns}</td>
-                  <td style={{ padding: "18px 10px", border: "none", color: mainTextColor }}>
+                <tr
+                  key={idx}
+                  style={{
+                    borderBottom:
+                      idx === filteredData.length - 1
+                        ? "none"
+                        : `2px solid ${tableBorderColor}`,
+                    fontWeight: 500,
+                    background: "#fff",
+                  }}
+                >
+                  <td
+                    style={{
+                      padding: "18px 16px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {row.time}
+                  </td>
+                  <td
+                    style={{
+                      padding: "18px 10px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {row.totalRevenue}
+                  </td>
+                  <td
+                    style={{
+                      padding: "18px 10px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {row.totalExpenses}
+                  </td>
+                  <td
+                    style={{
+                      padding: "18px 10px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {row.returns}
+                  </td>
+                  <td
+                    style={{
+                      padding: "18px 10px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
                     {row.change.up ? (
-                      <span style={{ color: greenUp, fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 4 }}>
-                        <svg width="18" height="18" viewBox="0 0 20 20" style={{ verticalAlign: "middle", marginRight: 2 }}>
-                          <path d="M10 15V5M10 5L6 9M10 5l4 4" stroke={greenUp} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                      <span
+                        style={{
+                          color: greenUp,
+                          fontWeight: 700,
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 20 20"
+                          style={{ verticalAlign: "middle", marginRight: 2 }}
+                        >
+                          <path
+                            d="M10 15V5M10 5L6 9M10 5l4 4"
+                            stroke={greenUp}
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            fill="none"
+                          />
                         </svg>
                         {row.change.value.replace("+", "")}
                       </span>
@@ -461,8 +623,16 @@ export default function ProfitLossReportPage() {
                       row.change.value
                     )}
                   </td>
-                  <td style={{ padding: "18px 10px", border: "none", color: mainTextColor }}>
-                    {typeof row.feedback === "string" ? row.feedback : row.feedback}
+                  <td
+                    style={{
+                      padding: "18px 10px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {typeof row.feedback === "string"
+                      ? row.feedback
+                      : row.feedback}
                   </td>
                 </tr>
               ))}
@@ -483,7 +653,7 @@ export default function ProfitLossReportPage() {
           letterSpacing: "0.02em",
           background: "transparent",
           zIndex: 99,
-          textAlign: "right"
+          textAlign: "right",
         }}
       >
         {filteredData.length === 0

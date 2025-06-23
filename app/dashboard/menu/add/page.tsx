@@ -171,40 +171,11 @@ export default function AddMenuItem() {
 
   return (
     <div className="min-h-screen bg-[#f5f1eb] p-0 font-serif">
-      <header className="fixed top-0 left-0 w-full h-[80px] bg-[#f5f1eb] px-6 flex items-center justify-between z-10">
-        <div className="flex items-center gap-3 text-xl font-bold">
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="The Waiter Company Logo"
-              width={50}
-              height={50}
-              className="h-10 w-auto"
-            />
-          </Link>
-          <span className="text-xl text-gray-400">×</span>
-          <span className="text-xl font-serif">Smart Cafe</span>
-        </div>
-        <div className="text-right">
-          {/* <h2 className="text-md font-medium">Thu 13 Mar 04:20PM</h2> */}
-          <h2 className="text-xl font-extrabold">
-            {new Date()
-              .toLocaleString("en-US", {
-                weekday: "short",
-                day: "2-digit",
-                month: "short",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })
-              .replace(",", "")}
-          </h2>
-        </div>
-      </header>
-      <main className="mx-auto mt-8 w-[1400px] ml-[6%]">
+      <main className="mx-auto w-[1400px] ml-[6%]">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2 text-[#4b2e2e]">
             <button
+              title="Back"
               onClick={() => router.push("/dashboard")}
               className="w-[25px] h-[25px]"
             >
@@ -443,6 +414,7 @@ export default function AddMenuItem() {
                   <div className="flex items-center gap-2">
                     {/* onClick={() => setShowIngredientModal(false)} */}
                     <button
+                      title="Close"
                       onClick={() => setShowIngredientModal(false)}
                       className="w-[12px] h-[22px]"
                     >

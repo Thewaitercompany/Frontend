@@ -2,53 +2,66 @@
 import React, { useState } from "react";
 
 // Staff Performance Icon with image inside a circle
-const StaffPerformanceIcon = ({ onClick, imageUrl, circleColor = "#D5D5D5", size = 40 }) => (
-    <button
-        onClick={onClick}
-        style={{
-            background: circleColor,
-            border: `1.2px solid ${circleColor}`,
-            borderRadius: "50%",
-            width: size,
-            height: size,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            boxShadow: "0 2px 8px 0 rgba(110, 85, 60, 0.09)",
-            overflow: "hidden",
-            padding: 0,
-            flexShrink: 0,
-        }}
-    >
-<img
-    src="/2bb6ca406cd027d513b3c1deffef4da8a234c4d0.png" // Removed the semicolon here
-    alt="Staff Performance"
+const StaffPerformanceIcon = ({
+  onClick,
+  imageUrl,
+  circleColor = "#D5D5D5",
+  size = 40,
+}: {
+  onClick: () => void;
+  imageUrl: string;
+  circleColor?: string;
+  size?: number;
+}) => (
+  <button
+    onClick={onClick}
     style={{
+      background: circleColor,
+      border: `1.2px solid ${circleColor}`,
+      borderRadius: "50%",
+      width: size,
+      height: size,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      cursor: "pointer",
+      boxShadow: "0 2px 8px 0 rgba(110, 85, 60, 0.09)",
+      overflow: "hidden",
+      padding: 0,
+      flexShrink: 0,
+    }}
+  >
+    <img
+      src="/2bb6ca406cd027d513b3c1deffef4da8a234c4d0.png" // Removed the semicolon here
+      alt="Staff Performance"
+      style={{
         width: "60%",
         height: "60%",
         objectFit: "contain",
         borderRadius: "50%",
-    }}
-    // Changed fallback to a generic placeholder to prevent continuous failed reloads
-    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = "https://placehold.co/24x24/D5D5D5/000000?text=SP"; }}
-/>
-    </button>
+      }}
+      // Changed fallback to a generic placeholder to prevent continuous failed reloads
+      onError={(e) => {
+        e.currentTarget.onerror = null;
+        e.currentTarget.src =
+          "https://placehold.co/24x24/D5D5D5/000000?text=SP";
+      }}
+    />
+  </button>
 );
-
 
 // Dummy staff data - now only one entry as per Figma
 const STAFF_DATA = [
-    {
-        image: null, // Avatar placeholder
-        name: "Mr Raju",
-        designation: "Waiter",
-        salary: "₹ 10,000",
-        ordersServed: 50,
-        hoursWorked: "9/10",
-        leavesTaken: 2,
-        rating: 4.5,
-    },
+  {
+    image: null, // Avatar placeholder
+    name: "Mr Raju",
+    designation: "Waiter",
+    salary: "₹ 10,000",
+    ordersServed: 50,
+    hoursWorked: "9/10",
+    leavesTaken: 2,
+    rating: 4.5,
+  },
 ];
 
 export default function StaffPerformancePage() {
@@ -106,7 +119,7 @@ export default function StaffPerformancePage() {
           padding: 0,
           transition: "top 0.2s",
         }}
-        onClick={() => window.location.href = "/dashboard/restaurantprofile"} // Changed to window.location.href
+        onClick={() => (window.location.href = "/dashboard/restaurantprofile")} // Changed to window.location.href
         aria-label="Back to Restaurant Profile"
       >
         <span
@@ -140,7 +153,8 @@ export default function StaffPerformancePage() {
       </button>
 
       {/* Main content area containing the table block - Adjusted position */}
-      <div style={{
+      <div
+        style={{
           marginTop: 130, // Adjusted to move down, accounting for button
           marginLeft: 150, // Adjusted to move right
           flexGrow: 1, // Allows this block to grow and fill available space
@@ -150,7 +164,8 @@ export default function StaffPerformancePage() {
           display: "flex",
           flexDirection: "column",
           minWidth: 0,
-        }}>
+        }}
+      >
         {/* Table block - Main component with shadow and rounded corners */}
         <div
           style={{
@@ -184,7 +199,9 @@ export default function StaffPerformancePage() {
             }}
           >
             {/* Search */}
-            <div style={{ position: "relative", flex: "1 1 auto", maxWidth: 270 }}>
+            <div
+              style={{ position: "relative", flex: "1 1 auto", maxWidth: 270 }}
+            >
               <input
                 type="text"
                 placeholder="Search"
@@ -219,8 +236,22 @@ export default function StaffPerformancePage() {
                   pointerEvents: "none",
                 }}
               >
-                <circle cx="11" cy="11" r="8" stroke="#B39793" strokeWidth="2" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="#B39793" strokeWidth="2" strokeLinecap="round" />
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="8"
+                  stroke="#B39793"
+                  strokeWidth="2"
+                />
+                <line
+                  x1="21"
+                  y1="21"
+                  x2="16.65"
+                  y2="16.65"
+                  stroke="#B39793"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
               </svg>
             </div>
             {/* Sort Button (From 1st) */}
@@ -247,18 +278,38 @@ export default function StaffPerformancePage() {
               }}
               type="button"
             >
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" style={{ marginRight: 5 }}>
-                <circle cx="10" cy="10" r="8" stroke="#BFA14A" strokeWidth="1.3" fill="none" />
-                <path d="M7 10h6M10 7v6" stroke="#BFA14A" strokeWidth="1.3" strokeLinecap="round" />
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 20 20"
+                fill="none"
+                style={{ marginRight: 5 }}
+              >
+                <circle
+                  cx="10"
+                  cy="10"
+                  r="8"
+                  stroke="#BFA14A"
+                  strokeWidth="1.3"
+                  fill="none"
+                />
+                <path
+                  d="M7 10h6M10 7v6"
+                  stroke="#BFA14A"
+                  strokeWidth="1.3"
+                  strokeLinecap="round"
+                />
               </svg>
               From 1st
             </button>
             {/* Staff Performance Icon added here */}
             <StaffPerformanceIcon
-                onClick={() => window.location.href = "/dashboard/restaurantprofile"} // Navigates back to restaurant profile
-                imageUrl="https://placehold.co/40x40/D5D5D5/000000?text=SP" // Placeholder image for now
-                circleColor="#D5D5D5"
-                size={40}
+              onClick={() =>
+                (window.location.href = "/dashboard/restaurantprofile")
+              } // Navigates back to restaurant profile
+              imageUrl="https://placehold.co/40x40/D5D5D5/000000?text=SP" // Placeholder image for now
+              circleColor="#D5D5D5"
+              size={40}
             />
           </div>
           {/* --- SEPARATION LINE --- */}
@@ -286,56 +337,207 @@ export default function StaffPerformancePage() {
               paddingBottom: 0,
             }}
           >
-            <table style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              fontFamily: "Calibri, Arial, sans-serif",
-              fontSize: 18.5,
-              color: mainTextColor,
-              background: "#fff",
-            }}>
+            <table
+              style={{
+                width: "100%",
+                borderCollapse: "collapse",
+                fontFamily: "Calibri, Arial, sans-serif",
+                fontSize: 18.5,
+                color: mainTextColor,
+                background: "#fff",
+              }}
+            >
               <thead>
-                <tr style={{
-                  background: "#fff",
-                  color: mainTextColor,
-                  fontWeight: 700,
-                  fontSize: 18.5,
-                  borderBottom: `2px solid ${tableBorderColor}`,
-                  letterSpacing: 0.04,
-                }}>
-                  <th style={{ padding: "15px 24px 15px 22px", textAlign: "left", border: "none" }}>Image</th>
-                  <th style={{ padding: "15px 24px", textAlign: "left", border: "none" }}>Name</th>
-                  <th style={{ padding: "15px 24px", textAlign: "left", border: "none" }}>Designation</th>
-                  <th style={{ padding: "15px 24px", textAlign: "left", border: "none" }}>Salary</th>
-                  <th style={{ padding: "15px 24px", textAlign: "left", border: "none" }}>Orders Served</th>
-                  <th style={{ padding: "15px 24px", textAlign: "left", border: "none" }}>Hours Worked</th>
-                  <th style={{ padding: "15px 24px", textAlign: "left", border: "none" }}>Leaves Taken</th>
-                  <th style={{ padding: "15px 24px", textAlign: "left", border: "none" }}>Rating</th>
+                <tr
+                  style={{
+                    background: "#fff",
+                    color: mainTextColor,
+                    fontWeight: 700,
+                    fontSize: 18.5,
+                    borderBottom: `2px solid ${tableBorderColor}`,
+                    letterSpacing: 0.04,
+                  }}
+                >
+                  <th
+                    style={{
+                      padding: "15px 24px 15px 22px",
+                      textAlign: "left",
+                      border: "none",
+                    }}
+                  >
+                    Image
+                  </th>
+                  <th
+                    style={{
+                      padding: "15px 24px",
+                      textAlign: "left",
+                      border: "none",
+                    }}
+                  >
+                    Name
+                  </th>
+                  <th
+                    style={{
+                      padding: "15px 24px",
+                      textAlign: "left",
+                      border: "none",
+                    }}
+                  >
+                    Designation
+                  </th>
+                  <th
+                    style={{
+                      padding: "15px 24px",
+                      textAlign: "left",
+                      border: "none",
+                    }}
+                  >
+                    Salary
+                  </th>
+                  <th
+                    style={{
+                      padding: "15px 24px",
+                      textAlign: "left",
+                      border: "none",
+                    }}
+                  >
+                    Orders Served
+                  </th>
+                  <th
+                    style={{
+                      padding: "15px 24px",
+                      textAlign: "left",
+                      border: "none",
+                    }}
+                  >
+                    Hours Worked
+                  </th>
+                  <th
+                    style={{
+                      padding: "15px 24px",
+                      textAlign: "left",
+                      border: "none",
+                    }}
+                  >
+                    Leaves Taken
+                  </th>
+                  <th
+                    style={{
+                      padding: "15px 24px",
+                      textAlign: "left",
+                      border: "none",
+                    }}
+                  >
+                    Rating
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {/* Display only the first entry */}
                 {filteredData.slice(0, 1).map((row, idx) => (
-                  <tr key={idx} style={{
-                    borderBottom: "none", // No border for a single entry
-                    fontWeight: 500,
-                    background: "#fff",
-                  }}>
-                    <td style={{ padding: "18px 24px 18px 22px", border: "none" }}>
+                  <tr
+                    key={idx}
+                    style={{
+                      borderBottom: "none", // No border for a single entry
+                      fontWeight: 500,
+                      background: "#fff",
+                    }}
+                  >
+                    <td
+                      style={{ padding: "18px 24px 18px 22px", border: "none" }}
+                    >
                       {/* Avatar icon */}
-                      <svg width="38" height="38" viewBox="0 0 28 28" fill="none">
-                        <circle cx="14" cy="13" r="10" stroke="#4B3937" strokeWidth="2.1" />
-                        <circle cx="14" cy="10" r="4" stroke="#4B3937" strokeWidth="1.6" />
-                        <path d="M7 20c.5-4.2 4.1-4.5 7-4.5s6.5 1.3 7 3.5" stroke="#4B3937" strokeWidth="2" strokeLinecap="round" />
+                      <svg
+                        width="38"
+                        height="38"
+                        viewBox="0 0 28 28"
+                        fill="none"
+                      >
+                        <circle
+                          cx="14"
+                          cy="13"
+                          r="10"
+                          stroke="#4B3937"
+                          strokeWidth="2.1"
+                        />
+                        <circle
+                          cx="14"
+                          cy="10"
+                          r="4"
+                          stroke="#4B3937"
+                          strokeWidth="1.6"
+                        />
+                        <path
+                          d="M7 20c.5-4.2 4.1-4.5 7-4.5s6.5 1.3 7 3.5"
+                          stroke="#4B3937"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
                       </svg>
                     </td>
-                    <td style={{ padding: "18px 24px", border: "none", color: mainTextColor }}>{row.name}</td>
-                    <td style={{ padding: "18px 24px", border: "none", color: mainTextColor }}>{row.designation}</td>
-                    <td style={{ padding: "18px 24px", border: "none", color: mainTextColor }}>{row.salary}</td>
-                    <td style={{ padding: "18px 24px", border: "none", color: mainTextColor }}>{row.ordersServed}</td>
-                    <td style={{ padding: "18px 24px", border: "none", color: mainTextColor }}>{row.hoursWorked}</td>
-                    <td style={{ padding: "18px 24px", border: "none", color: mainTextColor }}>{row.leavesTaken}</td>
-                    <td style={{ padding: "18px 24px", border: "none", color: mainTextColor }}>{row.rating}</td>
+                    <td
+                      style={{
+                        padding: "18px 24px",
+                        border: "none",
+                        color: mainTextColor,
+                      }}
+                    >
+                      {row.name}
+                    </td>
+                    <td
+                      style={{
+                        padding: "18px 24px",
+                        border: "none",
+                        color: mainTextColor,
+                      }}
+                    >
+                      {row.designation}
+                    </td>
+                    <td
+                      style={{
+                        padding: "18px 24px",
+                        border: "none",
+                        color: mainTextColor,
+                      }}
+                    >
+                      {row.salary}
+                    </td>
+                    <td
+                      style={{
+                        padding: "18px 24px",
+                        border: "none",
+                        color: mainTextColor,
+                      }}
+                    >
+                      {row.ordersServed}
+                    </td>
+                    <td
+                      style={{
+                        padding: "18px 24px",
+                        border: "none",
+                        color: mainTextColor,
+                      }}
+                    >
+                      {row.hoursWorked}
+                    </td>
+                    <td
+                      style={{
+                        padding: "18px 24px",
+                        border: "none",
+                        color: mainTextColor,
+                      }}
+                    >
+                      {row.leavesTaken}
+                    </td>
+                    <td
+                      style={{
+                        padding: "18px 24px",
+                        border: "none",
+                        color: mainTextColor,
+                      }}
+                    >
+                      {row.rating}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -354,7 +556,7 @@ export default function StaffPerformancePage() {
               letterSpacing: "0.02em",
               background: "transparent",
               zIndex: 11,
-              textAlign: "right"
+              textAlign: "right",
             }}
           >
             {filteredData.length === 0

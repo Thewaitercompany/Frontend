@@ -144,7 +144,7 @@ export default function DashboardLayout({
                   top: "-0.25rem",
                   right: "-0.25rem",
                   backgroundColor: "#e53e3e",
-                  color: "#202224",
+                  color: "#fff",
                   borderRadius: "9999px",
                   fontSize: "0.75rem",
                   width: "1rem",
@@ -158,7 +158,14 @@ export default function DashboardLayout({
                 {unreadNotificationsCount}
               </span>
             </Link>
-            <h2 style={{ fontSize: "1rem", fontWeight: 500, color: "#202224" }}>
+            <h2
+              style={{
+                fontSize: "1rem",
+                fontWeight: 500,
+                color: "#202224",
+                fontFamily: "serif",
+              }}
+            >
               {formatDateTime(currentTime)}
             </h2>
           </div>

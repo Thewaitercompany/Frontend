@@ -4,12 +4,48 @@ import { useRouter } from "next/navigation";
 
 // Dummy data for Peak Hours (matching screenshot)
 const DUMMY_DATA = [
-  { time: "01pm-02pm", totalCustomers: 17, newCustomers: 5, totalSales: "₹1,900", tablesOccupied: "6/10" },
-  { time: "12pm-01pm", totalCustomers: 15, newCustomers: 4, totalSales: "₹1,500", tablesOccupied: "6/10" },
-  { time: "11am-12pm", totalCustomers: 22, newCustomers: 8, totalSales: "₹2,200", tablesOccupied: "8/10" },
-  { time: "10am-11am", totalCustomers: 15, newCustomers: 2, totalSales: "₹1,700", tablesOccupied: "5/10" },
-  { time: "09am-10am", totalCustomers: 20, newCustomers: 3, totalSales: "₹2,000", tablesOccupied: "7/10" },
-  { time: "08am-09am", totalCustomers: 18, newCustomers: 1, totalSales: "₹1,600", tablesOccupied: "6/10" },
+  {
+    time: "01pm-02pm",
+    totalCustomers: 17,
+    newCustomers: 5,
+    totalSales: "₹1,900",
+    tablesOccupied: "6/10",
+  },
+  {
+    time: "12pm-01pm",
+    totalCustomers: 15,
+    newCustomers: 4,
+    totalSales: "₹1,500",
+    tablesOccupied: "6/10",
+  },
+  {
+    time: "11am-12pm",
+    totalCustomers: 22,
+    newCustomers: 8,
+    totalSales: "₹2,200",
+    tablesOccupied: "8/10",
+  },
+  {
+    time: "10am-11am",
+    totalCustomers: 15,
+    newCustomers: 2,
+    totalSales: "₹1,700",
+    tablesOccupied: "5/10",
+  },
+  {
+    time: "09am-10am",
+    totalCustomers: 20,
+    newCustomers: 3,
+    totalSales: "₹2,000",
+    tablesOccupied: "7/10",
+  },
+  {
+    time: "08am-09am",
+    totalCustomers: 18,
+    newCustomers: 1,
+    totalSales: "₹1,600",
+    tablesOccupied: "6/10",
+  },
 ];
 
 const FILTER_OPTIONS = [
@@ -44,10 +80,7 @@ export default function PeakHoursPage() {
 
   // Filtered data logic (search only for demo)
   const filteredData = DUMMY_DATA.filter((row) =>
-    Object.values(row)
-      .join(" ")
-      .toLowerCase()
-      .includes(search.toLowerCase())
+    Object.values(row).join(" ").toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -105,12 +138,16 @@ export default function PeakHoursPage() {
         >
           &#60;
         </span>
-        <span style={{
-          fontFamily: "Georgia, Times New Roman, serif",
-          color: mainTextColor,
-          fontWeight: 700,
-          fontSize: 28
-        }}>Peak Hours</span>
+        <span
+          style={{
+            fontFamily: "Georgia, Times New Roman, serif",
+            color: mainTextColor,
+            fontWeight: 700,
+            fontSize: 28,
+          }}
+        >
+          Peak Hours
+        </span>
       </button>
 
       {/* Main Block */}
@@ -150,7 +187,7 @@ export default function PeakHoursPage() {
             paddingBottom: "0.71rem",
             background: white,
             minHeight: 64,
-            gap: "1.1rem"
+            gap: "1.1rem",
           }}
         >
           {/* Search */}
@@ -170,10 +207,11 @@ export default function PeakHoursPage() {
               color: "#a08e85",
               height: inputHeight,
               boxSizing: "border-box",
-              backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M9.5 17C13.0899 17 16 14.0899 16 10.5C16 6.91015 13.0899 4 9.5 4C5.91015 4 3 6.91015 3 10.5C3 14.0899 5.91015 17 9.5 17Z\' stroke=\'%23bba9a2\' stroke-width=\'1.2\'/%3E%3Cpath d=\'M17 17L15 15\' stroke=\'%23bba9a2\' stroke-width=\'1.2\' stroke-linecap=\'round\'/%3E%3C/svg%3E")',
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.5 17C13.0899 17 16 14.0899 16 10.5C16 6.91015 13.0899 4 9.5 4C5.91015 4 3 6.91015 3 10.5C3 14.0899 5.91015 17 9.5 17Z' stroke='%23bba9a2' stroke-width='1.2'/%3E%3Cpath d='M17 17L15 15' stroke='%23bba9a2' stroke-width='1.2' stroke-linecap='round'/%3E%3C/svg%3E\")",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "10px center",
-              paddingLeft: "2.1rem"
+              paddingLeft: "2.1rem",
             }}
             aria-label="Search peak hours report"
           />
@@ -205,17 +243,22 @@ export default function PeakHoursPage() {
                 onClick={() => setShowFilterDropdown((v) => !v)}
               >
                 <span>
-                  {FILTER_OPTIONS.find((f) => f.value === filter)?.label || "Today"}
+                  {FILTER_OPTIONS.find((f) => f.value === filter)?.label ||
+                    "Today"}
                 </span>
-                <span style={{
-                  marginLeft: 10,
-                  fontSize: 19,
-                  color: "#BFA14A",
-                  fontWeight: 700,
-                  position: "relative",
-                  top: 1,
-                  userSelect: "none"
-                }}>▼</span>
+                <span
+                  style={{
+                    marginLeft: 10,
+                    fontSize: 19,
+                    color: "#BFA14A",
+                    fontWeight: 700,
+                    position: "relative",
+                    top: 1,
+                    userSelect: "none",
+                  }}
+                >
+                  ▼
+                </span>
               </button>
               {showFilterDropdown && (
                 <div
@@ -231,7 +274,7 @@ export default function PeakHoursPage() {
                     borderRadius: 8,
                     marginTop: 5,
                     fontFamily: "Calibri, Arial, sans-serif",
-                    fontSize: 17
+                    fontSize: 17,
                   }}
                   role="listbox"
                 >
@@ -242,7 +285,8 @@ export default function PeakHoursPage() {
                         padding: "0.7rem 1.1rem",
                         cursor: "pointer",
                         color: mainTextColor,
-                        background: filter === opt.value ? "#f3e6d9" : "transparent",
+                        background:
+                          filter === opt.value ? "#f3e6d9" : "transparent",
                         fontWeight: filter === opt.value ? 700 : 500,
                         borderRadius: 8,
                         transition: "background 0.13s",
@@ -282,8 +326,20 @@ export default function PeakHoursPage() {
               title="Share"
               type="button"
             >
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ display: "block" }}>
-                <path d="M3 11L19 4L12 21L10 13L3 11Z" stroke="#BFA14A" strokeWidth="2" strokeLinejoin="round" fill="none"/>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                style={{ display: "block" }}
+              >
+                <path
+                  d="M3 11L19 4L12 21L10 13L3 11Z"
+                  stroke="#BFA14A"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
               </svg>
             </button>
             {/* Download */}
@@ -306,8 +362,20 @@ export default function PeakHoursPage() {
               title="Download"
               type="button"
             >
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ display: "block" }}>
-                <path d="M11 4V16M11 16L6 11M11 16L16 11M4 18H18" stroke="#BFA14A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                style={{ display: "block" }}
+              >
+                <path
+                  d="M11 4V16M11 16L6 11M11 16L16 11M4 18H18"
+                  stroke="#BFA14A"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
           </div>
@@ -337,95 +405,170 @@ export default function PeakHoursPage() {
             paddingBottom: 0,
           }}
         >
-          <table style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            fontFamily: "Calibri, Arial, sans-serif",
-            fontSize: 20,
-            color: mainTextColor,
-            background: "#fff",
-          }}>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontFamily: "Calibri, Arial, sans-serif",
+              fontSize: 20,
+              color: mainTextColor,
+              background: "#fff",
+            }}
+          >
             <thead>
-              <tr style={{
-                background: "#fff",
-                color: mainTextColor,
-                fontWeight: 700,
-                fontSize: 20,
-                borderBottom: `2px solid ${tableBorderColor}`,
-                letterSpacing: 0.04,
-              }}>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
-                  fontSize: 20,
+              <tr
+                style={{
+                  background: "#fff",
+                  color: mainTextColor,
                   fontWeight: 700,
-                  minWidth: 150,
-                  verticalAlign: "middle"
-                }}>Time</th>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
                   fontSize: 20,
-                  fontWeight: 700,
-                  minWidth: 180,
-                  verticalAlign: "middle"
-                }}>Total Customers</th>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
-                  fontSize: 20,
-                  fontWeight: 700,
-                  minWidth: 180,
-                  verticalAlign: "middle"
-                }}>New Customers</th>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
-                  fontSize: 20,
-                  fontWeight: 700,
-                  minWidth: 180,
-                  verticalAlign: "middle"
-                }}>Total Sales</th>
-                <th style={{
-                  padding: "16px 10px",
-                  textAlign: "center",
-                  border: "none",
-                  fontSize: 20,
-                  fontWeight: 700,
-                  minWidth: 180,
-                  verticalAlign: "middle"
-                }}>Tables Occupied</th>
+                  borderBottom: `2px solid ${tableBorderColor}`,
+                  letterSpacing: 0.04,
+                }}
+              >
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 150,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Time
+                </th>
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 180,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Total Customers
+                </th>
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 180,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  New Customers
+                </th>
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 180,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Total Sales
+                </th>
+                <th
+                  style={{
+                    padding: "16px 10px",
+                    textAlign: "center",
+                    border: "none",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    minWidth: 180,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  Tables Occupied
+                </th>
               </tr>
             </thead>
             <tbody>
               {filteredData.length === 0 && (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: "center", color: "#bbb", padding: "38px 0", fontSize: 20 }}>No records found.</td>
+                  <td
+                    colSpan={5}
+                    style={{
+                      textAlign: "center",
+                      color: "#bbb",
+                      padding: "38px 0",
+                      fontSize: 20,
+                    }}
+                  >
+                    No records found.
+                  </td>
                 </tr>
               )}
               {filteredData.map((row, idx) => (
-                <tr key={idx} style={{
-                  borderBottom: idx === filteredData.length - 1 ? "none" : `2px solid ${tableBorderColor}`,
-                  fontWeight: 500,
-                  background: "#fff",
-                }}>
-                  <td style={{ padding: "16px 10px", border: "none", textAlign: "center", verticalAlign: "middle" }}>
+                <tr
+                  key={idx}
+                  style={{
+                    borderBottom:
+                      idx === filteredData.length - 1
+                        ? "none"
+                        : `2px solid ${tableBorderColor}`,
+                    fontWeight: 500,
+                    background: "#fff",
+                  }}
+                >
+                  <td
+                    style={{
+                      padding: "16px 10px",
+                      border: "none",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.time}
                   </td>
-                  <td style={{ padding: "16px 10px", border: "none", textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      padding: "16px 10px",
+                      border: "none",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.totalCustomers}
                   </td>
-                  <td style={{ padding: "16px 10px", border: "none", textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      padding: "16px 10px",
+                      border: "none",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.newCustomers}
                   </td>
-                  <td style={{ padding: "16px 10px", border: "none", textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      padding: "16px 10px",
+                      border: "none",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.totalSales}
                   </td>
-                  <td style={{ padding: "16px 10px", border: "none", textAlign: "center", verticalAlign: "middle" }}>
+                  <td
+                    style={{
+                      padding: "16px 10px",
+                      border: "none",
+                      textAlign: "center",
+                      verticalAlign: "middle",
+                    }}
+                  >
                     {row.tablesOccupied}
                   </td>
                 </tr>
@@ -447,7 +590,7 @@ export default function PeakHoursPage() {
           letterSpacing: "0.02em",
           background: "transparent",
           zIndex: 99,
-          textAlign: "right"
+          textAlign: "right",
         }}
       >
         {filteredData.length === 0

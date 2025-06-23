@@ -20,7 +20,10 @@ const FILTER_OPTIONS = [
   { label: "All", value: "all" },
 ];
 
-function filterData(data: typeof DUMMY_DATA, filter: string): typeof DUMMY_DATA {
+function filterData(
+  data: typeof DUMMY_DATA,
+  filter: string
+): typeof DUMMY_DATA {
   if (filter === "all") return data;
   return data.slice(0, 6);
 }
@@ -111,20 +114,24 @@ export default function RevenueReportPage() {
         >
           &#60;
         </span>
-        <span style={{
-          fontFamily: "Georgia, Times New Roman, serif",
-          color: mainTextColor,
-          fontWeight: 700,
-          fontSize: 30
-        }}>Revenue Report</span>
+        <span
+          style={{
+            fontFamily: "Georgia, Times New Roman, serif",
+            color: mainTextColor,
+            fontWeight: 700,
+            fontSize: 30,
+          }}
+        >
+          Revenue Report
+        </span>
       </button>
 
       {/* Sole Message/Table Block */}
       <div
         style={{
           background: white,
-          borderTopLeftRadius: 24,    // Top left corner radius
-          borderTopRightRadius: 24,   // Top right corner radius
+          borderTopLeftRadius: 24, // Top left corner radius
+          borderTopRightRadius: 24, // Top right corner radius
           borderBottomLeftRadius: 24,
           borderBottomRightRadius: 24,
           position: "relative",
@@ -179,7 +186,7 @@ export default function RevenueReportPage() {
           />
           {/* Filter Button (dropdown) */}
           <div style={{ position: "relative" }}>
-            <button 
+            <button
               title="Filter"
               style={{
                 fontFamily: "Calibri, Arial, sans-serif",
@@ -207,17 +214,22 @@ export default function RevenueReportPage() {
               onClick={() => setShowFilterDropdown((v) => !v)}
             >
               <span>
-                {FILTER_OPTIONS.find((f) => f.value === filter)?.label || "This Month"}
+                {FILTER_OPTIONS.find((f) => f.value === filter)?.label ||
+                  "This Month"}
               </span>
-              <span style={{
-                marginLeft: 10,
-                fontSize: 19,
-                color: "#BFA14A",
-                fontWeight: 700,
-                position: "relative",
-                top: 1,
-                userSelect: "none"
-              }}>▼</span>
+              <span
+                style={{
+                  marginLeft: 10,
+                  fontSize: 19,
+                  color: "#BFA14A",
+                  fontWeight: 700,
+                  position: "relative",
+                  top: 1,
+                  userSelect: "none",
+                }}
+              >
+                ▼
+              </span>
             </button>
             {showFilterDropdown && (
               <div
@@ -233,12 +245,12 @@ export default function RevenueReportPage() {
                   borderRadius: 8,
                   marginTop: 5,
                   fontFamily: "Calibri, Arial, sans-serif",
-                  fontSize: 17
+                  fontSize: 17,
                 }}
                 role="listbox"
               >
                 {FILTER_OPTIONS.map((opt) => (
-                  <div 
+                  <div
                     aria-label={opt.label}
                     title={opt.label}
                     key={opt.value}
@@ -246,7 +258,8 @@ export default function RevenueReportPage() {
                       padding: "0.7rem 1.1rem",
                       cursor: "pointer",
                       color: mainTextColor,
-                      background: filter === opt.value ? "#f3e6d9" : "transparent",
+                      background:
+                        filter === opt.value ? "#f3e6d9" : "transparent",
                       fontWeight: filter === opt.value ? 700 : 500,
                       borderRadius: 8,
                       transition: "background 0.13s",
@@ -266,7 +279,14 @@ export default function RevenueReportPage() {
             )}
           </div>
           {/* Share and Download buttons (figma-like, right-aligned) */}
-          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 0 }}>
+          <div
+            style={{
+              marginLeft: "auto",
+              display: "flex",
+              alignItems: "center",
+              gap: 0,
+            }}
+          >
             {/* Share */}
             <button
               style={{
@@ -289,8 +309,20 @@ export default function RevenueReportPage() {
               type="button"
             >
               {/* Paper plane icon */}
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ display: "block" }}>
-                <path d="M3 11L19 4L12 21L10 13L3 11Z" stroke="#BFA14A" strokeWidth="2" strokeLinejoin="round" fill="none"/>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                style={{ display: "block" }}
+              >
+                <path
+                  d="M3 11L19 4L12 21L10 13L3 11Z"
+                  stroke="#BFA14A"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                  fill="none"
+                />
               </svg>
             </button>
             {/* Download */}
@@ -314,8 +346,20 @@ export default function RevenueReportPage() {
               type="button"
             >
               {/* Download icon */}
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ display: "block" }}>
-                <path d="M11 4V16M11 16L6 11M11 16L16 11M4 18H18" stroke="#BFA14A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                style={{ display: "block" }}
+              >
+                <path
+                  d="M11 4V16M11 16L6 11M11 16L16 11M4 18H18"
+                  stroke="#BFA14A"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
           </div>
@@ -345,49 +389,164 @@ export default function RevenueReportPage() {
             paddingBottom: 0,
           }}
         >
-          <table style={{
-            width: "100%",
-            borderCollapse: "collapse",
-            fontFamily: "Calibri, Arial, sans-serif",
-            fontSize: 21,
-            color: mainTextColor,
-            background: "#fff",
-          }}>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontFamily: "Calibri, Arial, sans-serif",
+              fontSize: 21,
+              color: mainTextColor,
+              background: "#fff",
+            }}
+          >
             <thead>
-              <tr style={{
-                background: "#fff",
-                color: mainTextColor,
-                fontWeight: 700,
-                fontSize: 22,
-                borderBottom: `2px solid ${tableBorderColor}`,
-                letterSpacing: 0.04,
-              }}>
-                <th style={{ padding: "18px 20px", textAlign: "left", border: "none" }}>Order Id</th>
-                <th style={{ padding: "18px 20px", textAlign: "left", border: "none" }}>Amount</th>
-                <th style={{ padding: "18px 20px", textAlign: "left", border: "none" }}>Time</th>
-                <th style={{ padding: "18px 20px", textAlign: "left", border: "none" }}>Waiter Name</th>
-                <th style={{ padding: "18px 20px", textAlign: "left", border: "none" }}>Table No.</th>
-                <th style={{ padding: "18px 20px", textAlign: "left", border: "none" }}>Order method</th>
+              <tr
+                style={{
+                  background: "#fff",
+                  color: mainTextColor,
+                  fontWeight: 700,
+                  fontSize: 22,
+                  borderBottom: `2px solid ${tableBorderColor}`,
+                  letterSpacing: 0.04,
+                }}
+              >
+                <th
+                  style={{
+                    padding: "18px 20px",
+                    textAlign: "left",
+                    border: "none",
+                  }}
+                >
+                  Order Id
+                </th>
+                <th
+                  style={{
+                    padding: "18px 20px",
+                    textAlign: "left",
+                    border: "none",
+                  }}
+                >
+                  Amount
+                </th>
+                <th
+                  style={{
+                    padding: "18px 20px",
+                    textAlign: "left",
+                    border: "none",
+                  }}
+                >
+                  Time
+                </th>
+                <th
+                  style={{
+                    padding: "18px 20px",
+                    textAlign: "left",
+                    border: "none",
+                  }}
+                >
+                  Waiter Name
+                </th>
+                <th
+                  style={{
+                    padding: "18px 20px",
+                    textAlign: "left",
+                    border: "none",
+                  }}
+                >
+                  Table No.
+                </th>
+                <th
+                  style={{
+                    padding: "18px 20px",
+                    textAlign: "left",
+                    border: "none",
+                  }}
+                >
+                  Order method
+                </th>
               </tr>
             </thead>
             <tbody>
               {filteredData.length === 0 && (
                 <tr>
-                  <td colSpan={6} style={{ textAlign: "center", color: "#bbb", padding: "38px 0" }}>No records found.</td>
+                  <td
+                    colSpan={6}
+                    style={{
+                      textAlign: "center",
+                      color: "#bbb",
+                      padding: "38px 0",
+                    }}
+                  >
+                    No records found.
+                  </td>
                 </tr>
               )}
               {filteredData.slice(0, 6).map((row, idx) => (
-                <tr key={idx} style={{
-                  borderBottom: idx === filteredData.slice(0, 6).length - 1 ? "none" : `2px solid ${tableBorderColor}`,
-                  fontWeight: 500,
-                  background: "#fff",
-                }}>
-                  <td style={{ padding: "21px 20px", border: "none", color: mainTextColor }}>{row.orderId}</td>
-                  <td style={{ padding: "21px 20px", border: "none", color: mainTextColor }}>{row.amount}</td>
-                  <td style={{ padding: "21px 20px", border: "none", color: mainTextColor }}>{row.time}</td>
-                  <td style={{ padding: "21px 20px", border: "none", color: mainTextColor }}>{row.waiter}</td>
-                  <td style={{ padding: "21px 20px", border: "none", color: mainTextColor }}>{row.table}</td>
-                  <td style={{ padding: "21px 20px", border: "none", color: mainTextColor }}>{row.method}</td>
+                <tr
+                  key={idx}
+                  style={{
+                    borderBottom:
+                      idx === filteredData.slice(0, 6).length - 1
+                        ? "none"
+                        : `2px solid ${tableBorderColor}`,
+                    fontWeight: 500,
+                    background: "#fff",
+                  }}
+                >
+                  <td
+                    style={{
+                      padding: "21px 20px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {row.orderId}
+                  </td>
+                  <td
+                    style={{
+                      padding: "21px 20px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {row.amount}
+                  </td>
+                  <td
+                    style={{
+                      padding: "21px 20px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {row.time}
+                  </td>
+                  <td
+                    style={{
+                      padding: "21px 20px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {row.waiter}
+                  </td>
+                  <td
+                    style={{
+                      padding: "21px 20px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {row.table}
+                  </td>
+                  <td
+                    style={{
+                      padding: "21px 20px",
+                      border: "none",
+                      color: mainTextColor,
+                    }}
+                  >
+                    {row.method}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -406,7 +565,7 @@ export default function RevenueReportPage() {
             letterSpacing: "0.02em",
             background: "transparent",
             zIndex: 11,
-            textAlign: "right"
+            textAlign: "right",
           }}
         >
           {filteredData.length === 0
