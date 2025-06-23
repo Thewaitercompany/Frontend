@@ -177,9 +177,6 @@ export default function TableDetails() {
     <div className="min-h-screen bg-[#f5f1eb] p-4 font-aleo">
       <main className="max-w-[1250px] mx-auto mt-6 px-4 sm:px-6 lg:px-8 ml-[10%]">
         <h2 className="text-2xl font-medium mb-6 text-gray-800">
-    <div className="min-h-screen bg-[#f5f1eb] p-4 font-serif">
-      <main className="max-w-6xl mx-auto mt-6 px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl font-semibold mb-6 text-black">
           Table Details
         </h2>
 
@@ -274,42 +271,6 @@ export default function TableDetails() {
                     {table.status.replace("-", " ")}
                   </span>
                 </div> */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-          {filteredTables.map((table) => (
-            <div
-              key={table.id}
-              className={`p-4 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-lg ${getTableStyles(
-                table.status
-              )}`}
-              onClick={() => handleTableClick(table)}
-            >
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-2xl font-bold text-black">
-                  {table.id}
-                </span>
-                <span className="flex items-center gap-1 text-lg text-gray-600">
-                  <FaChair className="text-[#C99E5A]" /> {table.occupiedSeats}/
-                  {table.totalSeats}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaUtensils className="text-[#C99E5A] text-lg" />
-                <span className="text-base font-semibold text-gray-700">
-                  ₹{table.price}
-                </span>
-              </div>
-              <div className="mt-2">
-                <span
-                  className={`text-xs px-2 py-1 rounded-full ${
-                    table.status === "available"
-                      ? "bg-green-100 text-green-800"
-                      : table.status === "booked"
-                      ? "bg-red-100 text-red-800"
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}
-                >
-                  {table.status.replace("-", " ")}
-                </span>
               </div>
             ))}
           </div>
@@ -402,56 +363,6 @@ export default function TableDetails() {
                       </svg>
 
                       <span>{selectedTable.occupiedSeats}/{selectedTable.totalSeats}</span>
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-            <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-              <button
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold"
-                onClick={() => setShowSummary(false)}
-                aria-label="Close"
-              >
-                ×
-              </button>
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-black">Table Summary</h3>
-                <div className="flex items-center gap-4 text-lg text-gray-600">
-                  <FaChair className="text-[#C99E5A]" /> Table{" "}
-                  {selectedTable.id}
-                  <FaChair className="text-[#C99E5A]" />{" "}
-                  {selectedTable.occupiedSeats}/{selectedTable.totalSeats}
-                </div>
-              </div>
-
-              {/* Modal variant: Served-to only for booked tables */}
-              {selectedTable.status === "booked" ? (
-                <div className="space-y-4">
-                  {SERVED_TO_LIST.map((entry, idx) => (
-                    <div
-                      key={entry.orderId}
-                      className="border border-[#e5c99a] rounded-xl p-4 flex justify-between items-center bg-gray-50"
-                    >
-                      <div>
-                        <div className="mb-2 text-base font-semibold text-black">
-                          Order Id.: {entry.orderId}
-                        </div>
-                        <div className="text-base font-semibold text-gray-700">
-                          Served To:
-                        </div>
-                        <div className="text-base text-gray-600">
-                          {entry.servedTo}
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-end gap-2">
-                        <span className="flex items-center gap-1 text-lg text-gray-600">
-                          <FaChair className="text-[#C99E5A]" /> {entry.seats}
-                        </span>
-                        <span className="flex items-center gap-1 text-lg text-gray-600">
-                          <FaUtensils className="text-[#C99E5A]" /> ₹
-                          {entry.price}
-                        </span>
-                        <span className="flex items-center gap-1 text-lg text-gray-600">
-                          🕒 {entry.time}
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -540,85 +451,6 @@ export default function TableDetails() {
     </div>
   ))}
 </div>
-              ) : (
-                <>
-                  {/* Orders */}
-                  <div className="space-y-4 mb-6">
-                    {DUMMY_ORDERS.map((order, _idx) => (
-                      <div
-                        key={order.orderNo}
-                        className="border border-[#e5c99a] rounded-xl p-4 bg-gray-50"
-                      >
-                        <div className="mb-3 text-lg font-semibold text-black">
-                          Order No.: {order.orderNo}
-                        </div>
-                        {order.items.map((item, iidx) => (
-                          <div
-                            key={iidx}
-                            className="flex items-center gap-4 mb-3 p-3 bg-white rounded-lg"
-                          >
-                            <div className="w-16 h-16 rounded-lg overflow-hidden border border-[#e5c99a] bg-gray-50 flex-shrink-0">
-                              <Image
-                                src={item.image}
-                                alt={item.name}
-                                width={64}
-                                height={64}
-                                className="object-cover w-full h-full"
-                              />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="font-semibold text-lg text-black">
-                                {item.name}
-                              </div>
-                              <div className="text-base text-gray-600">
-                                ₹{item.price}{" "}
-                                <span className="ml-2">x{item.qty}</span>
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                *{item.note}
-                              </div>
-                            </div>
-                            {/* Progress bar and status */}
-                            <div className="flex-1 flex flex-col gap-2 min-w-0">
-                              <div
-                                className={`h-3 rounded-full ${
-                                  item.status === "served"
-                                    ? "bg-green-500"
-                                    : item.status === "cancelled"
-                                    ? "bg-red-500"
-                                    : "bg-gray-300"
-                                }`}
-                              ></div>
-                              <div className="flex justify-between text-xs text-gray-600">
-                                <span className="flex items-center gap-1">
-                                  Received{" "}
-                                  <span className="ml-1">
-                                    🕒 {item.received}
-                                  </span>
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  Prepared{" "}
-                                  <span className="ml-1">
-                                    👨‍🍳 {item.prepared}
-                                  </span>
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  {item.status === "served"
-                                    ? "Served"
-                                    : item.status === "cancelled"
-                                    ? "Cancelled"
-                                    : "--"}{" "}
-                                  <span className="ml-1">
-                                    🕒 {item.preparedTime}
-                                  </span>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
 
 
 
@@ -656,25 +488,6 @@ export default function TableDetails() {
                     <div className="flex gap-1 whitespace-nowrap">
                       <span className="font-light">Order Method:</span>
                       <span className="font-normal font-semibold">{BILL_SUMMARY.orderMethod}</span>
-                  {/* Bill summary */}
-                  <div className="flex flex-col lg:flex-row justify-between items-start gap-6 p-4 bg-gray-50 rounded-xl">
-                    <div className="space-y-2">
-                      <div className="flex justify-between w-40 text-base">
-                        <span className="text-gray-600">Total</span>
-                        <span className="font-semibold text-black">
-                          ₹{BILL_SUMMARY.total}
-                        </span>
-                      </div>
-                      <div className="flex justify-between w-40 text-base">
-                        <span className="text-gray-600">GST 10%</span>
-                        <span className="font-semibold text-black">
-                          ₹{BILL_SUMMARY.gst}
-                        </span>
-                      </div>
-                      <div className="flex justify-between w-40 text-lg font-bold text-black border-t pt-2">
-                        <span>Total Bill</span>
-                        <span>₹{BILL_SUMMARY.totalBill}</span>
-                      </div>
                     </div>
                     <div className="flex gap-1 whitespace-nowrap">
                       <span className="font-light">Payment Method:</span>
@@ -722,45 +535,6 @@ export default function TableDetails() {
                         <path d="M12.6699 12.3389H14.6699M12.6699 14.3403H15.6699" stroke="#C99E5A" stroke-width="0.7" stroke-linecap="round"/>
                       </svg>
 
-                    <div className="flex-1 space-y-2">
-                      <div className="text-base">
-                        <span className="text-gray-600">Order Method: </span>
-                        <span className="font-semibold text-black">
-                          {BILL_SUMMARY.orderMethod}
-                        </span>
-                      </div>
-                      <div className="text-base">
-                        <span className="text-gray-600">Payment Method: </span>
-                        <span className="font-semibold text-black">
-                          {BILL_SUMMARY.paymentMethod}
-                        </span>
-                      </div>
-                      <div className="text-base">
-                        <span className="text-gray-600">Served By: </span>
-                        <span className="font-semibold text-black">
-                          {BILL_SUMMARY.servedBy}
-                        </span>
-                      </div>
-                      <div className="text-base">
-                        <span className="text-gray-600">Served To: </span>
-                        <span className="font-semibold text-black">
-                          {BILL_SUMMARY.servedTo}
-                        </span>
-                      </div>
-                      <div className="flex gap-3 mt-4">
-                        <button
-                          className="px-6 py-2 bg-[#C99E5A] text-white rounded-lg font-semibold text-base hover:bg-[#b88d4a] transition-colors"
-                          onClick={() => alert("Finish Billing")}
-                        >
-                          Finish Billing
-                        </button>
-                        <button
-                          className="px-6 py-2 bg-[#C99E5A] text-white rounded-lg font-semibold text-base hover:bg-[#b88d4a] transition-colors"
-                          onClick={() => setShowBill(true)}
-                        >
-                          View Bill
-                        </button>
-                      </div>
                     </div>
                   </div>
 
@@ -884,32 +658,6 @@ export default function TableDetails() {
                       />
                     </svg>
                   </div>
-        {/* Bill Modal */}
-        {showBill && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-            <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
-              <button
-                className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold"
-                onClick={() => setShowBill(false)}
-                aria-label="Close"
-              >
-                ×
-              </button>
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-black">Bill</h3>
-                <div className="flex items-center gap-3">
-                  <button
-                    className="text-[#C99E5A] hover:text-[#b88d4a] p-2"
-                    title="Print Bill"
-                  >
-                    <FaPrint className="w-5 h-5" />
-                  </button>
-                  <button
-                    className="text-[#C99E5A] hover:text-[#b88d4a] p-2"
-                    title="Download Bill"
-                  >
-                    <FaDownload className="w-5 h-5" />
-                  </button>
                 </div>
 
                 {/* Order Summary */}
@@ -929,15 +677,6 @@ export default function TableDetails() {
                 {DUMMY_ORDERS.map((order) => (
                   <div key={order.orderNo} className="mb-4">
                     <p className="text-sm font-bold text-black mb-2">
-              </div>
-
-              <div className="mb-4 font-semibold text-base text-black">
-                Order Summary
-              </div>
-              <div className="space-y-3 mb-4">
-                {DUMMY_ORDERS.map((order, _idx) => (
-                  <div key={order.orderNo} className="border-b pb-3">
-                    <div className="font-semibold text-black mb-2">
                       Order Number: {order.orderNo}
                     </p>
 
@@ -971,26 +710,11 @@ export default function TableDetails() {
                   <span>GST</span>
                   <span className="text-center">10%</span>
                   <span className="text-right">₹{BILL_SUMMARY.gst}</span>
-              </div>
-
-              <div className="space-y-2 border-t pt-4">
-                <div className="flex justify-between text-base">
-                  <span className="text-gray-600">Total</span>
-                  <span className="font-semibold text-black">
-                    ₹{BILL_SUMMARY.total}
-                  </span>
                 </div>
 
                 <div className="border-t border-[#C99E5A] my-2"></div>
 
                 <div className="flex justify-between font-semibold text-base text-black">
-                <div className="flex justify-between text-base">
-                  <span className="text-gray-600">GST</span>
-                  <span className="font-semibold text-black">
-                    ₹{BILL_SUMMARY.gst}
-                  </span>
-                </div>
-                <div className="flex justify-between text-lg font-bold text-black border-t pt-2">
                   <span>Total Bill</span>
                   <span>₹{BILL_SUMMARY.totalBill}</span>
                 </div>
