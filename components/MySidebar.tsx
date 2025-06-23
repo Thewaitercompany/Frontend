@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 // Sidebar Icon Setup
 const SIDEBAR_ICON_SIZE = 43;
@@ -58,12 +58,12 @@ const SidebarIconsFigma = [
       <g filter="url(#filter0_d_6393_5190)">
         <path
           d="M28.2703 6H17.7297C12.3561 6 8 10.3561 8 15.7297V26.2703C8 31.6439 12.3561 36 17.7297 36H28.2703C33.6439 36 38 31.6439 38 26.2703V15.7297C38 10.3561 33.6439 6 28.2703 6Z"
-          stroke="#4D3E3B"
+          stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR}
           strokeWidth="2.5"
         />
         <path
           d="M14.8926 25.8645L18.8656 20.578C19.1088 20.2525 19.4655 20.0301 19.8649 19.9551C20.2644 19.88 20.6774 19.9576 21.0223 20.1726L24.898 22.6213C25.2561 22.8493 25.6895 22.9278 26.1049 22.8399C26.5203 22.752 26.8846 22.5046 27.1196 22.151L31.1088 16.1348"
-          stroke="#4D3E3B"
+          stroke={active ? SIDEBAR_ICON_ACTIVE_COLOR : SIDEBAR_ICON_COLOR}
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -344,6 +344,7 @@ const SIDEBAR_ROUTES = [
 export default function Sidebar() {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   const sidebarIconCount = SidebarIconsFigma.length;
   const iconsTotalHeight =
@@ -359,6 +360,24 @@ export default function Sidebar() {
     if (route) {
       router.push(route);
     }
+  };
+
+  // Function to check if a route is active
+  const isRouteActive = (route: string) => {
+    if (route === "/dashboard") {
+      // For dashboard, check if we're exactly on /dashboard or on a sub-route that doesn't match other specific routes
+      return (
+        pathname === "/dashboard" ||
+        (pathname.startsWith("/dashboard/") &&
+          !pathname.startsWith("/dashboard/restaurantprofile") &&
+          !pathname.startsWith("/dashboard/tables") &&
+          !pathname.startsWith("/dashboard/menu") &&
+          !pathname.startsWith("/dashboard/inventory") &&
+          !pathname.startsWith("/dashboard/total-orders") &&
+          !pathname.startsWith("/dashboard/reports"))
+      );
+    }
+    return pathname.startsWith(route);
   };
 
   return (
@@ -408,6 +427,7 @@ export default function Sidebar() {
           }}
         >
           {SidebarIconsFigma.map((IconComp, idx) => {
+            const isActive = isRouteActive(SIDEBAR_ROUTES[idx]);
             return (
               <button
                 key={idx}
@@ -418,7 +438,9 @@ export default function Sidebar() {
                     : SIDEBAR_ICON_SIZE,
                   height: SIDEBAR_ICON_SIZE,
                   borderRadius: 8,
-                  background: "transparent",
+                  background: isActive
+                    ? "rgba(77, 62, 59, 0.15)"
+                    : "transparent",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
@@ -435,14 +457,14 @@ export default function Sidebar() {
                 tabIndex={0}
                 aria-label={SIDEBAR_LABELS[idx]}
               >
-                {IconComp(false)}
+                {IconComp(isActive)}
                 <span
                   style={{
                     opacity: isHovered ? 1 : 0,
                     maxWidth: isHovered ? 230 : 0,
                     marginLeft: isHovered ? 24 : 0,
-                    color: "#F1EBE6",
-                    fontWeight: 400,
+                    color: isActive ? "#4D3E3B" : "#F1EBE6",
+                    fontWeight: isActive ? 600 : 400,
                     fontSize: 23,
                     letterSpacing: 0.1,
                     whiteSpace: "nowrap",
