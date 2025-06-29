@@ -337,7 +337,7 @@ const SIDEBAR_ROUTES = [
   "/dashboard/tables", // List of tables
   "/dashboard/menu", // Restaurant's Menu
   "/dashboard/inventory", // Inventory
-  "/dashboard/total-orders", // Sales Overview (using total-orders as sales overview)
+  "/dashboard/sales-overview", // Sales Overview
   "/dashboard/reports", // Reports
 ];
 
