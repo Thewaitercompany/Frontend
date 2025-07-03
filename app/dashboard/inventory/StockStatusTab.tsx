@@ -93,7 +93,7 @@ const typeOptions = [
 ];
 
 // Define the black content color from Figma
-const figmaBlack = '#302224';
+const figmaBlack = "#000";
 
 export default function StockStatusTab() {
   const [search, setSearch] = useState("");
@@ -299,7 +299,8 @@ export default function StockStatusTab() {
             left: "-8px",
             width: "calc(100% + 16px)",
             height: "10px",
-            background: "linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))",
+            background:
+              "linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))",
             marginTop: 2,
             marginBottom: 14,
           }}
@@ -310,7 +311,8 @@ export default function StockStatusTab() {
           className="flex-grow flex flex-col overflow-hidden px-2 pt-0"
           style={{ minHeight: 0 }}
         >
-          <div className="rounded-b-[14px] border border-[#FCFDFD]"
+          <div
+            className="rounded-b-[14px] border border-[#FCFDFD]"
             style={{
               borderRadius: "0 0 14px 14px",
               background: "#FCFDFD",
@@ -325,19 +327,55 @@ export default function StockStatusTab() {
               <Table className="w-full relative z-0">
                 <TableHeader>
                   {/* Headings aligned vertically in center and font-semibold */}
-                  <TableRow
-                    className="[&>th]:!border-b-[2px] [&>th]:!border-[#ebcdb5] [&>th]:!p-[10px_16px] align-middle"
-                  >
-                    <TableHead className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-left`} style={{paddingTop: "12px", paddingBottom: "12px"}}>Status</TableHead>
-                    <TableHead className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-left`} style={{paddingTop: "12px", paddingBottom: "12px"}}>Image</TableHead>
-                    <TableHead className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-left`} style={{paddingTop: "12px", paddingBottom: "12px"}}>Name</TableHead>
-                    <TableHead className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-left`} style={{paddingTop: "12px", paddingBottom: "12px"}}>Cost</TableHead>
-                    <TableHead className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-center`} style={{paddingTop: "12px", paddingBottom: "12px"}}>Total <br /> Unit</TableHead>
-                    <TableHead className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-center`} style={{paddingTop: "12px", paddingBottom: "12px"}}>Total <br /> Cost</TableHead>
-                    <TableHead className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-center`} style={{paddingTop: "12px", paddingBottom: "12px"}}>
+                  <TableRow className="[&>th]:!border-b-[2px] [&>th]:!border-[#ebcdb5] [&>th]:!p-[10px_16px] align-middle">
+                    <TableHead
+                      className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-left`}
+                      style={{ paddingTop: "12px", paddingBottom: "12px" }}
+                    >
+                      Status
+                    </TableHead>
+                    <TableHead
+                      className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-left`}
+                      style={{ paddingTop: "12px", paddingBottom: "12px" }}
+                    >
+                      Image
+                    </TableHead>
+                    <TableHead
+                      className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-left`}
+                      style={{ paddingTop: "12px", paddingBottom: "12px" }}
+                    >
+                      Name
+                    </TableHead>
+                    <TableHead
+                      className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-left`}
+                      style={{ paddingTop: "12px", paddingBottom: "12px" }}
+                    >
+                      Cost
+                    </TableHead>
+                    <TableHead
+                      className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-center`}
+                      style={{ paddingTop: "12px", paddingBottom: "12px" }}
+                    >
+                      Total <br /> Unit
+                    </TableHead>
+                    <TableHead
+                      className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-center`}
+                      style={{ paddingTop: "12px", paddingBottom: "12px" }}
+                    >
+                      Total <br /> Cost
+                    </TableHead>
+                    <TableHead
+                      className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-center`}
+                      style={{ paddingTop: "12px", paddingBottom: "12px" }}
+                    >
                       Per Day <br /> Consumption
                     </TableHead>
-                    <TableHead className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-center`} style={{paddingTop: "12px", paddingBottom: "12px"}}>Expiry <br /> Date</TableHead>
+                    <TableHead
+                      className={`!text-[${figmaBlack}] !font-medium !text-[22px] !leading-[1.1] !tracking-normal !text-center`}
+                      style={{ paddingTop: "12px", paddingBottom: "12px" }}
+                    >
+                      Expiry <br /> Date
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -352,7 +390,13 @@ export default function StockStatusTab() {
                             title="Low stock"
                             className={`inline-flex items-center justify-center !w-[32px] !h-[32px] !rounded-full !border-[2px] !border-[#EBCDB5] !bg-white !shadow-[0px_2px_4px_rgba(0,0,0,0.1),_0px_4px_8px_rgba(0,0,0,0.08)] !text-[#E44F2A]`}
                           >
-                            <span className={`!text-[28px] !font-bold !leading-[1] ${item.status === "low" ? 'animate-blink' : ''}`}>!</span>
+                            <span
+                              className={`!text-[28px] !font-bold !leading-[1] ${
+                                item.status === "low" ? "animate-blink" : ""
+                              }`}
+                            >
+                              !
+                            </span>
                           </span>
                         )}
                         {item.status === "order" && (
@@ -360,7 +404,13 @@ export default function StockStatusTab() {
                             title="Order placed"
                             className={`inline-flex items-center justify-center !w-[32px] !h-[32px] !rounded-full !border-[2px] !border-[#EBCDB5] !bg-white !shadow-[0px_2px_4px_rgba(0,0,0,0.1),_0px_4px_8px_rgba(0,0,0,0.08)] !text-[#E2B700]`}
                           >
-                            <span className={`!text-[28px] !font-bold !leading-[1] ${item.status === "order" ? 'animate-blink' : ''}`}>!</span>
+                            <span
+                              className={`!text-[28px] !font-bold !leading-[1] ${
+                                item.status === "order" ? "animate-blink" : ""
+                              }`}
+                            >
+                              !
+                            </span>
                           </span>
                         )}
                         {item.status === "sufficient" && (
@@ -368,7 +418,11 @@ export default function StockStatusTab() {
                             title="Sufficient stock"
                             className={`inline-flex items-center justify-center !w-[32px] !h-[32px] !rounded-full !border-[2px] !border-[#EBCDB5] !bg-white !shadow-[0px_2px_4px_rgba(0,0,0,0.1),_0px_4px_8px_rgba(0,0,0,0.08)] !text-[#18C65B]`}
                           >
-                            <span className={`!text-[28px] !font-bold !leading-[1]`}>!</span>
+                            <span
+                              className={`!text-[28px] !font-bold !leading-[1]`}
+                            >
+                              !
+                            </span>
                           </span>
                         )}
                       </TableCell>
@@ -391,22 +445,34 @@ export default function StockStatusTab() {
                           }}
                         />
                       </TableCell>
-                      <TableCell className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-left !p-[12px_16px]`}>
+                      <TableCell
+                        className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-left !p-[12px_16px]`}
+                      >
                         {item.name}
                       </TableCell>
-                      <TableCell className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-left !p-[12px_16px]`}>
+                      <TableCell
+                        className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-left !p-[12px_16px]`}
+                      >
                         ₹{item.cost}/kg
                       </TableCell>
-                      <TableCell className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-center !p-[12px_16px]`}>
+                      <TableCell
+                        className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-center !p-[12px_16px]`}
+                      >
                         {item.totalUnit}
                       </TableCell>
-                      <TableCell className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-center !p-[12px_16px]`}>
+                      <TableCell
+                        className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-center !p-[12px_16px]`}
+                      >
                         ₹{item.totalCost}
                       </TableCell>
-                      <TableCell className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-center !p-[12px_16px]`}>
+                      <TableCell
+                        className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-center !p-[12px_16px]`}
+                      >
                         {item.perDay} Kg
                       </TableCell>
-                      <TableCell className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-center !p-[12px_16px]`}>
+                      <TableCell
+                        className={`!text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !text-center !p-[12px_16px]`}
+                      >
                         {item.expiry}
                       </TableCell>
                       {i < filteredStockData.length - 1 && (
@@ -425,7 +491,10 @@ export default function StockStatusTab() {
                   ))}
                   {filteredStockData.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={8} className={`text-center !text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !py-8`}>
+                      <TableCell
+                        colSpan={8}
+                        className={`text-center !text-[${figmaBlack}] !font-normal !text-[16px] !leading-[20px] !tracking-normal !py-8`}
+                      >
                         No items found matching your criteria.
                       </TableCell>
                     </TableRow>
@@ -463,7 +532,7 @@ export default function StockStatusTab() {
             background: "transparent",
             textAlign: "right",
             paddingRight: "8px",
-            zIndex: 10
+            zIndex: 10,
           }}
         >
           {filteredStockData.length} of 300 items
@@ -471,36 +540,40 @@ export default function StockStatusTab() {
       </div>
 
       {/* --- Legend Section (positioned just below main block, outside) --- */}
-      <div className="flex flex-wrap gap-6 items-center px-4"
+      <div
+        className="flex flex-wrap gap-6 items-center px-4"
         style={{
-          marginLeft: '-12px',
-          marginTop: '635px', // position directly below the main block (610px + margin)
+          marginLeft: "-12px",
+          marginTop: "635px", // position directly below the main block (610px + margin)
           position: "absolute",
           left: 104,
           top: 35, // 145 + 610
           width: 1246,
         }}
       >
-        <div className={`flex items-center gap-1 !text-[${figmaBlack}] !text-[15px]`} style={{ marginLeft: 0 }}>
-          <span
-            className="inline-flex items-center justify-center !w-[20px] !h-[20px] !rounded-full !border-[1px] !border-[#EBCDB5] !bg-white !text-[14px] !font-bold !leading-[1] !shadow-[0_1px_2px_rgba(0,0,0,0.08),_0_1px_1px_rgba(0,0,0,0.15)] !text-[#E44F2A]"
-          >
+        <div
+          className={`flex items-center gap-1 !text-[${figmaBlack}] !text-[15px]`}
+          style={{ marginLeft: 0 }}
+        >
+          <span className="inline-flex items-center justify-center !w-[20px] !h-[20px] !rounded-full !border-[1px] !border-[#EBCDB5] !bg-white !text-[14px] !font-bold !leading-[1] !shadow-[0_1px_2px_rgba(0,0,0,0.08),_0_1px_1px_rgba(0,0,0,0.15)] !text-[#E44F2A]">
             !
           </span>
           Low stock
         </div>
-        <div className={`flex items-center gap-1 !text-[${figmaBlack}] !text-[15px]`} style={{ marginLeft: 0 }}>
-          <span
-            className="inline-flex items-center justify-center !w-[20px] !h-[20px] !rounded-full !border-[1px] !border-[#EBCDB5] !bg-white !text-[14px] !font-bold !leading-[1] !shadow-[0_1px_2px_rgba(0,0,0,0.08),_0_1px_1px_rgba(0,0,0,0.15)] !text-[#E2B700]"
-          >
+        <div
+          className={`flex items-center gap-1 !text-[${figmaBlack}] !text-[15px]`}
+          style={{ marginLeft: 0 }}
+        >
+          <span className="inline-flex items-center justify-center !w-[20px] !h-[20px] !rounded-full !border-[1px] !border-[#EBCDB5] !bg-white !text-[14px] !font-bold !leading-[1] !shadow-[0_1px_2px_rgba(0,0,0,0.08),_0_1px_1px_rgba(0,0,0,0.15)] !text-[#E2B700]">
             !
           </span>
           Order Placed
         </div>
-        <div className={`flex items-center gap-1 !text-[${figmaBlack}] !text-[15px]`} style={{ marginLeft: 0 }}>
-          <span
-            className="inline-flex items-center justify-center !w-[20px] !h-[20px] !rounded-full !border-[1px] !border-[#EBCDB5] !bg-white !text-[14px] !font-bold !leading-[1] !shadow-[0_1px_2px_rgba(0,0,0,0.08),_0_1px_1px_rgba(0,0,0,0.15)] !text-[#18C65B]"
-          >
+        <div
+          className={`flex items-center gap-1 !text-[${figmaBlack}] !text-[15px]`}
+          style={{ marginLeft: 0 }}
+        >
+          <span className="inline-flex items-center justify-center !w-[20px] !h-[20px] !rounded-full !border-[1px] !border-[#EBCDB5] !bg-white !text-[14px] !font-bold !leading-[1] !shadow-[0_1px_2px_rgba(0,0,0,0.08),_0_1px_1px_rgba(0,0,0,0.15)] !text-[#18C65B]">
             !
           </span>
           Sufficient stock

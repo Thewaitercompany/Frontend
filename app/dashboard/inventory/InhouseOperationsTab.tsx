@@ -31,7 +31,7 @@ const figmaBrownishColor = "#C99E5A";
 const figmaBorderColor = "#B39793";
 const figmaLightBrown = "#B39793";
 const figmaLightBrownBackground = "#F1EEE6";
-const figmaBlack = "#212224";
+const figmaBlack = "#000";
 const deleteDialogTextColor = "#4D3E3B";
 const deleteDialogButtonColor = "#C99E5A";
 const contentTypography = {
@@ -135,36 +135,53 @@ const CustomTickbox = ({
 
 // --- GoBack Vector SVG for modal ---
 const GoBackVector = () => (
-  <svg width="12" height="22" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10.2783 21.75C10.0882 21.75 9.89937 21.7101 9.72266 21.6318C9.54574 21.5534 9.38327 21.4378 9.24609 21.291L0.688477 12.1318V12.1309C0.550624 11.9845 0.439777 11.8093 0.364258 11.6152C0.288835 11.4214 0.250048 11.2128 0.25 11.002C0.25 10.7909 0.288745 10.5817 0.364258 10.3877C0.420883 10.2422 0.49717 10.1073 0.589844 9.9873L0.688477 9.87207L9.24609 0.712891L9.24707 0.711914C9.3838 0.564372 9.54575 0.448027 9.72266 0.369141C9.89933 0.29042 10.0881 0.250043 10.2783 0.25C10.4688 0.25 10.6581 0.290288 10.835 0.369141C11.0119 0.448031 11.1738 0.56436 11.3105 0.711914L11.3115 0.712891L11.4102 0.828125C11.5028 0.948168 11.5791 1.08303 11.6357 1.22852C11.7113 1.42255 11.75 1.63167 11.75 1.84277C11.75 2.05367 11.7112 2.2622 11.6357 2.45605C11.5791 2.60147 11.5028 2.73645 11.4102 2.85645L11.3115 2.97168L3.95215 10.8311L3.79199 11.002L3.95215 11.1729L11.3115 19.0312H11.3125C11.5894 19.3281 11.7471 19.7348 11.7471 20.1611C11.747 20.372 11.7079 20.5805 11.6328 20.7744C11.5577 20.9684 11.4487 21.1442 11.3115 21.291C11.0346 21.5874 10.6621 21.75 10.2783 21.75Z" fill="#4A3936" stroke="#EFECE4" strokeWidth="0.5"/>
+  <svg
+    width="12"
+    height="22"
+    viewBox="0 0 12 22"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M10.2783 21.75C10.0882 21.75 9.89937 21.7101 9.72266 21.6318C9.54574 21.5534 9.38327 21.4378 9.24609 21.291L0.688477 12.1318V12.1309C0.550624 11.9845 0.439777 11.8093 0.364258 11.6152C0.288835 11.4214 0.250048 11.2128 0.25 11.002C0.25 10.7909 0.288745 10.5817 0.364258 10.3877C0.420883 10.2422 0.49717 10.1073 0.589844 9.9873L0.688477 9.87207L9.24609 0.712891L9.24707 0.711914C9.3838 0.564372 9.54575 0.448027 9.72266 0.369141C9.89933 0.29042 10.0881 0.250043 10.2783 0.25C10.4688 0.25 10.6581 0.290288 10.835 0.369141C11.0119 0.448031 11.1738 0.56436 11.3105 0.711914L11.3115 0.712891L11.4102 0.828125C11.5028 0.948168 11.5791 1.08303 11.6357 1.22852C11.7113 1.42255 11.75 1.63167 11.75 1.84277C11.75 2.05367 11.7112 2.2622 11.6357 2.45605C11.5791 2.60147 11.5028 2.73645 11.4102 2.85645L11.3115 2.97168L3.95215 10.8311L3.79199 11.002L3.95215 11.1729L11.3115 19.0312H11.3125C11.5894 19.3281 11.7471 19.7348 11.7471 20.1611C11.747 20.372 11.7079 20.5805 11.6328 20.7744C11.5577 20.9684 11.4487 21.1442 11.3115 21.291C11.0346 21.5874 10.6621 21.75 10.2783 21.75Z"
+      fill="#4A3936"
+      stroke="#EFECE4"
+      strokeWidth="0.5"
+    />
   </svg>
 );
 
 export default function InhouseOperationsTab() {
   const [view, setView] = useState<"list" | "create" | "edit">("list");
   const [showIngredientsModal, setShowIngredientsModal] = useState(false);
-  const [showEditIngredientsModal, setShowEditIngredientsModal] = useState(false);
+  const [showEditIngredientsModal, setShowEditIngredientsModal] =
+    useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showNameModal, setShowNameModal] = useState(false);
   const [search, setSearch] = useState("");
   const [type, setType] = useState("");
-  const [selectedRawMaterials, setSelectedRawMaterials] = useState<number[]>([]);
-  const [selectedEditIngredients, setSelectedEditIngredients] = useState<number[]>(ingredientsForEdit.map(i => i.id));
+  const [selectedRawMaterials, setSelectedRawMaterials] = useState<number[]>(
+    []
+  );
+  const [selectedEditIngredients, setSelectedEditIngredients] = useState<
+    number[]
+  >(ingredientsForEdit.map((i) => i.id));
   const [mainRowVegChecked, setMainRowVegChecked] = useState(true);
   const [editVegChecked, setEditVegChecked] = useState(true);
   const [selectedIngredientType, setSelectedIngredientType] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [showIngredientsDetailModal, setShowIngredientsDetailModal] = useState(false);
+  const [showIngredientsDetailModal, setShowIngredientsDetailModal] =
+    useState(false);
 
   // Always close modals on main view change to prevent modal state leakage
-function goToView(newView: "list" | "create" | "edit") {
-  setShowIngredientsDetailModal(false);
-  setShowIngredientsModal(false);
-  setShowEditIngredientsModal(false);
-  setShowDeleteModal(false);
-  setShowNameModal(false);
-  setView(newView);
-}
+  function goToView(newView: "list" | "create" | "edit") {
+    setShowIngredientsDetailModal(false);
+    setShowIngredientsModal(false);
+    setShowEditIngredientsModal(false);
+    setShowDeleteModal(false);
+    setShowNameModal(false);
+    setView(newView);
+  }
 
   // --- MAIN LIST VIEW ---
   const renderListView = () => (
@@ -183,7 +200,10 @@ function goToView(newView: "list" | "create" | "edit") {
       }}
     >
       {/* Top section: Search and Type select */}
-      <div className="flex flex-wrap gap-2 mb-2 items-center" style={{ marginBottom: 14 }}>
+      <div
+        className="flex flex-wrap gap-2 mb-2 items-center"
+        style={{ marginBottom: 14 }}
+      >
         <span className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#B39793]" />
           <Input
@@ -223,16 +243,66 @@ function goToView(newView: "list" | "create" | "edit") {
                 background: "#fff",
               }}
             >
-              <SelectItem value="fruits" className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]">Fruits</SelectItem>
-              <SelectItem value="vegetables" className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]">Vegetables</SelectItem>
-              <SelectItem value="dairy" className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]">Dairy</SelectItem>
-              <SelectItem value="grains-seeds" className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]">Grains & Seeds</SelectItem>
-              <SelectItem value="poultry" className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]">Poultry</SelectItem>
-              <SelectItem value="raw-meat" className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]">Raw meat</SelectItem>
-              <SelectItem value="in-house-ingredient" className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]">In-house Ingredient</SelectItem>
-              <SelectItem value="nuts" className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]">Nuts</SelectItem>
-              <SelectItem value="fungi" className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]">Fungi</SelectItem>
-              <SelectItem value="kitchen-utilities" className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]">Kitchen utilities</SelectItem>
+              <SelectItem
+                value="fruits"
+                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+              >
+                Fruits
+              </SelectItem>
+              <SelectItem
+                value="vegetables"
+                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+              >
+                Vegetables
+              </SelectItem>
+              <SelectItem
+                value="dairy"
+                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+              >
+                Dairy
+              </SelectItem>
+              <SelectItem
+                value="grains-seeds"
+                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+              >
+                Grains & Seeds
+              </SelectItem>
+              <SelectItem
+                value="poultry"
+                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+              >
+                Poultry
+              </SelectItem>
+              <SelectItem
+                value="raw-meat"
+                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+              >
+                Raw meat
+              </SelectItem>
+              <SelectItem
+                value="in-house-ingredient"
+                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+              >
+                In-house Ingredient
+              </SelectItem>
+              <SelectItem
+                value="nuts"
+                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+              >
+                Nuts
+              </SelectItem>
+              <SelectItem
+                value="fungi"
+                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+              >
+                Fungi
+              </SelectItem>
+              <SelectItem
+                value="kitchen-utilities"
+                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+              >
+                Kitchen utilities
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -244,29 +314,55 @@ function goToView(newView: "list" | "create" | "edit") {
           left: "-8px",
           width: "calc(100% + 16px)",
           height: "10px",
-          background: "linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))",
+          background:
+            "linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0))",
           marginTop: 2,
           marginBottom: 14,
         }}
       ></div>
       {/* --- TABLE --- */}
-      <div className="overflow-x-hidden rounded-lg bg-white flex-grow" style={{ borderRadius: 14, boxShadow: "0px 2px 1000px rgba(0,0,0,0.03)" }}>
+      <div
+        className="overflow-x-hidden rounded-lg bg-white flex-grow"
+        style={{
+          borderRadius: 14,
+          boxShadow: "0px 2px 1000px rgba(0,0,0,0.03)",
+        }}
+      >
         <Table>
           <TableHeader style={{ borderBottom: "none" }}>
             <TableRow className="border-b-[#fff]">
-            <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-4">Image</TableHead>
-            <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-5">Name</TableHead>
-            <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-9">Description</TableHead>
-            <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-12">Ingredients</TableHead>
-            <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-1">Quantity</TableHead>
-            <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-5">Cost</TableHead>
-            <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-16">Toggle</TableHead>
-            <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-4">Edit</TableHead>
+              <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-4">
+                Image
+              </TableHead>
+              <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-5">
+                Name
+              </TableHead>
+              <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-9">
+                Description
+              </TableHead>
+              <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-12">
+                Ingredients
+              </TableHead>
+              <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-1">
+                Quantity
+              </TableHead>
+              <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-5">
+                Cost
+              </TableHead>
+              <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-16">
+                Toggle
+              </TableHead>
+              <TableHead className="text-[#202224] font-[Aleo] text-[23px] leading-[23px] px-4">
+                Edit
+              </TableHead>
             </TableRow>
             {/* First Line: #EBCDB5 below headings */}
             <TableRow>
               <TableCell colSpan={8}>
-                <div className="w-[1195px] h-[2px]" style={{ backgroundColor: "#EBCDB5" }} />
+                <div
+                  className="w-[1195px] h-[2px]"
+                  style={{ backgroundColor: "#EBCDB5" }}
+                />
               </TableCell>
             </TableRow>
           </TableHeader>
@@ -285,8 +381,10 @@ function goToView(newView: "list" | "create" | "edit") {
                       }}
                     />
                   </TableCell>
-                  <TableCell style={contentTypography}>{item.name}</TableCell>
-                  <TableCell style={contentTypography}>
+                  <TableCell style={{ ...contentTypography, color: "#000" }}>
+                    {item.name}
+                  </TableCell>
+                  <TableCell style={{ ...contentTypography, color: "#000" }}>
                     {item.description}
                     <button
                       style={{
@@ -301,7 +399,7 @@ function goToView(newView: "list" | "create" | "edit") {
                       view more
                     </button>
                   </TableCell>
-                  <TableCell style={contentTypography}>
+                  <TableCell style={{ ...contentTypography, color: "#000" }}>
                     {item.ingredients}
                     <button
                       onClick={() => setShowIngredientsModal(true)}
@@ -318,11 +416,19 @@ function goToView(newView: "list" | "create" | "edit") {
                       view more
                     </button>
                   </TableCell>
-                  <TableCell style={contentTypography}>{item.quantity}</TableCell>
-                  <TableCell style={contentTypography}>{item.cost}</TableCell>
+                  <TableCell style={{ ...contentTypography, color: "#000" }}>
+                    {item.quantity}
+                  </TableCell>
+                  <TableCell style={{ ...contentTypography, color: "#000" }}>
+                    {item.cost}
+                  </TableCell>
                   <TableCell style={{ verticalAlign: "top" }}>
                     <div className="flex flex-col items-center">
-                      <CustomTickbox checked={mainRowVegChecked} onChange={setMainRowVegChecked} ariaLabel="Veg Only" />
+                      <CustomTickbox
+                        checked={mainRowVegChecked}
+                        onChange={setMainRowVegChecked}
+                        ariaLabel="Veg Only"
+                      />
                       <span style={vegTickLabelTypography} className="mt-1">
                         Veg Only
                       </span>
@@ -422,44 +528,62 @@ function goToView(newView: "list" | "create" | "edit") {
       }}
     >
       {/* Top section: Back, Title, Type, Search */}
-<div className="flex items-center justify-between" style={{ padding: "26px 36px 0 36px" }}>
-  <div className="flex items-center gap-4">
-    {/* Custom SVG Back Button */}
-    <button
-      onClick={() => goToView("list")}
-      aria-label="Back"
-      style={{
-        background: "none",
-        border: "none",
-        padding: 0,
-        cursor: "pointer",
-        width: 24,
-        height: 24,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <svg width="24" height="24" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0.506246 12.3022L9.0635 21.4613C9.22307 21.6321 9.41251 21.7676 9.621 21.86C9.82949 21.9524 10.053 22 10.2786 22C10.7344 22 11.1715 21.8062 11.4938 21.4613C11.6533 21.2905 11.7799 21.0877 11.8663 20.8646C11.9526 20.6414 11.9971 20.4022 11.9971 20.1607C11.9971 19.6729 11.816 19.205 11.4938 18.8601L4.13452 11.0016L11.4938 3.14304C11.6542 2.97275 11.7815 2.77015 11.8684 2.54692C11.9553 2.3237 12 2.08427 12 1.84245C12 1.60062 11.9553 1.36119 11.8684 1.13797C11.7815 0.914743 11.6542 0.712143 11.4938 0.541851C11.3347 0.370157 11.1454 0.233877 10.9368 0.140879C10.7283 0.0478783 10.5046 0 10.2786 0C10.0527 0 9.829 0.0478783 9.62044 0.140879C9.41189 0.233877 9.2226 0.370157 9.0635 0.541851L0.506246 9.70097C0.345834 9.87126 0.218509 10.0739 0.13162 10.2971C0.044733 10.5203 0 10.7597 0 11.0016C0 11.2434 0.044733 11.4828 0.13162 11.706C0.218509 11.9293 0.345834 12.1319 0.506246 12.3022Z" fill="#4A3936"/>
-      </svg>
-    </button>
-    <h2
-      className="text-xl font-semibold text-[#4E3E3B]"
-      style={{
-        fontFamily: aleoFont,
-        fontWeight: 700,
-        fontSize: 24,
-        marginLeft: 8,
-      }}
-    >
-      Create your in-house ingredient
+      <div
+        className="flex items-center justify-between"
+        style={{ padding: "26px 36px 0 36px" }}
+      >
+        <div className="flex items-center gap-4">
+          {/* Custom SVG Back Button */}
+          <button
+            onClick={() => goToView("list")}
+            aria-label="Back"
+            style={{
+              background: "none",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+              width: 24,
+              height: 24,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 12 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0.506246 12.3022L9.0635 21.4613C9.22307 21.6321 9.41251 21.7676 9.621 21.86C9.82949 21.9524 10.053 22 10.2786 22C10.7344 22 11.1715 21.8062 11.4938 21.4613C11.6533 21.2905 11.7799 21.0877 11.8663 20.8646C11.9526 20.6414 11.9971 20.4022 11.9971 20.1607C11.9971 19.6729 11.816 19.205 11.4938 18.8601L4.13452 11.0016L11.4938 3.14304C11.6542 2.97275 11.7815 2.77015 11.8684 2.54692C11.9553 2.3237 12 2.08427 12 1.84245C12 1.60062 11.9553 1.36119 11.8684 1.13797C11.7815 0.914743 11.6542 0.712143 11.4938 0.541851C11.3347 0.370157 11.1454 0.233877 10.9368 0.140879C10.7283 0.0478783 10.5046 0 10.2786 0C10.0527 0 9.829 0.0478783 9.62044 0.140879C9.41189 0.233877 9.2226 0.370157 9.0635 0.541851L0.506246 9.70097C0.345834 9.87126 0.218509 10.0739 0.13162 10.2971C0.044733 10.5203 0 10.7597 0 11.0016C0 11.2434 0.044733 11.4828 0.13162 11.706C0.218509 11.9293 0.345834 12.1319 0.506246 12.3022Z"
+                fill="#4A3936"
+              />
+            </svg>
+          </button>
+          <h2
+            className="text-xl font-semibold text-[#4E3E3B]"
+            style={{
+              fontFamily: aleoFont,
+              fontWeight: 700,
+              fontSize: 24,
+              marginLeft: 8,
+            }}
+          >
+            Create your in-house ingredient
           </h2>
         </div>
         {/* --- New Figma-style Ingredient Type Dropdown + Search Bar --- */}
-        <div className="flex items-center justify-end" style={{ fontFamily: aleoFont }}>
+        <div
+          className="flex items-center justify-end"
+          style={{ fontFamily: aleoFont }}
+        >
           {/* Type of Ingredient Dropdown */}
-          <Select value={selectedIngredientType} onValueChange={setSelectedIngredientType}>
+          <Select
+            value={selectedIngredientType}
+            onValueChange={setSelectedIngredientType}
+          >
             <SelectTrigger
               className="w-[220px] h-[32px] rounded-[10px] bg-[#fff] border border-[#B39793] font-normal justify-between pr-3"
               style={{
@@ -509,7 +633,10 @@ function goToView(newView: "list" | "create" | "edit") {
 
           {/* Search Bar */}
           <div style={{ position: "relative", marginLeft: "10px" }}>
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: figmaLightBrown, height: "20px", width: "20px" }} />
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2"
+              style={{ color: figmaLightBrown, height: "20px", width: "20px" }}
+            />
             <Input
               type="text"
               placeholder="Search"
@@ -538,11 +665,21 @@ function goToView(newView: "list" | "create" | "edit") {
         <Table>
           <TableHeader>
             <TableRow className="border-b-[#EBCDB5]">
-              <TableHead style={{ ...contentTypography, color: "#4E3E3B" }}>Select</TableHead>
-              <TableHead style={{ ...contentTypography, color: "#4E3E3B" }}>Raw material</TableHead>
-              <TableHead style={{ ...contentTypography, color: "#4E3E3B" }}>Quantity</TableHead>
-              <TableHead style={{ ...contentTypography, color: "#4E3E3B" }}>Unit</TableHead>
-              <TableHead style={{ ...contentTypography, color: "#4E3E3B" }}>Cost</TableHead>
+              <TableHead style={{ ...contentTypography, color: "#4E3E3B" }}>
+                Select
+              </TableHead>
+              <TableHead style={{ ...contentTypography, color: "#4E3E3B" }}>
+                Raw material
+              </TableHead>
+              <TableHead style={{ ...contentTypography, color: "#4E3E3B" }}>
+                Quantity
+              </TableHead>
+              <TableHead style={{ ...contentTypography, color: "#4E3E3B" }}>
+                Unit
+              </TableHead>
+              <TableHead style={{ ...contentTypography, color: "#4E3E3B" }}>
+                Cost
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -602,7 +739,12 @@ function goToView(newView: "list" | "create" | "edit") {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="grams" style={{ color: "#000", fontFamily: aleoFont }}>grams</SelectItem>
+                      <SelectItem
+                        value="grams"
+                        style={{ color: "#000", fontFamily: aleoFont }}
+                      >
+                        grams
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </TableCell>
@@ -639,7 +781,7 @@ function goToView(newView: "list" | "create" | "edit") {
             fontSize: 18,
             height: 38,
             marginLeft: 16,
-            
+
             boxShadow: "0 1.5px 4px rgba(200, 158, 90, 0.09)",
           }}
         >
@@ -696,8 +838,7 @@ function goToView(newView: "list" | "create" | "edit") {
     "Toggle",
   ];
 
-  const gridTemplate =
-    "96px 124px 232px 108px 108px 68px 140px";
+  const gridTemplate = "96px 124px 232px 108px 108px 68px 140px";
 
   const figmaBrownishColor = "#C99E5A";
 
@@ -728,8 +869,7 @@ function goToView(newView: "list" | "create" | "edit") {
           margin: "0px 0 0 0",
           background: "#fff",
           borderRadius: 16,
-          boxShadow:
-            "0 1.5px 4px 0 rgba(200, 158, 90, 0.07)",
+          boxShadow: "0 1.5px 4px 0 rgba(200, 158, 90, 0.07)",
           display: "flex",
           flexDirection: "column",
           alignItems: "stretch",
@@ -744,38 +884,47 @@ function goToView(newView: "list" | "create" | "edit") {
           }}
         >
           <div className="flex items-center">
-<button
-  onClick={() => goToView("list")}
-  aria-label="Back"
-  style={{
-    background: "none",
-    border: "none",
-    padding: 0,
-    marginRight: 10,
-    cursor: "pointer",
-    width: 24,
-    height: 24,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  }}
->
-  <svg width="24" height="24" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0.506246 12.3022L9.0635 21.4613C9.22307 21.6321 9.41251 21.7676 9.621 21.86C9.82949 21.9524 10.053 22 10.2786 22C10.7344 22 11.1715 21.8062 11.4938 21.4613C11.6533 21.2905 11.7799 21.0877 11.8663 20.8646C11.9526 20.6414 11.9971 20.4022 11.9971 20.1607C11.9971 19.6729 11.816 19.205 11.4938 18.8601L4.13452 11.0016L11.4938 3.14304C11.6542 2.97275 11.7815 2.77015 11.8684 2.54692C11.9553 2.3237 12 2.08427 12 1.84245C12 1.60062 11.9553 1.36119 11.8684 1.13797C11.7815 0.914743 11.6542 0.712143 11.4938 0.541851C11.3347 0.370157 11.1454 0.233877 10.9368 0.140879C10.7283 0.0478783 10.5046 0 10.2786 0C10.0527 0 9.829 0.0478783 9.62044 0.140879C9.41189 0.233877 9.2226 0.370157 9.0635 0.541851L0.506246 9.70097C0.345834 9.87126 0.218509 10.0739 0.13162 10.2971C0.044733 10.5203 0 10.7597 0 11.0016C0 11.2434 0.044733 11.4828 0.13162 11.706C0.218509 11.9293 0.345834 12.1319 0.506246 12.3022Z" fill="#4A3936"/>
-  </svg>
-</button>
-<span
-  style={{
-    fontFamily: "Aleo, sans-serif",
-    fontWeight: 700,
-    fontSize: 26,
-    color: "#4D3E3B",
-    letterSpacing: "0px",
-    marginLeft: 14,
-  }}
->
-  Edit In-house Ingredient
-</span>
+            <button
+              onClick={() => goToView("list")}
+              aria-label="Back"
+              style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                marginRight: 10,
+                cursor: "pointer",
+                width: 24,
+                height: 24,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 12 22"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.506246 12.3022L9.0635 21.4613C9.22307 21.6321 9.41251 21.7676 9.621 21.86C9.82949 21.9524 10.053 22 10.2786 22C10.7344 22 11.1715 21.8062 11.4938 21.4613C11.6533 21.2905 11.7799 21.0877 11.8663 20.8646C11.9526 20.6414 11.9971 20.4022 11.9971 20.1607C11.9971 19.6729 11.816 19.205 11.4938 18.8601L4.13452 11.0016L11.4938 3.14304C11.6542 2.97275 11.7815 2.77015 11.8684 2.54692C11.9553 2.3237 12 2.08427 12 1.84245C12 1.60062 11.9553 1.36119 11.8684 1.13797C11.7815 0.914743 11.6542 0.712143 11.4938 0.541851C11.3347 0.370157 11.1454 0.233877 10.9368 0.140879C10.7283 0.0478783 10.5046 0 10.2786 0C10.0527 0 9.829 0.0478783 9.62044 0.140879C9.41189 0.233877 9.2226 0.370157 9.0635 0.541851L0.506246 9.70097C0.345834 9.87126 0.218509 10.0739 0.13162 10.2971C0.044733 10.5203 0 10.7597 0 11.0016C0 11.2434 0.044733 11.4828 0.13162 11.706C0.218509 11.9293 0.345834 12.1319 0.506246 12.3022Z"
+                  fill="#4A3936"
+                />
+              </svg>
+            </button>
+            <span
+              style={{
+                fontFamily: "Aleo, sans-serif",
+                fontWeight: 700,
+                fontSize: 26,
+                color: "#4D3E3B",
+                letterSpacing: "0px",
+                marginLeft: 14,
+              }}
+            >
+              Edit In-house Ingredient
+            </span>
           </div>
           <Button
             variant="outline"
@@ -927,7 +1076,9 @@ function goToView(newView: "list" | "create" | "edit") {
                 justifyContent: "left",
               }}
             >
-              Tomato<br />Gravy
+              Tomato
+              <br />
+              Gravy
             </div>
           </div>
           {/* Description */}
@@ -955,7 +1106,9 @@ function goToView(newView: "list" | "create" | "edit") {
                 textAlign: "left",
               }}
             >
-              {"Gravy for main\ndishes Tomato,\nOnion, Garlic,\nGreen Chilli Gravy \nfor main dishes \nTomato, Onion,\nGarlic, Green Chilli"}
+              {
+                "Gravy for main\ndishes Tomato,\nOnion, Garlic,\nGreen Chilli Gravy \nfor main dishes \nTomato, Onion,\nGarlic, Green Chilli"
+              }
             </div>
           </div>
           {/* Category */}
@@ -1090,19 +1243,19 @@ function goToView(newView: "list" | "create" | "edit") {
             </div>
           </div>
           {/* INGREDIENTS CONTENT BLOCK - ONLY THIS OPENS THE DIALOG */}
-            <div
-              className="flex flex-col items-center justify-center"
-              style={{ width: 100, cursor: "pointer" }}
-              onClick={() => setShowIngredientsDetailModal(true)}
-              tabIndex={0}
-              role="button"
-              aria-label="Edit Ingredients"
-              onKeyPress={e => {
-                if (e.key === "Enter" || e.key === " ") {
-                  setShowIngredientsDetailModal(true);
-                }
-              }}
-            >
+          <div
+            className="flex flex-col items-center justify-center"
+            style={{ width: 100, cursor: "pointer" }}
+            onClick={() => setShowIngredientsDetailModal(true)}
+            tabIndex={0}
+            role="button"
+            aria-label="Edit Ingredients"
+            onKeyPress={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                setShowIngredientsDetailModal(true);
+              }
+            }}
+          >
             <div
               style={{
                 ...smallContentFont,
@@ -1157,7 +1310,10 @@ function goToView(newView: "list" | "create" | "edit") {
             className="flex flex-col items-center justify-center"
             style={{ width: 140, height: 100, paddingRight: 0 }}
           >
-            <div className="flex flex-col items-center justify-center" style={{ width: "100%" }}>
+            <div
+              className="flex flex-col items-center justify-center"
+              style={{ width: "100%" }}
+            >
               <CustomTickbox
                 checked={editVegChecked}
                 onChange={setEditVegChecked}
@@ -1176,7 +1332,8 @@ function goToView(newView: "list" | "create" | "edit") {
                 Veg Only
               </span>
               <span style={{ ...vegTickLabelTypography, fontSize: 12 }}>
-                By default,<br />
+                By default,
+                <br />
                 the toggle is set to veg.
               </span>
             </div>
@@ -1219,7 +1376,7 @@ function goToView(newView: "list" | "create" | "edit") {
         {view === "create" && renderCreateView()}
         {view === "edit" && renderEditView()}
       </div>
-      
+
       {/* VIEW MORE DIALOGUE BOX - FULL CUSTOM v3 STYLE */}
       <Dialog
         open={showIngredientsModal}
@@ -1237,7 +1394,10 @@ function goToView(newView: "list" | "create" | "edit") {
           }}
         >
           <DialogHeader>
-            <div className="flex items-center justify-between" style={{ padding: "32px 40px 0 40px" }}>
+            <div
+              className="flex items-center justify-between"
+              style={{ padding: "32px 40px 0 40px" }}
+            >
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setShowIngredientsModal(false)}
@@ -1270,13 +1430,13 @@ function goToView(newView: "list" | "create" | "edit") {
             {/* Separation line under the top */}
             <div
               style={{
-            left: "-8px",
-            width: "calc(100% + 16px)",
-            height: "10px",
-            background:
-              "linear-gradient(to bottom, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0))",
-            marginTop: 10,
-            marginBottom: 14,
+                left: "-8px",
+                width: "calc(100% + 16px)",
+                height: "10px",
+                background:
+                  "linear-gradient(to bottom, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0))",
+                marginTop: 10,
+                marginBottom: 14,
               }}
             ></div>
           </DialogHeader>
@@ -1303,7 +1463,7 @@ function goToView(newView: "list" | "create" | "edit") {
                       fontWeight: 700,
                       fontSize: 18,
                       background: "#fff",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Ingredients
@@ -1315,7 +1475,7 @@ function goToView(newView: "list" | "create" | "edit") {
                       fontWeight: 700,
                       fontSize: 18,
                       background: "#fff",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Quantity
@@ -1327,7 +1487,7 @@ function goToView(newView: "list" | "create" | "edit") {
                       fontWeight: 700,
                       fontSize: 18,
                       background: "#fff",
-                      border: "none"
+                      border: "none",
                     }}
                   >
                     Cost
@@ -1380,14 +1540,19 @@ function goToView(newView: "list" | "create" | "edit") {
                     </TableRow>
                     {/* #EBCDB5 line under each message */}
                     <TableRow>
-                      <TableCell colSpan={3} style={{ padding: 0, border: "none" }}>
-                        <div style={{
-                          width: "100%",
-                          height: "2px",
-                          backgroundColor: "#EBCDB5",
-                          margin: 0,
-                          border: "none"
-                        }} />
+                      <TableCell
+                        colSpan={3}
+                        style={{ padding: 0, border: "none" }}
+                      >
+                        <div
+                          style={{
+                            width: "100%",
+                            height: "2px",
+                            backgroundColor: "#EBCDB5",
+                            margin: 0,
+                            border: "none",
+                          }}
+                        />
                       </TableCell>
                     </TableRow>
                   </React.Fragment>
@@ -1401,7 +1566,7 @@ function goToView(newView: "list" | "create" | "edit") {
                       fontSize: 18,
                       border: "none",
                       background: "#fff",
-                      padding: "18px 0 8px 0"
+                      padding: "18px 0 8px 0",
                     }}
                   >
                     Total Cost
@@ -1410,7 +1575,7 @@ function goToView(newView: "list" | "create" | "edit") {
                     style={{
                       border: "none",
                       background: "#fff",
-                      padding: "18px 0 8px 0"
+                      padding: "18px 0 8px 0",
                     }}
                   />
                   <TableCell
@@ -1421,7 +1586,7 @@ function goToView(newView: "list" | "create" | "edit") {
                       fontSize: 18,
                       border: "none",
                       background: "#fff",
-                      padding: "18px 0 8px 0"
+                      padding: "18px 0 8px 0",
                     }}
                   >
                     ₹30
@@ -1430,7 +1595,7 @@ function goToView(newView: "list" | "create" | "edit") {
               </TableBody>
             </Table>
           </div>
-      {/* INGREDIENTS CONTENT BLOCK MODAL: CENTERED LIKE DELETE MODAL */}
+          {/* INGREDIENTS CONTENT BLOCK MODAL: CENTERED LIKE DELETE MODAL */}
         </DialogContent>
       </Dialog>
 
@@ -1562,7 +1727,8 @@ function goToView(newView: "list" | "create" | "edit") {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            boxShadow: "0 8px 40px 0 rgba(185,185,185,0.13), 0 2px 8px 0 rgba(185,185,185,0.08)",
+            boxShadow:
+              "0 8px 40px 0 rgba(185,185,185,0.13), 0 2px 8px 0 rgba(185,185,185,0.08)",
             padding: 0,
             position: "fixed",
             top: "50%",
@@ -1571,7 +1737,15 @@ function goToView(newView: "list" | "create" | "edit") {
             zIndex: 9999,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", width: "100%", justifyContent: "center", marginTop: 38 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              justifyContent: "center",
+              marginTop: 38,
+            }}
+          >
             <button
               onClick={() => setShowDeleteModal(false)}
               style={{
@@ -1587,7 +1761,13 @@ function goToView(newView: "list" | "create" | "edit") {
               aria-label="Back"
             >
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                <path d="M23 27L10 16L23 5" stroke="#4D3E3B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path
+                  d="M23 27L10 16L23 5"
+                  stroke="#4D3E3B"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
             <span
@@ -1632,7 +1812,7 @@ function goToView(newView: "list" | "create" | "edit") {
                 objectFit: "cover",
                 display: "block",
               }}
-              onError={e => {
+              onError={(e) => {
                 (e.currentTarget as any).src = "/crispyfries.jpg";
               }}
             />
@@ -1646,7 +1826,7 @@ function goToView(newView: "list" | "create" | "edit") {
               width: 196,
               margin: "16px auto 0 auto",
               textAlign: "center",
-              lineHeight: "24px"
+              lineHeight: "24px",
             }}
           >
             Tomato Gravy
@@ -1659,7 +1839,7 @@ function goToView(newView: "list" | "create" | "edit") {
               color: deleteDialogTextColor,
               width: 196,
               margin: "0 auto 0 auto",
-              textAlign: "center"
+              textAlign: "center",
             }}
           >
             1kg
@@ -1671,7 +1851,7 @@ function goToView(newView: "list" | "create" | "edit") {
               justifyContent: "center",
               marginTop: 18,
               marginBottom: 18,
-              width: "100%"
+              width: "100%",
             }}
           >
             <button
@@ -1690,7 +1870,7 @@ function goToView(newView: "list" | "create" | "edit") {
                 padding: "8px 38px",
                 cursor: "pointer",
                 margin: "0 auto",
-                boxShadow: "0 2px 8px 0 #C99E5A22"
+                boxShadow: "0 2px 8px 0 #C99E5A22",
               }}
             >
               Delete
@@ -1698,577 +1878,643 @@ function goToView(newView: "list" | "create" | "edit") {
           </div>
         </DialogContent>
       </Dialog>
-<Dialog open={showNameModal} onOpenChange={setShowNameModal}>
-  <DialogContent
-    style={{
-      background: "#FFFFFF",
-      borderRadius: 22, // strong curve, matches delete modal
-      width: 322,
-      minWidth: 362,
-      maxWidth: 322,
-      height: 210,
-      minHeight: 250,
-      maxHeight: 210,
-      padding: 0,
-      position: "fixed",
-      left: 769,
-      top: 351,
-      boxShadow: "0 8px 40px 0 rgba(185,185,185,0.13), 0 2px 8px 0 rgba(185,185,185,0.08)",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "flex-start",
-    }}
-  >
-    <DialogHeader
-      style={{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-start",
-        margin: 0,
-        padding: 0,
-        marginTop: 18,
-        marginLeft: 0,
-      }}
-    >
-      {/* Custom SVG Back Button (close dialog) */}
-      <button
-        style={{
-      background: "#FFFFFF",
-      borderRadius: 22,
-      width: 0,
-      minWidth: 0,
-      maxWidth: 322,
-      height: 210,
-      minHeight: 210,
-      maxHeight: 210,
-      padding: 0,
-      position: "fixed",
-      left: 28,
-      top: 28,
-      boxShadow: "0 8px 40px 0 rgba(185,185,185,0.13), 0 2px 8px 0 rgba(185,185,185,0.08)",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "flex-start",
-        }}
-        aria-label="Close"
-        onClick={() => setShowNameModal(false)}
-      >
-        <svg width="24" height="24" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0.506246 12.3022L9.0635 21.4613C9.22307 21.6321 9.41251 21.7676 9.621 21.86C9.82949 21.9524 10.053 22 10.2786 22C10.7344 22 11.1715 21.8062 11.4938 21.4613C11.6533 21.2905 11.7799 21.0877 11.8663 20.8646C11.9526 20.6414 11.9971 20.4022 11.9971 20.1607C11.9971 19.6729 11.816 19.205 11.4938 18.8601L4.13452 11.0016L11.4938 3.14304C11.6542 2.97275 11.7815 2.77015 11.8684 2.54692C11.9553 2.3237 12 2.08427 12 1.84245C12 1.60062 11.9553 1.36119 11.8684 1.13797C11.7815 0.914743 11.6542 0.712143 11.4938 0.541851C11.3347 0.370157 11.1454 0.233877 10.9368 0.140879C10.7283 0.0478783 10.5046 0 10.2786 0C10.0527 0 9.829 0.0478783 9.62044 0.140879C9.41189 0.233877 9.2226 0.370157 9.0635 0.541851L0.506246 9.70097C0.345834 9.87126 0.218509 10.0739 0.13162 10.2971C0.044733 10.5203 0 10.7597 0 11.0016C0 11.2434 0.044733 11.4828 0.13162 11.706C0.218509 11.9293 0.345834 12.1319 0.506246 12.3022Z" fill="#4A3936"/>
-        </svg>
-      </button>
-      <DialogTitle
-        style={{
-          fontFamily: "Aleo",
-          fontWeight: 400,
-          fontSize: 23.5,
-          lineHeight: "100%",
-          letterSpacing: 0,
-          color: "#4D3E3B",
-          marginLeft: 0,
-          marginTop: 4,
-          textAlign: "left",
-          width: 266,
-          height: 48,
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-          <span>
-    What would you name your <br />
-    in-house ingredient?
-  </span>
-      </DialogTitle>
-    </DialogHeader>
-    {/* Input line with Figma-style font/spacing */}
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        marginTop: 6,
-        marginBottom: 0,
-      }}
-    >
-      <Input
-        placeholder="----------"
-        aria-label="In-house ingredient name"
-        style={{
-          width: 200,
-          height: 34,
-          marginTop: 0,
-          marginBottom: 0,
-          marginLeft: 0,
-          marginRight: 0,
-          border: "none",
-          borderBottom: "2px solid #fff",
-          borderRadius: 5,
-          outline: "none",
-          background: "transparent",
-          textAlign: "center",
-          fontFamily: "Aleo",
-          fontWeight: 500,
-          fontSize: 28,
-          lineHeight: "100%",
-          letterSpacing: 0,
-          color: "#4D3E3B",
-          padding: 0,
-        }}
-      />
-    </div>
-    {/* Save button */}
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        marginTop: 24,
-      }}
-    >
-      <Button
-        type="button"
-        onClick={() => setShowNameModal(false)}
-        style={{
-          width: 188,
-          height: 40,
-          borderRadius: 6,
-          background: "#C99E5A",
-          fontFamily: "Aleo",
-          fontWeight: 400,
-          fontSize: 24,
-          lineHeight: "100%",
-          letterSpacing: "-0.11px",
-          textAlign: "center",
-          color: "#FFFFFF",
-          boxShadow: "0 2px 8px 0 #C99E5A22",
-          margin: 0,
-          padding: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        Save
-      </Button>
+      <Dialog open={showNameModal} onOpenChange={setShowNameModal}>
+        <DialogContent
+          style={{
+            background: "#FFFFFF",
+            borderRadius: 22, // strong curve, matches delete modal
+            width: 322,
+            minWidth: 362,
+            maxWidth: 322,
+            height: 210,
+            minHeight: 250,
+            maxHeight: 210,
+            padding: 0,
+            position: "fixed",
+            left: 769,
+            top: 351,
+            boxShadow:
+              "0 8px 40px 0 rgba(185,185,185,0.13), 0 2px 8px 0 rgba(185,185,185,0.08)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "flex-start",
+          }}
+        >
+          <DialogHeader
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              margin: 0,
+              padding: 0,
+              marginTop: 18,
+              marginLeft: 0,
+            }}
+          >
+            {/* Custom SVG Back Button (close dialog) */}
+            <button
+              style={{
+                background: "#FFFFFF",
+                borderRadius: 22,
+                width: 0,
+                minWidth: 0,
+                maxWidth: 322,
+                height: 210,
+                minHeight: 210,
+                maxHeight: 210,
+                padding: 0,
+                position: "fixed",
+                left: 28,
+                top: 28,
+                boxShadow:
+                  "0 8px 40px 0 rgba(185,185,185,0.13), 0 2px 8px 0 rgba(185,185,185,0.08)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+              }}
+              aria-label="Close"
+              onClick={() => setShowNameModal(false)}
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 12 22"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.506246 12.3022L9.0635 21.4613C9.22307 21.6321 9.41251 21.7676 9.621 21.86C9.82949 21.9524 10.053 22 10.2786 22C10.7344 22 11.1715 21.8062 11.4938 21.4613C11.6533 21.2905 11.7799 21.0877 11.8663 20.8646C11.9526 20.6414 11.9971 20.4022 11.9971 20.1607C11.9971 19.6729 11.816 19.205 11.4938 18.8601L4.13452 11.0016L11.4938 3.14304C11.6542 2.97275 11.7815 2.77015 11.8684 2.54692C11.9553 2.3237 12 2.08427 12 1.84245C12 1.60062 11.9553 1.36119 11.8684 1.13797C11.7815 0.914743 11.6542 0.712143 11.4938 0.541851C11.3347 0.370157 11.1454 0.233877 10.9368 0.140879C10.7283 0.0478783 10.5046 0 10.2786 0C10.0527 0 9.829 0.0478783 9.62044 0.140879C9.41189 0.233877 9.2226 0.370157 9.0635 0.541851L0.506246 9.70097C0.345834 9.87126 0.218509 10.0739 0.13162 10.2971C0.044733 10.5203 0 10.7597 0 11.0016C0 11.2434 0.044733 11.4828 0.13162 11.706C0.218509 11.9293 0.345834 12.1319 0.506246 12.3022Z"
+                  fill="#4A3936"
+                />
+              </svg>
+            </button>
+            <DialogTitle
+              style={{
+                fontFamily: "Aleo",
+                fontWeight: 400,
+                fontSize: 23.5,
+                lineHeight: "100%",
+                letterSpacing: 0,
+                color: "#4D3E3B",
+                marginLeft: 0,
+                marginTop: 4,
+                textAlign: "left",
+                width: 266,
+                height: 48,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <span>
+                What would you name your <br />
+                in-house ingredient?
+              </span>
+            </DialogTitle>
+          </DialogHeader>
+          {/* Input line with Figma-style font/spacing */}
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 6,
+              marginBottom: 0,
+            }}
+          >
+            <Input
+              placeholder="----------"
+              aria-label="In-house ingredient name"
+              style={{
+                width: 200,
+                height: 34,
+                marginTop: 0,
+                marginBottom: 0,
+                marginLeft: 0,
+                marginRight: 0,
+                border: "none",
+                borderBottom: "2px solid #fff",
+                borderRadius: 5,
+                outline: "none",
+                background: "transparent",
+                textAlign: "center",
+                fontFamily: "Aleo",
+                fontWeight: 500,
+                fontSize: 28,
+                lineHeight: "100%",
+                letterSpacing: 0,
+                color: "#4D3E3B",
+                padding: 0,
+              }}
+            />
+          </div>
+          {/* Save button */}
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 24,
+            }}
+          >
+            <Button
+              type="button"
+              onClick={() => setShowNameModal(false)}
+              style={{
+                width: 188,
+                height: 40,
+                borderRadius: 6,
+                background: "#C99E5A",
+                fontFamily: "Aleo",
+                fontWeight: 400,
+                fontSize: 24,
+                lineHeight: "100%",
+                letterSpacing: "-0.11px",
+                textAlign: "center",
+                color: "#FFFFFF",
+                boxShadow: "0 2px 8px 0 #C99E5A22",
+                margin: 0,
+                padding: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              Save
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
       {/* Ingredients Detail Modal */}
-{view === "edit" && (
-  <Dialog
-    open={showIngredientsDetailModal}
-    onOpenChange={setShowIngredientsDetailModal}
-  >
-    <DialogContent
-      style={{
-        width: 1035,
-        height: 554,
-        minHeight: 554,
-        minWidth: 1035,
-        background: "#fff",
-        borderRadius: 14,
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        zIndex: 9999,
-        padding: 0,
-        boxShadow: "0 8px 40px 0 rgba(185,185,185,0.13), 0 2px 8px 0 rgba(185,185,185,0.08)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          padding: "20px 38px 0 38px", // reduced top padding for less gap above first message
-          fontFamily: aleoFont,
-          fontWeight: 500,
-          fontSize: 22,
-          color: "#212224",
-          justifyContent: "flex-start",
-          letterSpacing: 0,
-        }}
-      >
-        {/* SVG Back Button */}
-        <button
-          onClick={() => setShowIngredientsDetailModal(false)}
-          style={{
-            background: 'none',
-            border: 'none',
-            padding: 0,
-            marginRight: 10,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            height: 32,
-          }}
-          aria-label="Go back"
+      {view === "edit" && (
+        <Dialog
+          open={showIngredientsDetailModal}
+          onOpenChange={setShowIngredientsDetailModal}
         >
-          <svg width="20" height="28" viewBox="0 0 12 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10.2783 21.75C10.0882 21.75 9.89937 21.7101 9.72266 21.6318C9.54574 21.5534 9.38327 21.4378 9.24609 21.291L0.688477 12.1318V12.1309C0.550624 11.9845 0.439777 11.8093 0.364258 11.6152C0.288835 11.4214 0.250048 11.2128 0.25 11.002C0.25 10.7909 0.288745 10.5817 0.364258 10.3877C0.420883 10.2422 0.49717 10.1073 0.589844 9.9873L0.688477 9.87207L9.24609 0.712891L9.24707 0.711914C9.3838 0.564372 9.54575 0.448027 9.72266 0.369141C9.89933 0.29042 10.0881 0.250043 10.2783 0.25C10.4688 0.25 10.6581 0.290288 10.835 0.369141C11.0119 0.448031 11.1738 0.56436 11.3105 0.711914L11.3115 0.712891L11.4102 0.828125C11.5028 0.948168 11.5791 1.08303 11.6357 1.22852C11.7113 1.42255 11.75 1.63167 11.75 1.84277C11.75 2.05367 11.7112 2.2622 11.6357 2.45605C11.5791 2.60147 11.5028 2.73645 11.4102 2.85645L11.3115 2.97168L3.95215 10.8311L3.79199 11.002L3.95215 11.1729L11.3115 19.0312H11.3125C11.5894 19.3281 11.7471 19.7348 11.7471 20.1611C11.747 20.372 11.7079 20.5805 11.6328 20.7744C11.5577 20.9684 11.4487 21.1442 11.3115 21.291C11.0346 21.5874 10.6621 21.75 10.2783 21.75Z" fill="#4A3936" stroke="#EFECE4" strokeWidth="0.5"/>
-          </svg>
-        </button>
-        <span>Edit ingredients for your in-house ingredient.</span>
-      </div>
-
-      {/* Dropdown + Search */}
-      <div className="flex items-center justify-end" style={{ width: "100%", marginTop: -41, paddingRight: 38, fontFamily: aleoFont }}>
-        {/* Dropdown */}
-        <Select value={selectedIngredientType} onValueChange={setSelectedIngredientType}>
-          <SelectTrigger
-            className="w-[220px] h-[32px] rounded-[5px] bg-[#fff] border border-[#B39793] font-normal justify-between pr-3"
+          <DialogContent
             style={{
-              borderColor: figmaLightBrown,
+              width: 1035,
+              height: 554,
+              minHeight: 554,
+              minWidth: 1035,
               background: "#fff",
-              fontSize: 16,
-              minWidth: 220,
-              minHeight: 32,
-              color: figmaLightBrown,
-              lineHeight: 'normal',
-              display: 'flex',
-              alignItems: 'center',
-              boxShadow: 'none',
+              borderRadius: 14,
+              position: "fixed",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              zIndex: 9999,
+              padding: 0,
+              boxShadow:
+                "0 8px 40px 0 rgba(185,185,185,0.13), 0 2px 8px 0 rgba(185,185,185,0.08)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            <SelectValue placeholder="Type of Ingredient" />
-          </SelectTrigger>
-          <SelectContent
-            className="!border-[1px] !border-[#B39793] !bg-white !rounded-[4px] !shadow-[0_2px_8px_rgba(0,0,0,0.03)] !p-0"
-            style={{
-              borderColor: figmaLightBrown,
-              background: "#fff",
-            }}
-          >
-            {[
-              { value: "fruits", label: "Fruits" },
-              { value: "vegetables", label: "Vegetables" },
-              { value: "dairy", label: "Dairy" },
-              { value: "grains-seeds", label: "Grains & Seeds" },
-              { value: "poultry", label: "Poultry" },
-              { value: "raw-meat", label: "Raw meat" },
-              { value: "in-house-ingredient", label: "In-house Ingredient" },
-              { value: "nuts", label: "Nuts" },
-              { value: "fungi", label: "Fungi" },
-              { value: "kitchen-utilities", label: "Kitchen utilities" },
-            ].map((item) => (
-              <SelectItem
-                key={item.value}
-                value={item.value}
-                className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] cursor-pointer data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
-              >
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        {/* Search Bar */}
-        <div style={{ position: "relative", marginLeft: "10px" }}>
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: figmaLightBrown, height: '20px', width: '20px' }} />
-          <Input
-            type="text"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 w-[210px] h-[32px] rounded-[5px] text-black bg-[#fff] border border-[#B39793] placeholder:text-[#B39793] font-normal"
-            style={{
-              borderColor: figmaLightBrown,
-              background: "#fff",
-              fontSize: 16,
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Soft separation line (enhanced visibility) */}
-      <div
-        className="relative"
-        style={{
-          left: "0px",
-          width: "calc(100% + 1px)",
-          height: "10px",
-          background: "linear-gradient(to bottom, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0))",
-          marginTop: 2,
-          marginBottom: 14,
-          borderTop: "5px solid rgba(0, 0, 0, 0.06)",
-          borderBottom: "none",
-        }}
-      />
-      {/* Table Headings */}
-      <div
-        className="grid"
-        style={{
-          width: 1002,
-          margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "87px 210px 123px 100px 89px 90px",
-          gap: 80,
-          alignItems: "center",
-          fontFamily: aleoFont,
-          fontWeight: 500,
-          fontSize: 22,
-          color: figmaBlack,
-          lineHeight: "20px",
-          letterSpacing: 0,
-          background: "#fff",
-          marginTop: -11,
-          marginRight: -10,
-          verticalAlign: "middle",
-        }}
-      >
-        <div style={{ textAlign: "center" }}>Select</div>
-        <div style={{ textAlign: "center" }}>Ingredients</div>
-        <div style={{ textAlign: "center" }}>Quantity</div>
-        <div style={{ textAlign: "center" }}>Unit</div>
-        <div style={{ textAlign: "center" }}>Cost</div>
-      </div>
-      {/* Golden separation line below headings */}
-      <div
-        style={{
-          width: 1032,
-          height: 1,
-          background: "#EBCDB5",
-          margin: "0 auto 0 auto",
-          borderWidth: 1,
-          borderStyle: "solid",
-          borderColor: "#EBCDB5",
-        }}
-      />
-
-      {/* Ingredient Rows */}
-      <div
-        style={{
-          width: 1002,
-          margin: "0 auto",
-          display: "flex",
-          flexDirection: "column",
-          background: "#fff",
-          gap: 2.7, // no gap, to minimize vertical spacing between rows
-        }}
-      >
-        {ingredientsForEdit.map((item, idx) => (
-          <React.Fragment key={item.id}>
+            {/* Header */}
             <div
-              className="grid"
               style={{
-                display: "grid",
-                gridTemplateColumns: "87px 210px 123px 100px 89px 90px",
+                width: "100%",
+                display: "flex",
                 alignItems: "center",
+                padding: "20px 38px 0 38px", // reduced top padding for less gap above first message
                 fontFamily: aleoFont,
-                fontWeight: 400,
-                fontSize: 20,
-                color: figmaBlack,
-                height: 48,
-                verticalAlign: "middle",
-                background: "#fff",
-                margin: 0, // remove default margin
+                fontWeight: 500,
+                fontSize: 22,
+                color: "#212224",
+                justifyContent: "flex-start",
+                letterSpacing: 0,
               }}
             >
-              {/* Tick */}
-              <div style={{ display: "flex", justifyContent: "right" }}>
-                <CustomTickbox
-                  checked={selectedEditIngredients.includes(item.id)}
-                  onChange={(checked) => {
-                    setSelectedEditIngredients((prev) =>
-                      checked
-                        ? [...prev, item.id]
-                        : prev.filter((id) => id !== item.id)
-                    );
-                  }}
-                  ariaLabel={`Select ${item.name}`}
+              {/* SVG Back Button */}
+              <button
+                onClick={() => setShowIngredientsDetailModal(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  marginRight: 10,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  height: 32,
+                }}
+                aria-label="Go back"
+              >
+                <svg
+                  width="20"
+                  height="28"
+                  viewBox="0 0 12 22"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.2783 21.75C10.0882 21.75 9.89937 21.7101 9.72266 21.6318C9.54574 21.5534 9.38327 21.4378 9.24609 21.291L0.688477 12.1318V12.1309C0.550624 11.9845 0.439777 11.8093 0.364258 11.6152C0.288835 11.4214 0.250048 11.2128 0.25 11.002C0.25 10.7909 0.288745 10.5817 0.364258 10.3877C0.420883 10.2422 0.49717 10.1073 0.589844 9.9873L0.688477 9.87207L9.24609 0.712891L9.24707 0.711914C9.3838 0.564372 9.54575 0.448027 9.72266 0.369141C9.89933 0.29042 10.0881 0.250043 10.2783 0.25C10.4688 0.25 10.6581 0.290288 10.835 0.369141C11.0119 0.448031 11.1738 0.56436 11.3105 0.711914L11.3115 0.712891L11.4102 0.828125C11.5028 0.948168 11.5791 1.08303 11.6357 1.22852C11.7113 1.42255 11.75 1.63167 11.75 1.84277C11.75 2.05367 11.7112 2.2622 11.6357 2.45605C11.5791 2.60147 11.5028 2.73645 11.4102 2.85645L11.3115 2.97168L3.95215 10.8311L3.79199 11.002L3.95215 11.1729L11.3115 19.0312H11.3125C11.5894 19.3281 11.7471 19.7348 11.7471 20.1611C11.747 20.372 11.7079 20.5805 11.6328 20.7744C11.5577 20.9684 11.4487 21.1442 11.3115 21.291C11.0346 21.5874 10.6621 21.75 10.2783 21.75Z"
+                    fill="#4A3936"
+                    stroke="#EFECE4"
+                    strokeWidth="0.5"
+                  />
+                </svg>
+              </button>
+              <span>Edit ingredients for your in-house ingredient.</span>
+            </div>
+
+            {/* Dropdown + Search */}
+            <div
+              className="flex items-center justify-end"
+              style={{
+                width: "100%",
+                marginTop: -41,
+                paddingRight: 38,
+                fontFamily: aleoFont,
+              }}
+            >
+              {/* Dropdown */}
+              <Select
+                value={selectedIngredientType}
+                onValueChange={setSelectedIngredientType}
+              >
+                <SelectTrigger
+                  className="w-[220px] h-[32px] rounded-[5px] bg-[#fff] border border-[#B39793] font-normal justify-between pr-3"
                   style={{
-                    width: 24,
-                    height: 24,
-                    marginRight: 10,
-                    border: `2px solid ${figmaBrownishColor}`,
-                    borderRadius: 4,
+                    borderColor: figmaLightBrown,
+                    background: "#fff",
+                    fontSize: 16,
+                    minWidth: 220,
+                    minHeight: 32,
+                    color: figmaLightBrown,
+                    lineHeight: "normal",
+                    display: "flex",
+                    alignItems: "center",
+                    boxShadow: "none",
+                  }}
+                >
+                  <SelectValue placeholder="Type of Ingredient" />
+                </SelectTrigger>
+                <SelectContent
+                  className="!border-[1px] !border-[#B39793] !bg-white !rounded-[4px] !shadow-[0_2px_8px_rgba(0,0,0,0.03)] !p-0"
+                  style={{
+                    borderColor: figmaLightBrown,
+                    background: "#fff",
+                  }}
+                >
+                  {[
+                    { value: "fruits", label: "Fruits" },
+                    { value: "vegetables", label: "Vegetables" },
+                    { value: "dairy", label: "Dairy" },
+                    { value: "grains-seeds", label: "Grains & Seeds" },
+                    { value: "poultry", label: "Poultry" },
+                    { value: "raw-meat", label: "Raw meat" },
+                    {
+                      value: "in-house-ingredient",
+                      label: "In-house Ingredient",
+                    },
+                    { value: "nuts", label: "Nuts" },
+                    { value: "fungi", label: "Fungi" },
+                    { value: "kitchen-utilities", label: "Kitchen utilities" },
+                  ].map((item) => (
+                    <SelectItem
+                      key={item.value}
+                      value={item.value}
+                      className="text-black !p-[3px_16px] !text-[14px] !bg-white !leading-[1.5] hover:!bg-[#F7EFE7] hover:!text-[#B39793] cursor-pointer data-[selected=true]:!bg-[#F7EFE7] data-[selected=true]:!text-[#B39793]"
+                    >
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Search Bar */}
+              <div style={{ position: "relative", marginLeft: "10px" }}>
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2"
+                  style={{
+                    color: figmaLightBrown,
+                    height: "20px",
+                    width: "20px",
+                  }}
+                />
+                <Input
+                  type="text"
+                  placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 w-[210px] h-[32px] rounded-[5px] text-black bg-[#fff] border border-[#B39793] placeholder:text-[#B39793] font-normal"
+                  style={{
+                    borderColor: figmaLightBrown,
+                    background: "#fff",
+                    fontSize: 16,
                   }}
                 />
               </div>
-              {/* Name */}
-              <div style={{
-                border: `1px solid ${figmaBrownishColor}`,
-                borderRadius: 5,
-                width: 123,
-                height: 35,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontFamily: aleoFont,
-                fontWeight: 400,
-                fontSize: 19,
-                color: "#000",
-                marginLeft: "148px",
-                background: "#fff",
-              }}>
-                {item.name}
-              </div>
-              {/* Quantity */}
-              <div style={{
-                border: `1px solid ${figmaBrownishColor}`,
-                borderRadius: 5,
-                width: 87,
-                height: 30,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontFamily: aleoFont,
-                fontWeight: 400,
-                fontSize: 20,
-                color: "#000",
-                marginLeft: "205px",
-                background: "#fff",
-              }}>
-                {item.quantity}
-              </div>
-              {/* Unit dropdown */}
-              <div style={{
-                border: `1px solid ${figmaBrownishColor}`,
-                borderRadius: 5,
-                width: 89,
-                height: 30,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontFamily: aleoFont,
-                fontWeight: 400,
-                fontSize: 20,
-                color: "#000",
-                marginLeft: "275px",
-                background: "#fff",
-              }}>
-                <Select defaultValue={item.unit}>
-                  <SelectTrigger
-                    className="bg-[#fff] border-[#C99E5A] rounded-[5px] h-[30px] w-[89px] px-2 flex items-center justify-between"
-                    style={{
-                      fontFamily: aleoFont,
-                      fontWeight: 400,
-                      fontSize: 20,
-                      color: "#000",
-                      background: "#fff",
-                      border: `1px solid ${figmaBrownishColor}`,
-                      height: 30,
-                      minHeight: 30,
-                      width: 89,
-                      minWidth: 89,
-                      borderRadius: 5,
-                      boxShadow: "none",
-                    }}
-                  >
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="grams" style={{ color: "#000", fontFamily: aleoFont }}>grams</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              {/* Cost */}
-              <div style={{
-                fontFamily: aleoFont,
-                fontWeight: 400,
-                fontSize: 20,
-                color: "#000",
-                textAlign: "center",
-                width: 90,
-                marginLeft: "345px",
-              }}>
-                ₹{item.cost}
-              </div>
             </div>
-            {/* line under each row */}
+
+            {/* Soft separation line (enhanced visibility) */}
+            <div
+              className="relative"
+              style={{
+                left: "0px",
+                width: "calc(100% + 1px)",
+                height: "10px",
+                background:
+                  "linear-gradient(to bottom, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0))",
+                marginTop: 2,
+                marginBottom: 14,
+                borderTop: "5px solid rgba(0, 0, 0, 0.06)",
+                borderBottom: "none",
+              }}
+            />
+            {/* Table Headings */}
+            <div
+              className="grid"
+              style={{
+                width: 1002,
+                margin: "0 auto",
+                display: "grid",
+                gridTemplateColumns: "87px 210px 123px 100px 89px 90px",
+                gap: 80,
+                alignItems: "center",
+                fontFamily: aleoFont,
+                fontWeight: 500,
+                fontSize: 22,
+                color: figmaBlack,
+                lineHeight: "20px",
+                letterSpacing: 0,
+                background: "#fff",
+                marginTop: -11,
+                marginRight: -10,
+                verticalAlign: "middle",
+              }}
+            >
+              <div style={{ textAlign: "center" }}>Select</div>
+              <div style={{ textAlign: "center" }}>Ingredients</div>
+              <div style={{ textAlign: "center" }}>Quantity</div>
+              <div style={{ textAlign: "center" }}>Unit</div>
+              <div style={{ textAlign: "center" }}>Cost</div>
+            </div>
+            {/* Golden separation line below headings */}
             <div
               style={{
-                width: 1034,
+                width: 1032,
                 height: 1,
                 background: "#EBCDB5",
-                marginLeft: "-16px",
+                margin: "0 auto 0 auto",
                 borderWidth: 1,
                 borderStyle: "solid",
                 borderColor: "#EBCDB5",
-                marginTop: 0, // remove default margin between rows
-                marginBottom: 0, // remove default margin between rows
               }}
             />
-          </React.Fragment>
-        ))}
-      </div>
 
-      {/* Bottom bazel */}
-      <div
-        style={{
-          width: 1034,
-          height: 60,
-          position: "absolute",
-          left: 1,
-          bottom: 0,
-          background: "#F1EEE6",
-          borderBottomRightRadius: 14,
-          borderBottomLeftRadius: 14,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          paddingLeft: 32,
-          fontFamily: aleoFont,
-        }}
-      >
-        <span style={{
-          fontWeight: 600,
-          fontSize: 24,
-          color: "#212224",
-          marginRight: 757,
-          verticalAlign: "middle",
-        }}>Total Cost</span>
-        <span style={{
-          fontWeight: 600,
-          fontSize: 24,
-          color: "#212224",
-          verticalAlign: "middle",
-        }}>
-          ₹{ingredientsForEdit.filter(i => selectedEditIngredients.includes(i.id)).reduce((acc, item) => acc + item.cost, 0)}
-        </span>
-      </div>
-      {/* Save Changes button OUTSIDE the dialog, below and right-aligned */}
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "flex-end",
-          position: "relative",
-          marginTop: 82,
-        }}
-      >
-        <Button
-          onClick={() => setShowIngredientsDetailModal(false)}
-          className="text-white"
-          style={{
-            background: figmaBrownishColor,
-            fontFamily: aleoFont,
-            fontWeight: 700,
-            fontSize: 22,
-            width: 188,
-            height: 41,
-            borderRadius: 6,
-            marginRight: 32,
-            marginTop: -8,
-          }}
-        >
-          Save Changes
-        </Button>
-      </div>
-    </DialogContent>
-  </Dialog>
-)}
+            {/* Ingredient Rows */}
+            <div
+              style={{
+                width: 1002,
+                margin: "0 auto",
+                display: "flex",
+                flexDirection: "column",
+                background: "#fff",
+                gap: 2.7, // no gap, to minimize vertical spacing between rows
+              }}
+            >
+              {ingredientsForEdit.map((item, idx) => (
+                <React.Fragment key={item.id}>
+                  <div
+                    className="grid"
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "87px 210px 123px 100px 89px 90px",
+                      alignItems: "center",
+                      fontFamily: aleoFont,
+                      fontWeight: 400,
+                      fontSize: 20,
+                      color: figmaBlack,
+                      height: 48,
+                      verticalAlign: "middle",
+                      background: "#fff",
+                      margin: 0, // remove default margin
+                    }}
+                  >
+                    {/* Tick */}
+                    <div style={{ display: "flex", justifyContent: "right" }}>
+                      <CustomTickbox
+                        checked={selectedEditIngredients.includes(item.id)}
+                        onChange={(checked) => {
+                          setSelectedEditIngredients((prev) =>
+                            checked
+                              ? [...prev, item.id]
+                              : prev.filter((id) => id !== item.id)
+                          );
+                        }}
+                        ariaLabel={`Select ${item.name}`}
+                        style={{
+                          width: 24,
+                          height: 24,
+                          marginRight: 10,
+                          border: `2px solid ${figmaBrownishColor}`,
+                          borderRadius: 4,
+                        }}
+                      />
+                    </div>
+                    {/* Name */}
+                    <div
+                      style={{
+                        border: `1px solid ${figmaBrownishColor}`,
+                        borderRadius: 5,
+                        width: 123,
+                        height: 35,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontFamily: aleoFont,
+                        fontWeight: 400,
+                        fontSize: 19,
+                        color: "#000",
+                        marginLeft: "148px",
+                        background: "#fff",
+                      }}
+                    >
+                      {item.name}
+                    </div>
+                    {/* Quantity */}
+                    <div
+                      style={{
+                        border: `1px solid ${figmaBrownishColor}`,
+                        borderRadius: 5,
+                        width: 87,
+                        height: 30,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontFamily: aleoFont,
+                        fontWeight: 400,
+                        fontSize: 20,
+                        color: "#000",
+                        marginLeft: "205px",
+                        background: "#fff",
+                      }}
+                    >
+                      {item.quantity}
+                    </div>
+                    {/* Unit dropdown */}
+                    <div
+                      style={{
+                        border: `1px solid ${figmaBrownishColor}`,
+                        borderRadius: 5,
+                        width: 89,
+                        height: 30,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontFamily: aleoFont,
+                        fontWeight: 400,
+                        fontSize: 20,
+                        color: "#000",
+                        marginLeft: "275px",
+                        background: "#fff",
+                      }}
+                    >
+                      <Select defaultValue={item.unit}>
+                        <SelectTrigger
+                          className="bg-[#fff] border-[#C99E5A] rounded-[5px] h-[30px] w-[89px] px-2 flex items-center justify-between"
+                          style={{
+                            fontFamily: aleoFont,
+                            fontWeight: 400,
+                            fontSize: 20,
+                            color: "#000",
+                            background: "#fff",
+                            border: `1px solid ${figmaBrownishColor}`,
+                            height: 30,
+                            minHeight: 30,
+                            width: 89,
+                            minWidth: 89,
+                            borderRadius: 5,
+                            boxShadow: "none",
+                          }}
+                        >
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem
+                            value="grams"
+                            style={{ color: "#000", fontFamily: aleoFont }}
+                          >
+                            grams
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    {/* Cost */}
+                    <div
+                      style={{
+                        fontFamily: aleoFont,
+                        fontWeight: 400,
+                        fontSize: 20,
+                        color: "#000",
+                        textAlign: "center",
+                        width: 90,
+                        marginLeft: "345px",
+                      }}
+                    >
+                      ₹{item.cost}
+                    </div>
+                  </div>
+                  {/* line under each row */}
+                  <div
+                    style={{
+                      width: 1034,
+                      height: 1,
+                      background: "#EBCDB5",
+                      marginLeft: "-16px",
+                      borderWidth: 1,
+                      borderStyle: "solid",
+                      borderColor: "#EBCDB5",
+                      marginTop: 0, // remove default margin between rows
+                      marginBottom: 0, // remove default margin between rows
+                    }}
+                  />
+                </React.Fragment>
+              ))}
+            </div>
 
+            {/* Bottom bazel */}
+            <div
+              style={{
+                width: 1034,
+                height: 60,
+                position: "absolute",
+                left: 1,
+                bottom: 0,
+                background: "#F1EEE6",
+                borderBottomRightRadius: 14,
+                borderBottomLeftRadius: 14,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                paddingLeft: 32,
+                fontFamily: aleoFont,
+              }}
+            >
+              <span
+                style={{
+                  fontWeight: 600,
+                  fontSize: 24,
+                  color: "#212224",
+                  marginRight: 757,
+                  verticalAlign: "middle",
+                }}
+              >
+                Total Cost
+              </span>
+              <span
+                style={{
+                  fontWeight: 600,
+                  fontSize: 24,
+                  color: "#212224",
+                  verticalAlign: "middle",
+                }}
+              >
+                ₹
+                {ingredientsForEdit
+                  .filter((i) => selectedEditIngredients.includes(i.id))
+                  .reduce((acc, item) => acc + item.cost, 0)}
+              </span>
+            </div>
+            {/* Save Changes button OUTSIDE the dialog, below and right-aligned */}
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+                position: "relative",
+                marginTop: 82,
+              }}
+            >
+              <Button
+                onClick={() => setShowIngredientsDetailModal(false)}
+                className="text-white"
+                style={{
+                  background: figmaBrownishColor,
+                  fontFamily: aleoFont,
+                  fontWeight: 700,
+                  fontSize: 22,
+                  width: 188,
+                  height: 41,
+                  borderRadius: 6,
+                  marginRight: 32,
+                  marginTop: -8,
+                }}
+              >
+                Save Changes
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }

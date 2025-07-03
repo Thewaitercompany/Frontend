@@ -507,13 +507,9 @@ export default function FetchMenuItems() {
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto rounded-md ">
+            <div className="overflow-x-auto rounded-md">
               <table className="min-w-full bg-white text-center text-xl">
-                {" "}
-                {/* increased from text-sm to text-base */}
                 <thead className="text-[#4b2e2e] font-medium">
-                  {" "}
-                  {/* changed font-large (invalid) to font-medium */}
                   <tr className="border-b border-[#e0d5cc] bg-transparent">
                     <th className="py-2 px-4">Image</th>
                     <th className="py-2 px-4">Name</th>
@@ -526,8 +522,6 @@ export default function FetchMenuItems() {
                   </tr>
                 </thead>
                 <tbody className="text-[#4b2e2e] font-medium">
-                  {" "}
-                  {/* added font-medium to match header */}
                   {filteredOrders.map((order, i) => (
                     <tr key={i} className="border-b border-[#f5e9e2]">
                       <td className="py-3 px-4">
