@@ -205,7 +205,7 @@ function DashboardPage() {
     borderRadius: 12,
     position: "absolute",
     left: 70 - 40,
-    top: -15,
+    top: -65,
     overflow: 'visible',
     boxShadow: '0 7px 24px 0 rgba(200,170,120,0.10), 0 8px 15px rgba(0,0,0,0.08)',
     border: "1.7px solid #ede6dd",

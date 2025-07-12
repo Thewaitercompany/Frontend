@@ -35,8 +35,8 @@ const StaffPerformanceIcon = ({
       src="/2bb6ca406cd027d513b3c1deffef4da8a234c4d0.png" // Removed the semicolon here
       alt="Staff Performance"
       style={{
-        width: "60%",
-        height: "60%",
+        width: "100%",
+        height: "100%",
         objectFit: "contain",
         borderRadius: "50%",
       }}
@@ -87,9 +87,11 @@ export default function StaffPerformancePage() {
         minHeight: "100vh", // Ensure it stretches over the entire screen vertically
         background: "#F5F1EB", // Background color from the provided page
         fontFamily: "Calibri, Arial, sans-serif",
-        width: "100vw",
+        width: "100%",
         position: "relative",
         overflow: "hidden", // Prevents overall page scrollbars
+        overflowX: "hidden",
+        overflowY: "hidden",
         display: "flex",
         flexDirection: "column", // Use column to allow stacking of elements
         alignItems: "flex-start", // Align items to the start
@@ -109,8 +111,8 @@ export default function StaffPerformancePage() {
           outline: "none",
           borderRadius: 8,
           position: "absolute", // Use absolute positioning for precise control
-          top: 90, // Moved down
-          left: 140, // Moved right
+          top: 15, // Moved down
+          left: 120, // Moved right
           display: "flex",
           alignItems: "center",
           cursor: "pointer",
@@ -155,8 +157,8 @@ export default function StaffPerformancePage() {
       {/* Main content area containing the table block - Adjusted position */}
       <div
         style={{
-          marginTop: 130, // Adjusted to move down, accounting for button
-          marginLeft: 150, // Adjusted to move right
+          marginTop:70, // Adjusted to move down, accounting for button
+          marginLeft: 130, // Adjusted to move right
           flexGrow: 1, // Allows this block to grow and fill available space
           width: "calc(100vw - 180px)", // Adjusted width to ensure it stretches
           maxWidth: 1350, // Max width constraint
@@ -551,7 +553,7 @@ export default function StaffPerformancePage() {
               fontFamily: "Calibri, Arial, sans-serif",
               position: "absolute",
               right: 22,
-              bottom: -30,
+              bottom: -10,
               userSelect: "none",
               letterSpacing: "0.02em",
               background: "transparent",
