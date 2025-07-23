@@ -55,7 +55,7 @@ export default function RevenueReportPage() {
   const tableBlockWidth = "calc(100vw - 160px)";
   const tableBlockMaxWidth = 1350;
   const backButtonLeft = 120;
-  const backButtonTop = 59;
+  const backButtonTop = 19;
   const inputHeight = 38;
   const itemCountBottom = 18;
 
@@ -137,7 +137,7 @@ export default function RevenueReportPage() {
           position: "relative",
           overflow: "visible",
           boxShadow: "0 3px 18px 1px rgba(180,140,80,0.12)",
-          margin: "100px 0 0 130px",
+          margin: "68px 0 0 130px",
           width: tableBlockWidth,
           maxWidth: tableBlockMaxWidth,
           border: "none",
@@ -560,7 +560,7 @@ export default function RevenueReportPage() {
             fontFamily: "Calibri, Arial, sans-serif",
             position: "absolute",
             right: -5, // <--- Right margin
-            bottom: -30, // <--- Bottom margin
+            bottom: -50, // <--- Bottom margin
             userSelect: "none",
             letterSpacing: "0.02em",
             background: "transparent",

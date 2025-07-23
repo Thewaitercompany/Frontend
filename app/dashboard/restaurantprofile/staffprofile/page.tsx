@@ -3,7 +3,7 @@ import React, { useState } from "react";
 // Removed: import { useRouter } from "next/navigation"; // Not used in this context
 
 // Pen SVG icon component
-function PenIcon({ size = 22 }: { size?: number }) {
+function PenIcon({ size = 42 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <path
@@ -25,8 +25,8 @@ function PenIcon({ size = 22 }: { size?: number }) {
 // Profile SVG icon component
 const profileIcon = (
   <svg
-    width={42}
-    height={42}
+    width={82}
+    height={82}
     viewBox="0 0 28 28"
     fill="none"
     key="sidebar-user"
@@ -264,11 +264,12 @@ function SimpleCalendar() {
         background: "#fff",
         borderRadius: 16,
         boxShadow: "0 4px 18px 0 rgba(140,110,70,0.06)",
-        padding: "28px 26px 16px 26px",
+        padding: "5px 26px 16px 26px",
         width: 280, // Matched with Profile Card width
-        minWidth: 280, // Fixed minWidth
+        minWidth: 415, // Fixed minWidth
         maxWidth: 280, // Fixed maxWidth
-        marginRight: 0,
+        marginRight: 35, // Adjusted to match layout
+        height: 290,  // Fixed height to ensure consistent layout
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -325,33 +326,45 @@ function SimpleCalendar() {
           alignItems: "center",
         }}
       >
-        <span>
-          <span
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: "50%",
-              background: "#c94536",
-              display: "inline-block",
-              marginRight: 5,
-              verticalAlign: "middle",
-            }}
-          ></span>{" "}
-          Leave taken
-        </span>
-        <span>
-          <span
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: "50%",
-              background: "#F9B174",
-              display: "inline-block",
-              marginRight: 5,
-              verticalAlign: "middle",
-            }}
-          ></span>{" "}
-          Salary due date
+<span
+  style={{
+    display: "flex",
+    alignItems: "center",
+    marginTop: -15, // Adjusted to align with text
+    gap: 5, // controls space between dot and text
+  }}
+>
+  <span
+    style={{
+      width: 10,
+      height: 10,
+      borderRadius: "50%",
+      background: "#c94536",
+      display: "inline-block",
+      // No verticalAlign needed
+    }}
+  ></span>
+  Leave taken
+</span>
+<span
+  style={{
+    display: "flex",
+    alignItems: "center",
+    marginTop: -15, // Adjusted to align with text
+    gap: 5, // controls space between dot and text
+  }}
+>
+  <span
+    style={{
+      width: 10,
+      height: 10,
+      borderRadius: "50%",
+      background: "#F9B174",
+      display: "inline-block",
+      // No verticalAlign needed
+    }}
+  ></span>
+  Salary due date          
         </span>
       </div>
     </div>
@@ -369,10 +382,10 @@ function DishesServedGraph() {
     { hour: "3-4pm", value: 115 },
   ];
   const maxY = 120;
-  const chartHeight = 190;
+  const chartHeight = 150;
   // Calculate chartWidth based on Personal Info Card + Reviews Card + gap
   // Personal Info Card width (322) + Reviews Card width (280) + gap (28) = 630
-  const chartWidth = 630;
+  const chartWidth = 857;
 
   // Function to generate SVG path for a smooth curve
   function getCurve(points: [number, number][]) {
@@ -414,6 +427,7 @@ function DishesServedGraph() {
         width: "100%",
         flex: 1,
         display: "flex",
+        marginLeft: -25, // Adjusted to match layout
         flexDirection: "column",
         position: "relative",
       }}
@@ -456,7 +470,8 @@ function DishesServedGraph() {
       </div>
       {/* SVG for the graph */}
       <svg
-        width={chartWidth}
+      
+        width={chartWidth - 50} // Adjusted width to match chartWidth + padding
         height={chartHeight + 27}
         style={{ marginBottom: -3 }}
       >
@@ -542,13 +557,12 @@ export default function StaffProfilePage() {
   };
 
   // Fixed values for back button and main block positioning, derived from RevenueReportPage
-  const backButtonTop = 59;
-  const backButtonLeft = 270; // Adjusted for rightward shift
-  const mainBlockMarginTop = 100;
-  const mainBlockMarginLeft = 280; // Adjusted for rightward shift
-  // Increased width to make it elongated horizontally, ensuring content still fits
-  const mainBlockWidth = 1050;
-
+  const backButtonTop = 15;
+  const backButtonLeft = 130; // Adjusted for rightward shift
+  const mainBlockWidth = "calc(100vw - 180px)";
+  const mainBlockMarginLeft = 130;
+  const mainBlockMarginTop = 67;
+  const mainBlockMaxWidth = 1350;
   return (
     <div
       style={{
@@ -628,10 +642,10 @@ export default function StaffProfilePage() {
           boxShadow: "0 3px 18px 1px rgba(180,140,80,0.12)", // Matched with RevenueReportPage
           padding: "20px 20px 10px 22px", // Adjusted padding for content to fit
           width: mainBlockWidth, // Fixed width to ensure 3+2 layout fits
-          maxWidth: "calc(100vw - " + (mainBlockMarginLeft + 20) + "px)", // Adjusted maxWidth to consider left margin and some right padding
+          maxWidth: mainBlockMaxWidth, // Adjusted maxWidth to consider left margin and some right padding
           // Using fixed margins to match RevenueReportPage's position
           marginTop: mainBlockMarginTop,
-          marginBottom: 10, // Adjusted to reduce vertical height slightly
+          marginBottom: 5, // Adjusted to reduce vertical height slightly
           marginLeft: mainBlockMarginLeft, // Shifted right
           marginRight: "auto", // Push to right to ensure fixed left margin
           display: "flex",
@@ -643,38 +657,38 @@ export default function StaffProfilePage() {
       >
         {/* Top Row: 3 Cards (Profile, Personal Information, Reviews) */}
         <div
-          style={{
-            display: "flex",
-            flexDirection: "row", // Horizontal layout
-            gap: 28, // Gap between cards
-            marginBottom: 12, // Spacing at the bottom
-            minWidth: 0, // Allows shrinking
-            width: "100%", // Takes full width of parent
-            justifyContent: "center", // Centers cards when they are fewer or on smaller screens
-          }}
-        >
-          {/* Profile Card */}
-          <div
-            style={{
-              background: "#fff",
-              borderRadius: 14,
-              boxShadow: "0 4px 18px 0 rgba(140,110,70,0.06)",
-              padding: "20px 18px 13px 18px",
-              width: 280, // Adjusted width to match Calendar and fit layout
-              minWidth: 280, // Fixed size
-              maxWidth: 280, // Fixed size
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              position: "relative",
-            }}
-          >
+  style={{
+    display: "flex",
+    flexDirection: "row",
+    gap: 36,         // Bigger gap if you want more space between cards
+    marginBottom: 12,
+    width: "100%",
+    justifyContent: "stretch", // Cards fill available space
+    alignItems: "stretch",     // Cards match vertical height if parent is tall
+  }}
+>
+  {/* Profile Card */}
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: 18, // Slightly larger for more modern look
+                boxShadow: "0 4px 18px 0 rgba(140,110,70,0.06)",
+                padding: "34px 28px 24px 28px", // More padding
+                flex: 1,   // <-- THIS makes the card fill available horizontal space
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                position: "relative",
+                minWidth: 0, // Allows flexbox to shrink/grow
+                height: "100%", // Cards match parent height if desired
+              }}
+            >
             <div style={{ marginBottom: 6 }}>{profileIcon}</div>
             <div
               style={{
                 fontFamily: "Georgia, Times New Roman, serif",
                 fontWeight: 700,
-                fontSize: 15.5,
+                fontSize: 23.5,
                 color: "#4B3937",
                 marginBottom: 1,
               }}
@@ -685,7 +699,7 @@ export default function StaffProfilePage() {
               style={{
                 fontFamily: "Georgia, Times New Roman, serif",
                 fontWeight: 600,
-                fontSize: 13.5,
+                fontSize: 23.5,
                 color: "#4B3937",
                 marginBottom: 5,
               }}
@@ -693,13 +707,13 @@ export default function StaffProfilePage() {
               Cook
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
-              <span style={{ color: "#FFA726", fontSize: 13 }}>★★★★★</span>
+              <span style={{ color: "#FFA726", fontSize: 20 }}>★★★★★</span>
               <span
                 style={{
                   marginLeft: 3,
                   color: "#4B3937",
                   fontWeight: 600,
-                  fontSize: 11,
+                  fontSize: 20,
                 }}
               >
                 5
@@ -708,8 +722,8 @@ export default function StaffProfilePage() {
             <span
               style={{
                 position: "absolute",
-                right: 14,
-                top: 14,
+                right: 164,
+                top: 78,
                 zIndex: 2,
                 width: 28,
                 height: 28,
@@ -724,21 +738,21 @@ export default function StaffProfilePage() {
           </div>
           {/* Personal Information Card */}
           <div
-            style={{
-              background: "#fff",
-              borderRadius: 14,
-              boxShadow: "0 4px 18px 0 rgba(140,110,70,0.06)",
-              padding: "20px 18px 13px 18px",
-              width: 322, // Adjusted width to fit layout
-              minWidth: 322, // Fixed size
-              maxWidth: 322, // Fixed size
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-              alignItems: "flex-start",
-              position: "relative",
-            }}
-          >
+    style={{
+      background: "#fff",
+      borderRadius: 18,
+      boxShadow: "0 4px 18px 0 rgba(140,110,70,0.06)",
+      padding: "34px 28px 24px 28px",
+      flex: 1,   // <-- Fills space
+      display: "flex",
+      flexDirection: "column",
+      gap: 18,   // More space between inner elements
+      alignItems: "flex-start",
+      position: "relative",
+      minWidth: 0,
+      height: "100%",
+    }}
+  >
             <div
               style={{
                 fontFamily: "Georgia, Times New Roman, serif",
@@ -894,16 +908,14 @@ export default function StaffProfilePage() {
           <div
             style={{
               background: "#fff",
-              borderRadius: 14,
+              borderRadius: 18,
               boxShadow: "0 4px 18px 0 rgba(140,110,70,0.06)",
-              padding: "0px", // ReviewsCard component has its own padding
-              width: 280, // Adjusted width to match Profile Card and fit layout
-              minWidth: 280, // Fixed size
-              maxWidth: 280, // Fixed size
+              padding: "24px 22px 18px 22px", // More padding
+              flex: 1,   // <-- Fills space
               display: "flex",
               flexDirection: "column",
-              gap: 0,
-              color: "#4B3937",
+              minWidth: 0,
+              height: "100%",
               justifyContent: "center",
             }}
           >
@@ -920,7 +932,7 @@ export default function StaffProfilePage() {
             minWidth: 1, // Allows shrinking
             marginBottom: 0, // Reduced to move bottom row upwards
             width: "100%", // Takes full width of parent
-            justifyContent: "center", // Centers cards when they are fewer or on smaller screens
+            justifyContent: "left", // Centers cards when they are fewer or on smaller screens
           }}
         >
           <SimpleCalendar />

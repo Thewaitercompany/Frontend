@@ -32,7 +32,7 @@ const StaffPerformanceIcon = ({
     }}
   >
     <img
-      src="/2bb6ca406cd027d513b3c1deffef4da8a234c4d0.png" // Removed the semicolon here
+      src="/2bb6ca406cd027d513b3c1deffef4da8a234c4d0.png"
       alt="Staff Performance"
       style={{
         width: "100%",
@@ -40,7 +40,6 @@ const StaffPerformanceIcon = ({
         objectFit: "contain",
         borderRadius: "50%",
       }}
-      // Changed fallback to a generic placeholder to prevent continuous failed reloads
       onError={(e) => {
         e.currentTarget.onerror = null;
         e.currentTarget.src =
@@ -84,21 +83,21 @@ export default function StaffPerformancePage() {
   return (
     <div
       style={{
-        minHeight: "100vh", // Ensure it stretches over the entire screen vertically
-        background: "#F5F1EB", // Background color from the provided page
+        minHeight: "100vh",
+        background: "#F5F1EB",
         fontFamily: "Calibri, Arial, sans-serif",
         width: "100%",
         position: "relative",
-        overflow: "hidden", // Prevents overall page scrollbars
+        overflow: "hidden",
         overflowX: "hidden",
         overflowY: "hidden",
         display: "flex",
-        flexDirection: "column", // Use column to allow stacking of elements
-        alignItems: "flex-start", // Align items to the start
-        paddingBottom: 20, // Add some padding to the bottom bezel
+        flexDirection: "column",
+        alignItems: "flex-start",
+        paddingBottom: 20,
       }}
     >
-      {/* Back Button & Title - Adjusted position */}
+      {/* Back Button & Title */}
       <button
         style={{
           color: mainTextColor,
@@ -110,9 +109,9 @@ export default function StaffPerformancePage() {
           border: "none",
           outline: "none",
           borderRadius: 8,
-          position: "absolute", // Use absolute positioning for precise control
-          top: 15, // Moved down
-          left: 120, // Moved right
+          position: "absolute",
+          top: 15,
+          left: 120,
           display: "flex",
           alignItems: "center",
           cursor: "pointer",
@@ -121,7 +120,7 @@ export default function StaffPerformancePage() {
           padding: 0,
           transition: "top 0.2s",
         }}
-        onClick={() => (window.location.href = "/dashboard/restaurantprofile")} // Changed to window.location.href
+        onClick={() => (window.location.href = "/dashboard/restaurantprofile")}
         aria-label="Back to Restaurant Profile"
       >
         <span
@@ -154,15 +153,15 @@ export default function StaffPerformancePage() {
         </span>
       </button>
 
-      {/* Main content area containing the table block - Adjusted position */}
+      {/* Main content area containing the table block */}
       <div
         style={{
-          marginTop:70, // Adjusted to move down, accounting for button
-          marginLeft: 130, // Adjusted to move right
-          flexGrow: 1, // Allows this block to grow and fill available space
-          width: "calc(100vw - 180px)", // Adjusted width to ensure it stretches
-          maxWidth: 1350, // Max width constraint
-          alignSelf: "flex-start", // Ensures it aligns to the start of the column
+          marginTop: 70,
+          marginLeft: 130,
+          flexGrow: 1,
+          width: "calc(100vw - 180px)",
+          maxWidth: 1350,
+          alignSelf: "flex-start",
           display: "flex",
           flexDirection: "column",
           minWidth: 0,
@@ -172,15 +171,15 @@ export default function StaffPerformancePage() {
         <div
           style={{
             background: white,
-            borderRadius: 24, // Consistent with Revenue Report Page
-            boxShadow: shadow, // Consistent shadow
+            borderRadius: 24,
+            boxShadow: shadow,
             border: "none",
             display: "flex",
             flexDirection: "column",
             opacity: 1,
             pointerEvents: "auto",
-            flexGrow: 1, // Make this block grow to fill available vertical space
-            paddingBottom: 60, // Add padding to the bottom to push content up and make it taller
+            flexGrow: 1,
+            paddingBottom: 1,             // <--- REDUCED BOTTOM PADDING
           }}
         >
           {/* Top Row: Search, Sort, and Staff Performance Icon */}
@@ -190,10 +189,10 @@ export default function StaffPerformancePage() {
               display: "flex",
               justifyContent: "flex-start",
               alignItems: "center",
-              gap: "1.3rem", // Increased gap as in Revenue Report
+              gap: "1.3rem",
               flexWrap: "nowrap",
-              paddingLeft: "2.5rem", // Adjusted padding
-              paddingRight: "2.5rem", // Adjusted padding
+              paddingLeft: "2.5rem",
+              paddingRight: "2.5rem",
               paddingTop: "1.0rem",
               paddingBottom: "0.6rem",
               background: white,
@@ -215,7 +214,7 @@ export default function StaffPerformancePage() {
                   fontSize: "1.18rem",
                   padding: "0.42rem 1.1rem 0.42rem 2.2rem",
                   borderRadius: "0.375rem",
-                  border: `1.2px solid #B39793`, // Changed border color
+                  border: `1.2px solid #B39793`,
                   width: "100%",
                   color: mainTextColor,
                   height: 38,
@@ -223,7 +222,7 @@ export default function StaffPerformancePage() {
                 }}
                 aria-label="Search staff"
               />
-              {/* Search Icon - Fixed position and color */}
+              {/* Search Icon */}
               <svg
                 width="18"
                 height="18"
@@ -234,7 +233,7 @@ export default function StaffPerformancePage() {
                   top: "50%",
                   left: 8,
                   transform: "translateY(-50%)",
-                  color: "#B39793", // Changed icon color
+                  color: "#B39793",
                   pointerEvents: "none",
                 }}
               >
@@ -261,7 +260,7 @@ export default function StaffPerformancePage() {
               style={{
                 marginLeft: "auto",
                 background: "#fdfbf8",
-                border: "1.3px solid #B39793", // Changed border color
+                border: "1.3px solid #B39793",
                 borderRadius: 12,
                 fontFamily: "Calibri, Arial, sans-serif",
                 fontSize: 17,
@@ -308,8 +307,8 @@ export default function StaffPerformancePage() {
             <StaffPerformanceIcon
               onClick={() =>
                 (window.location.href = "/dashboard/restaurantprofile")
-              } // Navigates back to restaurant profile
-              imageUrl="https://placehold.co/40x40/D5D5D5/000000?text=SP" // Placeholder image for now
+              }
+              imageUrl="https://placehold.co/40x40/D5D5D5/000000?text=SP"
               circleColor="#D5D5D5"
               size={40}
             />
@@ -440,7 +439,7 @@ export default function StaffPerformancePage() {
                   <tr
                     key={idx}
                     style={{
-                      borderBottom: "none", // No border for a single entry
+                      borderBottom: "none",
                       fontWeight: 500,
                       background: "#fff",
                     }}
@@ -450,8 +449,8 @@ export default function StaffPerformancePage() {
                     >
                       {/* Avatar icon */}
                       <svg
-                        width="38"
-                        height="38"
+                        width="56"   // <--- INCREASED FROM 38 to 56
+                        height="56"  // <--- INCREASED FROM 38 to 56
                         viewBox="0 0 28 28"
                         fill="none"
                       >
@@ -559,6 +558,7 @@ export default function StaffPerformancePage() {
               background: "transparent",
               zIndex: 11,
               textAlign: "right",
+              padding: "10px 0 8px 0",
             }}
           >
             {filteredData.length === 0

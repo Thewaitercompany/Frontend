@@ -254,10 +254,10 @@ const NotificationsPage: React.FC = () => {
       n.text.toLowerCase().includes(searchTerm.toLowerCase()) && filterByDate(n)
   );
 
-  const notificationBlockMarginBottom = 16;
+  const notificationBlockMarginBottom = 6;
   const notificationButtonLeft = 90;
   const notificationBlockPaddingBottom = 24;
-  const fiveOfFiveBottom = 14;
+  const fiveOfFiveBottom = 84;
 
   return (
     <div
@@ -278,7 +278,7 @@ const NotificationsPage: React.FC = () => {
           fontWeight: 400,
           letterSpacing: 0.1,
           fontFamily: "Times New Roman, Times, serif",
-          top: 97,
+          top: 14,
           left: notificationButtonLeft,
           zIndex: 22,
           border: "none",
@@ -312,7 +312,7 @@ const NotificationsPage: React.FC = () => {
       {/* Notification Section Block */}
       <div
         style={{
-          margin: `140px 0 ${notificationBlockMarginBottom}px 25px`,
+          margin: `68px 0 ${notificationBlockMarginBottom}px 25px`,
           background: "#fcfaf8",
           borderRadius: 18,
           position: "relative",
@@ -735,24 +735,25 @@ const NotificationsPage: React.FC = () => {
       </div>
 
       {/* Bottom right: X of Y items */}
-      <div
-        style={{
-          position: "fixed",
-          right: 52,
-          bottom: fiveOfFiveBottom,
-          fontFamily: "Calibri, Arial, sans-serif",
-          fontSize: 13,
-          color: "#000000",
-          fontWeight: 400,
-          textAlign: "right",
-          zIndex: 99,
-          background: "transparent",
-          letterSpacing: "0.03em",
-          pointerEvents: "none",
-        }}
-      >
-        {filteredNotifications.length} of {notifications.length} items
-      </div>
+        <div
+          style={{
+            position: "absolute",
+            right: 32, // relative to notification block
+            bottom: 66,
+            fontFamily: "Calibri, Arial, sans-serif",
+            fontSize: 13,
+            color: "#000000",
+            fontWeight: 400,
+            textAlign: "right",
+            zIndex: 99,
+            background: "transparent",
+            letterSpacing: "0.03em",
+            pointerEvents: "none",
+          }}
+        >
+          {filteredNotifications.length} of {notifications.length} items
+        </div>
+
     </div>
   );
 };
