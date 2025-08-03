@@ -1286,7 +1286,7 @@ function RestaurantStaffSection() {
         marginTop: 20,
         marginBottom: 30,
         marginRight: "auto",
-        marginLeft: 180,
+        marginLeft: 140,
         background: "#fff",
         borderRadius: 18,
         boxShadow: "0 8px 30px 0 rgba(110, 85, 60, 0.13)",
@@ -1379,17 +1379,41 @@ function RestaurantStaffSection() {
             }}
           >
             Restaurant Staff <DropdownIcon color={outlineColor} />
-          </button>
-          {/* Updated StaffPerformanceIcon */}
-          <StaffPerformanceIcon
-            onClick={() =>
-              (window.location.href =
-                "http://localhost:3000/dashboard/restaurantprofile/staffperformance")
-            }
-            imageUrl="/2bb6ca406cd027d513b3c1deffef4da8a234c4d0.png"
-            circleColor="#D5D5D5"
-            size={40}
-          />
+</button>
+{/* Updated StaffPerformanceIcon */}
+<button
+  onClick={() =>
+    (window.location.href =
+      "http://localhost:3000/dashboard/restaurantprofile/staffperformance")
+  }
+  style={{
+    background: "#D5D5D5",
+    border: "1.2px solid #D5D5D5",
+    borderRadius: "50%",
+    width: 40,
+    height: 40,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    boxShadow: "0 2px 8px 0 rgba(110, 85, 60, 0.09)",
+    overflow: "hidden",
+    padding: 0,
+    flexShrink: 0,
+  }}
+>
+  <img
+    src="/2bb6ca406cd027d513b3c1deffef4da8a234c4d0.png"
+    alt="Staff Performance"
+    style={{
+      width: "100%",
+      height: "100%",
+      objectFit: "contain",
+      borderRadius: "50%",
+    }}
+  />
+</button>
+
           {/* PlusIcon with conditional background and icon color */}
           <button
             onClick={handleOpenAddStaffModal}
@@ -1541,7 +1565,7 @@ function MembershipPlanCard() {
         padding: "18px 17px 14px 17px",
         minWidth: 0,
         flex: "1 1 0%",
-        maxWidth: 290,
+        maxWidth: 390,
         display: "flex",
         flexDirection: "column",
         gap: 15,
@@ -1639,7 +1663,7 @@ function TaxInformationCard() {
     color: "#4B3937",
     padding: "7px 9px",
     fontFamily: "'Inter', sans-serif", // Body font
-    marginBottom: 8,
+    marginBottom: 18,
   };
 
   return (
@@ -1651,7 +1675,7 @@ function TaxInformationCard() {
         padding: "18px 17px 14px 17px",
         minWidth: 0,
         flex: "1 1 0%",
-        maxWidth: 290,
+        maxWidth: 390,
         display: "flex",
         flexDirection: "column",
         gap: 10,
@@ -1719,7 +1743,7 @@ function KotCard() {
         padding: "18px 17px 10px 17px",
         minWidth: 0,
         flex: "1 1 auto",
-        maxWidth: 290,
+        maxWidth: 390,
         display: "flex",
         flexDirection: "column",
         gap: 10,
@@ -1777,7 +1801,7 @@ function FoodDeliveryPlatformsBox() {
         padding: "14px 15px 1px 17px", // Reduced top and bottom padding
         minWidth: 0,
         flex: "1 1 auto",
-        maxWidth: 290,
+        maxWidth: 390,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -1793,6 +1817,7 @@ function FoodDeliveryPlatformsBox() {
           width: 1000,
           height: "auto",
           borderRadius: 10,
+          marginBottom: 6,
           objectFit: "contain",
         }}
         onError={(e) => {
@@ -1836,7 +1861,7 @@ export default function RestaurantProfilePage() {
         marginTop: 27,
         marginBottom: 0,
         marginRight: "auto",
-        marginLeft: 180, // Main block's left margin
+        marginLeft: 140, // Main block's left margin
         background: "#fff",
         borderRadius: 18,
         boxShadow: "0 8px 30px 0 rgba(110, 85, 60, 0.13)",
@@ -1903,17 +1928,19 @@ export default function RestaurantProfilePage() {
     <div
       style={{
         width: "100%",
-        minHeight: "100vh",
+        minHeight: "195vh",
         background: "#F7F4EF", // Main page background color from Figma
         fontFamily: "'Inter', sans-serif", // Default font for the entire page
+        overflowX: "hidden", // prevent horizontal scrollbar
+        overflowY: "auto",   // only scroll vertically if needed
       }}
     >
       {/* Removed Navigation "Back to Dashboard" Button */}
       {/* Page Title */}
       <div
         style={{
-          marginTop: 30,
-          marginLeft: 195,
+          marginTop: 0,
+          marginLeft: 145,
           fontFamily: "'Georgia', serif", // Heading font
           fontWeight: 600,
           fontSize: 28,
@@ -1936,12 +1963,12 @@ export default function RestaurantProfilePage() {
           marginTop: 20,
           marginBottom: 30,
           marginRight: "auto",
-          marginLeft: 180,
-          width: 1250,
-          maxWidth: "95vw",
+          marginLeft: 140,
+          width: "100%",
+          maxWidth: 1455, // or more based on your screen design
           display: "flex",
-          flexDirection: "row",
-          gap: 8,
+          flexDirection: "row", // Keep horizontal arrangement for the main row
+          gap: 30, // Changed gap from 8 to 30
           justifyContent: "space-between",
           alignItems: "stretch",
           boxSizing: "border-box",
@@ -1949,8 +1976,20 @@ export default function RestaurantProfilePage() {
       >
         <MembershipPlanCard />
         <TaxInformationCard />
-        <KotCard />
-        <FoodDeliveryPlatformsBox />
+        {/* New flex container for KOT and FoodDeliveryPlatformsBox */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column", // Stack vertically
+            gap: 8, // This gap remains 8px as requested
+            flex: "1 1 auto",
+            maxWidth: 596, // Changed maxWidth from 397 to 396 for even distribution
+            minWidth: 0, // Allow shrinking
+          }}
+        >
+          <KotCard />
+          <FoodDeliveryPlatformsBox />
+        </div>
       </div>
     </div>
   );

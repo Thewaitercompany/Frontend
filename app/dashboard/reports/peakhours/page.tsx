@@ -70,12 +70,12 @@ export default function PeakHoursPage() {
   // Block sizing and spacing (match your previous for consistent layout)
   const tableBlockWidth = "calc(110vw - 320px)";
   const tableBlockMaxWidth = 8000;
-  const tableBlockMarginTop = 110;
+  const tableBlockMarginTop = 68;
   const tableBlockMarginBottom = 38;
   const tableBlockMarginLeft = 120;
   const minBlockHeight = 540;
   const backButtonLeft = 118;
-  const backButtonTop = 60;
+  const backButtonTop = 19;
   const inputHeight = 38;
 
   // Filtered data logic (search only for demo)
@@ -585,7 +585,7 @@ export default function PeakHoursPage() {
           fontFamily: "Calibri, Arial, sans-serif",
           position: "absolute",
           right: 45,
-          bottom: 14,
+          bottom: 54,
           userSelect: "none",
           letterSpacing: "0.02em",
           background: "transparent",

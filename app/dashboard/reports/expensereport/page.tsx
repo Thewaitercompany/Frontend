@@ -70,13 +70,13 @@ export default function ExpenseReportPage() {
   // Sizing for the inner message/table block
   const tableBlockWidth = "calc(100vw - 160px)";
   const tableBlockMaxWidth = 1350;
-  const tableBlockMarginTop = 108;
+  const tableBlockMarginTop = 68;
   const tableBlockMarginBottom = 15;
   const tableBlockMarginLeft = 120;
 
   // Back button position (MATCH Revenue report)
   const backButtonLeft = 120;
-  const backButtonTop = 59;
+  const backButtonTop = 19;
   const inputHeight = 38;
 
   return (
@@ -604,7 +604,7 @@ export default function ExpenseReportPage() {
           fontFamily: "Calibri, Arial, sans-serif",
           position: "absolute",
           right: 45,
-          bottom: 18,
+          bottom: 188,
           userSelect: "none",
           letterSpacing: "0.02em",
           background: "transparent",

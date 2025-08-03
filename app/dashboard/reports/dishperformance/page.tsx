@@ -44,12 +44,12 @@ export default function DishPerformancePage() {
   // Make the center block a little bigger on the right and top
   const tableBlockWidth = "calc(110vw - 320px)"; // was 420px, now bigger (less margin right)
   const tableBlockMaxWidth = 8000; // was 950, now slightly wider
-  const tableBlockMarginTop = 110; // was 180, now less margin top (moves up)
+  const tableBlockMarginTop = 68; // was 180, now less margin top (moves up)
   const tableBlockMarginBottom = 38;
   const tableBlockMarginLeft = 120; // shift block a little more to the left (was 230)
   const minBlockHeight = 550;
   const backButtonLeft = 118;
-  const backButtonTop = 64;
+  const backButtonTop = 19;
   const inputHeight = 38;
 
   // Filtered data logic (for demo, not filtering on veg, category, today)
@@ -742,7 +742,7 @@ export default function DishPerformancePage() {
           fontFamily: "Calibri, Arial, sans-serif",
           position: "absolute",
           right: 45,
-          bottom: 14,
+          bottom: 54,
           userSelect: "none",
           letterSpacing: "0.02em",
           background: "transparent",

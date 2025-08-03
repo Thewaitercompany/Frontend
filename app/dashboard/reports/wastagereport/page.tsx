@@ -64,12 +64,12 @@ export default function WastageReportPage() {
   // Block sizing and spacing
   const tableBlockWidth = "calc(110vw - 320px)";
   const tableBlockMaxWidth = 8000;
-  const tableBlockMarginTop = 110;
+  const tableBlockMarginTop = 68;
   const tableBlockMarginBottom = 0; // block ends at last row
   const tableBlockMarginLeft = 120;
   const minBlockHeight = 0; // let natural height
   const backButtonLeft = 118;
-  const backButtonTop = 65;
+  const backButtonTop = 19;
   const inputHeight = 38;
 
   // Filtered data logic (search only for demo)
@@ -666,7 +666,7 @@ export default function WastageReportPage() {
           fontFamily: "Calibri, Arial, sans-serif",
           position: "absolute",
           right: 45,
-          bottom: 14,
+          bottom: 164,
           userSelect: "none",
           letterSpacing: "0.02em",
           background: "transparent",
